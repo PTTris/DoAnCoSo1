@@ -54,49 +54,40 @@ const Register = () => {
                                     </p>
                                 </div>
 
-                                <div
-                                    data-mdb-input-init
-                                    class="form-outline mb-4"
-                                >
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email">
+                                        Email address
+                                    </label>
                                     <input
                                         type="email"
                                         name="email"
                                         class="form-control form-control-lg"
-                                        placeholder="Vui lòng nhập email"
+                                        placeholder="Nhập địa chỉ email"
                                     />
-                                    <label class="form-label" for="email">
-                                        Email address
-                                    </label>
                                 </div>
 
-                                <div
-                                    data-mdb-input-init
-                                    class="form-outline mb-4"
-                                >
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="username">
+                                        Username
+                                    </label>
                                     <input
                                         type="text"
                                         name="username"
                                         class="form-control form-control-lg"
                                         placeholder="Vui lòng nhập tên người dùng"
                                     />
-                                    <label class="form-label" for="username">
-                                        Username
-                                    </label>
                                 </div>
 
-                                <div
-                                    data-mdb-input-init
-                                    class="form-outline mb-3"
-                                >
+                                <div class="form-outline mb-3">
+                                    <label class="form-label" for="password">
+                                        Password
+                                    </label>
                                     <input
                                         type="password"
                                         name="password"
                                         class="form-control form-control-lg"
                                         placeholder="Nhập mật khẩu"
                                     />
-                                    <label class="form-label" for="password">
-                                        Password
-                                    </label>
                                 </div>
 
                                 <div class="text-center text-lg-start mt-2 pt-2">

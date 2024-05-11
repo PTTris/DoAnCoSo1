@@ -54,34 +54,28 @@ const Login = () => {
                                     </p>
                                 </div>
 
-                                <div
-                                    data-mdb-input-init
-                                    class="form-outline mb-4"
-                                >
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email">
+                                        Email address
+                                    </label>
                                     <input
                                         type="email"
                                         name="email"
                                         class="form-control form-control-lg"
                                         placeholder="Nhập địa chỉ email"
                                     />
-                                    <label class="form-label" for="email">
-                                        Email address
-                                    </label>
                                 </div>
 
-                                <div
-                                    data-mdb-input-init
-                                    class="form-outline mb-3"
-                                >
+                                <div class="form-outline mb-3">
+                                    <label class="form-label" for="password">
+                                        Password
+                                    </label>
                                     <input
                                         type="password"
                                         name="password"
                                         class="form-control form-control-lg"
                                         placeholder="Nhập mật khẩu tối thiểu 8 kí tự"
                                     />
-                                    <label class="form-label" for="password">
-                                        Password
-                                    </label>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center">

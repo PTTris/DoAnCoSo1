@@ -328,7 +328,7 @@
             .nav-item:first-child {
                 margin-left: 0 !important;
             }
-            .nav-item.active a {
+            a.active {
                 color: #38a8ea;
                 font-weight: 700;
             }
@@ -351,6 +351,7 @@
     left: 15px;
     top: 50px;
     font-weight: 700;
+    cursor: pointer;
 }
 
 .wrapmenu_right.open_sidebar_menu {

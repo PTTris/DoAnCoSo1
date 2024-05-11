@@ -1,5 +1,5 @@
 import "./Header.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 // --- Icon ---
@@ -11,7 +11,6 @@ import { IoCartOutline, IoSearch } from "react-icons/io5";
 export default function Header() {
     const [isShowMenuRight, setShowMenuRight] = useState(true);
     const [isShowListBookSelf, setShowListBookSelf] = useState(true);
-    const [isShowListNewsFeed, setShowListNewsFeed] = useState(true);
 
     const handleShowListBookSelf = () => {
         const listBookself = document.querySelector(".list-bookself");
@@ -21,17 +20,6 @@ export default function Header() {
         } else {
             listBookself.style.display = "none";
             setShowListBookSelf(!isShowListBookSelf);
-        }
-    };
-
-    const handleShowListNewsFeed = () => {
-        const listNewsFeed = document.querySelector(".list-newsfeed");
-        if (isShowListNewsFeed) {
-            listNewsFeed.style.display = "block";
-            setShowListNewsFeed(!isShowListNewsFeed);
-        } else {
-            listNewsFeed.style.display = "none";
-            setShowListNewsFeed(!isShowListNewsFeed);
         }
     };
 
@@ -161,22 +149,22 @@ export default function Header() {
                                 <div class="wrap_main d-none d-lg-block d-xl-block">
                                     <div class="header-nav">
                                         <ul class="item_big nav-left hidden-xs hidden-sm">
-                                            <li class="nav-item active ">
+                                            <li class="nav-item ">
                                                 <NavLink class="a-img" to="/">
                                                     <span>Trang chủ</span>
                                                 </NavLink>
                                             </li>
 
                                             <li class="nav-item ">
-                                                <a
+                                                <NavLink
+                                                    to="/allbooks"
                                                     class="a-img"
-                                                    href="/collections/all"
                                                 >
                                                     <span>
                                                         Tủ sách thương hiệu
                                                     </span>
                                                     <i class="fa fa-caret-down"></i>
-                                                </a>
+                                                </NavLink>
                                                 <ul class="item_small hidden-sm hidden-xs">
                                                     <li>
                                                         <a
@@ -289,15 +277,15 @@ export default function Header() {
                                             </li>
 
                                             <li class="nav-item ">
-                                                <a
+                                                <NavLink
                                                     class="a-img"
-                                                    href="/tin-tuc"
+                                                    to="/news"
                                                 >
                                                     <span>
                                                         Tin tức &amp; Sự kiện
                                                     </span>
                                                     <i class="fa fa-caret-down"></i>
-                                                </a>
+                                                </NavLink>
                                                 <ul class="item_small hidden-sm hidden-xs">
                                                     <li>
                                                         <a
@@ -474,7 +462,7 @@ export default function Header() {
                             <div class="menu_mobile">
                                 <ul class="ul_collections">
                                     <li class="level0 level-top parent">
-                                        <a href="/">Trang chủ</a>
+                                        <NavLink to="/">Trang chủ</NavLink>
                                     </li>
 
                                     <li class="level0 level-top parent">
@@ -483,7 +471,7 @@ export default function Header() {
                                         </a>
 
                                         <i
-                                            class="fa fa-plus show-list-bookself"
+                                            class="cursor-pointer fa fa-plus show-list-bookself"
                                             onClick={handleShowListBookSelf}
                                         ></i>
                                         <ul
@@ -569,30 +557,7 @@ export default function Header() {
                                     </li>
 
                                     <li class="level0 level-top parent">
-                                        <a href="/tin-tuc">
-                                            Tin tức &amp; Sự kiện
-                                        </a>
-
-                                        <i
-                                            class="fa fa-plus show-list-newsfeed"
-                                            onClick={handleShowListNewsFeed}
-                                        ></i>
-                                        <ul
-                                            class="level0 list-newsfeed"
-                                            style={{ display: "none" }}
-                                        >
-                                            <li class="level1 ">
-                                                <a href="/tin-tuc-bao-chi">
-                                                    <span>Tin tức báo chí</span>
-                                                </a>
-                                            </li>
-
-                                            <li class="level1 ">
-                                                <a href="/su-kien">
-                                                    <span>Sự kiện</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        <NavLink to="/news">Tin tức</NavLink>
                                     </li>
 
                                     <li class="level0 level-top parent">
