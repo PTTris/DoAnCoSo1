@@ -6,9 +6,10 @@
     height: 25px;
     border-radius: 50%;
     border: none;
-    background-color: #000;
+    background-color: #38a8ea;
     color: #fff;
+    z-index: 9999999999;
     &:hover {
-        background-color: #38a8ea;
+        opacity: 0.8;
     }
 }

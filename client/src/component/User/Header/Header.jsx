@@ -113,16 +113,13 @@ export default function Header() {
                                     </div>
                                 </div>
                                 <div className="cart d-flex align-items-center">
-                                    <IoCartOutline size={"1.4em"} />
-
-                                    <span className="mx-1 ">
-                                        <NavLink
-                                            className="text-light"
-                                            to={"/Cart"}
-                                        >
-                                            Giỏ hàng
-                                        </NavLink>
-                                    </span>
+                                    <NavLink
+                                        className="text-light"
+                                        to={"/Cart"}
+                                    >
+                                        <IoCartOutline size={"1.4em"} />
+                                        <span className="mx-1 ">Giỏ hàng</span>
+                                    </NavLink>
 
                                     <div class="top-cart-content">
                                         <ul
@@ -281,71 +278,40 @@ export default function Header() {
                                                     class="a-img"
                                                     to="/news"
                                                 >
-                                                    <span>
-                                                        Tin tức &amp; Sự kiện
-                                                    </span>
-                                                    <i class="fa fa-caret-down"></i>
+                                                    <span>Tin tức báo chí</span>
                                                 </NavLink>
-                                                <ul class="item_small hidden-sm hidden-xs">
-                                                    <li>
-                                                        <a
-                                                            href="/tin-tuc-bao-chi"
-                                                            title=""
-                                                        >
-                                                            Tin tức báo chí
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/su-kien"
-                                                            title=""
-                                                        >
-                                                            Sự kiện
-                                                        </a>
-                                                    </li>
-                                                </ul>
                                             </li>
                                         </ul>
                                         <ul class="logo_center">
                                             <li class="logo">
-                                                <a
-                                                    href="/"
+                                                <NavLink
+                                                    to="/"
                                                     class="logo-wrapper d-none d-sm-none d-md-none d-lg-block d-xl-block"
                                                 >
                                                     <img
                                                         src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/logo.png?1714706765233"
                                                         alt="logo Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
                                                     />
-                                                </a>
-                                                <a
-                                                    href="/"
-                                                    class="logo-wrapper d-none d-sm-block d-md-block d-lg-none d-xl-none"
-                                                >
-                                                    <img
-                                                        src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/logo.png?1714706765233"
-                                                        alt="logo Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                                    />
-                                                </a>
+                                                </NavLink>
                                             </li>
                                         </ul>
                                         <ul class="item_big nav-right hidden-xs hidden-sm">
                                             <li class="nav-item ">
-                                                <a
+                                                <NavLink
                                                     class="a-img"
-                                                    href="/tac-gia"
+                                                    to="/author"
                                                 >
                                                     <span>Tác giả</span>
-                                                </a>
+                                                </NavLink>
                                             </li>
 
                                             <li class="nav-item ">
-                                                <a
-                                                    class="a-img"
-                                                    href="/lien-he"
+                                                <NavLink
+                                                    class="arguments-img"
+                                                    to="/contact"
                                                 >
                                                     <span>Liên hệ</span>
-                                                </a>
+                                                </NavLink>
                                             </li>
                                         </ul>
                                     </div>
@@ -365,7 +331,7 @@ export default function Header() {
                                     <div class="header-nav">
                                         <ul class="logo_center">
                                             <li class="logo">
-                                                <a
+                                                <NavLink
                                                     href="/"
                                                     class="logo-wrapper"
                                                 >
@@ -373,7 +339,7 @@ export default function Header() {
                                                         src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/logo_mobi.png?1714706765233"
                                                         alt="logo Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
                                                     />
-                                                </a>
+                                                </NavLink>
                                             </li>
                                         </ul>
                                     </div>

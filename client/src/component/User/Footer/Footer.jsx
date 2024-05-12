@@ -12,7 +12,7 @@ import ScrollToTop from "../../ScrollToTop/ScrollToTop";
 export default function Footer() {
     return (
         <MDBFooter
-            bgColor="light"
+            bgColor="grey"
             className="text-center text-lg-start text-muted"
         >
             <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">

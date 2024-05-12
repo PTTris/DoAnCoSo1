@@ -5,6 +5,10 @@ import Login from "./component/User/Account/Login/Login";
 import Register from "./component/User/Account/Register/Register";
 import AllBooks from "./component/User/Books/AllBooks/AllBooks";
 import News from "./component/User/News/News";
+import Author from "./component/User/Author/Author";
+import Contact from "./component/User/Contact/Contact";
+import BookDetail from "./component/User/Books/BookDetail/BookDetail";
+import Cart from "./component/User/Cart/Cart";
 
 function App() {
     return (
@@ -14,6 +18,13 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route path="/allbooks" element={<AllBooks />} />
                     <Route path="/news" element={<News />} />
+                    <Route path="/author" element={<Author />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route
+                        path="/nhung-em-be-dang-lon"
+                        element={<BookDetail />}
+                    />
                 </Route>
                 <Route path="/account/login" element={<Login />} />
                 <Route path="/account/register" element={<Register />} />

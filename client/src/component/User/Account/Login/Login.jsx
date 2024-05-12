@@ -108,7 +108,7 @@ const Login = () => {
                                         Đăng nhập
                                     </button>
                                     <p class="small fw-bold mt-2 pt-1 mb-0">
-                                        Don't have an account?{" "}
+                                        Bạn chưa có tài khoản?{" "}
                                         <NavLink to="/account/register">
                                             Đăng ký
                                         </NavLink>

@@ -5,18 +5,19 @@ const ScrollButton = () => {
 
     const toggleVisible = () => {
         const scrolled = document.documentElement.scrollTop;
-        if (scrolled > 700) {
+        if (scrolled > 500) {
             setVisible(true);
-        } else if (scrolled <= 700) {
+        } else if (scrolled <= 500) {
             setVisible(false);
         }
     };
-
     const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "auto",
-        });
+        const c = document.documentElement.scrollTop || document.body.scrollTop;
+        if (c > 0) {
+            window.requestAnimationFrame(scrollToTop);
+            // Tăng khoảng cách
+            window.scrollTo(0, c - c / 12);
+        }
     };
 
     window.addEventListener("scroll", toggleVisible);
