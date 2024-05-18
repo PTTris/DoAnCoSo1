@@ -49,7 +49,7 @@
             cursor: pointer;
             .boxsearch {
                 display: none;
-                form {
+                .input-group {
                     input {
                         position: absolute;
                         top: -18px;
@@ -219,7 +219,7 @@
                 float: none;
                 position: relative;
                 margin: 0;
-                margin: 0 10px;
+                margin: 0 12px;
                 border-radius: 0px;
                 padding: 0;
                 height: 125px;
@@ -227,7 +227,7 @@
                     display: block;
                     text-align: left;
                     padding: 0px 0px 0 0;
-                    font-size: 16px;
+                    font-size: 18px;
                     font-family: "Quicksand", sans-serif;
                     font-weight: 700;
                     height: 125px;
@@ -309,7 +309,7 @@
                         a {
                             max-height: 45px;
                             font-weight: 400;
-                            font-size: 14px;
+                            font-size: 16px;
                             line-height: 33px;
                             display: block;
                             padding: 7px 5px 7px 0px;
@@ -328,6 +328,9 @@
             .nav-item:first-child {
                 margin-left: 0 !important;
             }
+            .nav-item:last-child {
+                margin-right: 0 !important;
+            }
             a.active {
                 color: #38a8ea;
                 font-weight: 700;
@@ -337,7 +340,7 @@
             line-height: 125px;
             text-align: center;
             padding: 0;
-            margin: 0 50px 0 5px;
+            margin-right: 20px;
         }
     }
 }
@@ -657,5 +660,13 @@
 @media (max-width: 1199px) {
     .header_r .cartsearch .carthd {
         float: right;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+    .header-nav > ul.item_big > li.nav-item {
+        margin: 0 7px !important;
+        a {
+            font-size: 12px;
+        }
     }
 }

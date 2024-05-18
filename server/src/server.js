@@ -1,20 +1,16 @@
-require("dotenv").config();
-const express = require("express");
+import express from "express";
+import "dotenv/config";
 const app = express();
-const connection = require("./config/database");
+import initAPIRoute from "./routes/api.js";
+import cors from "cors";
 
 // config req.body
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data
-
+app.use(cors());
 // Routers
-app.use("/", webRouter);
+initAPIRoute(app);
 
-// test connection
-connection.query("SELECT * FROM Users u", function (err, results, fields) {
-    // console.log(results);
-});
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+app.listen(process.env.port, () => {
+    console.log(`Sever running in port ${process.env.port}`);
 });

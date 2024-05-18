@@ -1,38 +1,31 @@
-import "./AllBooks.scss";
-import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import {
-//     fetchBooks,
-//     selectAllBooksWithPagination,
-//     setPage,
-// } from "../../../../redux/reducer/getAllBooksWithPagination.js";
-import { NavLink } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "../../../../utils/axiosCustomize.js";
 import { changeString } from "../../../../assets/js/handleFunc.js";
 
-const AllBooks = () => {
-    const LIMIT_PAGE = 12;
-    const [data, setData] = useState([]);
+const AllBooksOfCategory = (props) => {
+    const LIMIT_PAGE = 5;
+    const [books, setbooks] = useState([]);
     const [totalPages, settotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const fetchAllBooksWithPaginate = async (page) => {
+    const fetchAllBooksOfCategoryWithPaginate = async (page) => {
         let response = await axios.get(
-            `/getAllBooksWithPaginations?page=${page}&limit=${LIMIT_PAGE}`
+            `/getAllBooksOfCategoryWithPag/${props.selectedCategoryID}?page=${page}&limit=${LIMIT_PAGE}`
         );
 
-        setData(response.data.data);
+        setbooks(response.data.data);
 
         settotalPages(response.data.totalPages);
     };
 
     useEffect(() => {
-        fetchAllBooksWithPaginate(1);
-    }, []);
+        fetchAllBooksOfCategoryWithPaginate(1);
+    }, [props.selectedCategoryID]);
 
     const handlePageClick = async (event) => {
-        await fetchAllBooksWithPaginate(+event.selected + 1);
+        await fetchAllBooksOfCategoryWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
     };
 
@@ -52,7 +45,7 @@ const AllBooks = () => {
                                 </li>
 
                                 <li>
-                                    <span>Tất cả sản phẩm</span>
+                                    <span>{props.nameCategory}</span>
                                 </li>
                             </ul>
                         </div>
@@ -67,14 +60,14 @@ const AllBooks = () => {
                                 <div class="slider-items-products section">
                                     <div class="collectiontitle">
                                         <h1 class="cat-heading">
-                                            Tất cả sản phẩm
+                                            {props.nameCategory}
                                         </h1>
                                     </div>
                                 </div>
                                 <div class="category-products products">
                                     <section class="products-view products-view-grid collection_reponsive list_hover_pro">
                                         <div class="row">
-                                            {data.map((book) => (
+                                            {books.map((book) => (
                                                 <>
                                                     <div
                                                         key={book.maSach}
@@ -165,4 +158,4 @@ const AllBooks = () => {
     );
 };
 
-export default AllBooks;
+export default AllBooksOfCategory;

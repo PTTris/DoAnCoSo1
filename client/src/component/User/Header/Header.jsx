@@ -1,16 +1,31 @@
-import "./Header.scss";
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-
 // --- Icon ---
 import { FaPhoneVolume } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 
-export default function Header() {
+import "./Header.scss";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    fetchAllCategory,
+    selectAllCategory,
+} from "../../../redux/reducer/getAllCategory";
+import { fetchAllBook } from "../../../redux/reducer/getAllBooks";
+import { fetchBookSortByDate } from "../../../redux/reducer/getBookSortByDate";
+import { changeString } from "../../../assets/js/handleFunc";
+
+export default function Header(props) {
     const [isShowMenuRight, setShowMenuRight] = useState(true);
     const [isShowListBookSelf, setShowListBookSelf] = useState(true);
+
+    const categoryBooks = useSelector(selectAllCategory);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchAllCategory());
+    }, [dispatch]);
 
     const handleShowListBookSelf = () => {
         const listBookself = document.querySelector(".list-bookself");
@@ -41,6 +56,12 @@ export default function Header() {
             opacityMenu.classList.remove("open_opacity");
             setShowMenuRight(true);
         });
+    };
+
+    const handleClickSetSelectedCategory = (event) => {
+        props.setSelectedCategoryID(event.target.getAttribute("dataKey"));
+        props.setSelectedCategory(event.target.getAttribute("href"));
+        props.setNameCategory(event.target.getAttribute("dataName"));
     };
 
     return (
@@ -75,11 +96,7 @@ export default function Header() {
                                     <IoIosSearch size={"1.5em"} />
                                     <span>Tìm kiếm</span>
                                     <div className="boxsearch">
-                                        <form
-                                            action="/search"
-                                            method="get"
-                                            className="input-group search-bar"
-                                        >
+                                        <div className="input-group search-bar">
                                             <input
                                                 type="text"
                                                 name="query"
@@ -94,7 +111,7 @@ export default function Header() {
                                             >
                                                 <IoSearch size={"1.7em"} />
                                             </button>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="account d-flex align-items-center">
@@ -147,7 +164,15 @@ export default function Header() {
                                     <div class="header-nav">
                                         <ul class="item_big nav-left hidden-xs hidden-sm">
                                             <li class="nav-item ">
-                                                <NavLink class="a-img" to="/">
+                                                <NavLink
+                                                    class="a-img"
+                                                    to="/"
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            fetchBookSortByDate()
+                                                        );
+                                                    }}
+                                                >
                                                     <span>Trang chủ</span>
                                                 </NavLink>
                                             </li>
@@ -156,6 +181,11 @@ export default function Header() {
                                                 <NavLink
                                                     to="/allbooks"
                                                     class="a-img"
+                                                    onClick={() => {
+                                                        dispatch(
+                                                            fetchAllBook()
+                                                        );
+                                                    }}
                                                 >
                                                     <span>
                                                         Tủ sách thương hiệu
@@ -163,113 +193,34 @@ export default function Header() {
                                                     <i class="fa fa-caret-down"></i>
                                                 </NavLink>
                                                 <ul class="item_small hidden-sm hidden-xs">
-                                                    <li>
-                                                        <a
-                                                            href="/skybooks"
-                                                            title=""
-                                                        >
-                                                            Skybooks
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/skynovel"
-                                                            title=""
-                                                        >
-                                                            Skynovel
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/skycomics"
-                                                            title=""
-                                                        >
-                                                            Skycomics
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/skymommy"
-                                                            title=""
-                                                        >
-                                                            Skymommy
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/sky-special"
-                                                            title=""
-                                                        >
-                                                            Sky Special
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/tu-sach-chua-lanh"
-                                                            title=""
-                                                        >
-                                                            Tủ sách chữa lành
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/tu-sach-quy-co"
-                                                            title=""
-                                                        >
-                                                            Tủ sách quý cô
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/song-khac"
-                                                            title=""
-                                                        >
-                                                            Sống khác
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/deepbooks"
-                                                            title=""
-                                                        >
-                                                            Deepbooks
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/tram-huong-nghiep"
-                                                            title=""
-                                                        >
-                                                            Trạm hướng nghiệp
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/i-love-cookbook"
-                                                            title=""
-                                                        >
-                                                            I love cookbook
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a
-                                                            href="/glow-books"
-                                                            title=""
-                                                        >
-                                                            Glow Books
-                                                        </a>
-                                                    </li>
+                                                    {categoryBooks.map(
+                                                        (category) => (
+                                                            <li>
+                                                                <NavLink
+                                                                    dataKey={
+                                                                        category.maTheLoaiSach
+                                                                    }
+                                                                    dataName={
+                                                                        category.tenTheLoaiSach
+                                                                    }
+                                                                    onClick={(
+                                                                        event
+                                                                    ) =>
+                                                                        handleClickSetSelectedCategory(
+                                                                            event
+                                                                        )
+                                                                    }
+                                                                    to={`/${changeString(
+                                                                        category.tenTheLoaiSach
+                                                                    )}`}
+                                                                >
+                                                                    {`
+                                                                        ${category.tenTheLoaiSach}
+                                                                    `}
+                                                                </NavLink>
+                                                            </li>
+                                                        )
+                                                    )}
                                                 </ul>
                                             </li>
 
@@ -313,6 +264,15 @@ export default function Header() {
                                                     <span>Liên hệ</span>
                                                 </NavLink>
                                             </li>
+
+                                            <li class="nav-item ">
+                                                <NavLink
+                                                    class="arguments-img"
+                                                    to="/admin"
+                                                >
+                                                    <span>Quản lý</span>
+                                                </NavLink>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -332,8 +292,8 @@ export default function Header() {
                                         <ul class="logo_center">
                                             <li class="logo">
                                                 <NavLink
-                                                    href="/"
-                                                    class="logo-wrapper"
+                                                    to="/"
+                                                    className="logo-wrapper"
                                                 >
                                                     <img
                                                         src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/logo_mobi.png?1714706765233"

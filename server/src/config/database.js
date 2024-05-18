@@ -1,22 +1,13 @@
-require("dotenv").config();
-const mysql = require("mysql2");
+import "dotenv/config";
 
-// const connection = mysql.createConnection({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     database: process.env.DB_NAME,
-//     port: process.env.DB_PORT,
-//     password: process.env.DB_PASSWORD,
-// });
+import mysql from "mysql2/promise";
 
-// Thực tế sẽ dùng như này
-const connection = mysql.createPool({
+const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
     password: process.env.DB_PASSWORD,
-    // Cần này để xử lý hiệu năng khi kết nối database
+    // Xử lý hiệu năng khi kết nối database
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -26,4 +17,4 @@ const connection = mysql.createPool({
     keepAliveInitialDelay: 0,
 });
 
-module.exports = connection;
+export default pool;
