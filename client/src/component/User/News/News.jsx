@@ -1,6 +1,19 @@
+import { NavLink } from "react-router-dom";
 import "./News.scss";
+import { useSelector } from "react-redux";
+import { selectAllCategory } from "../../../redux/reducer/getAllCategory";
+import { changeString, scrollToTop } from "../../../assets/js/handleFunc";
 
-const News = () => {
+const News = (props) => {
+    const categoryBooks = useSelector(selectAllCategory);
+
+    const handleClickSetSelectedCategory = (event) => {
+        scrollToTop();
+        props.setSelectedCategoryID(event.target.getAttribute("dataKey"));
+        props.setSelectedCategory(event.target.getAttribute("href"));
+        props.setNameCategory(event.target.getAttribute("dataName"));
+    };
+
     return (
         <>
             <div class="blog_wrapper">
@@ -392,113 +405,30 @@ const News = () => {
                                 <div class="aside-content">
                                     <nav class="nav-category navbar-toggleable-md">
                                         <ul class="nav navbar-pills">
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/skybooks"
-                                                >
-                                                    Skybooks
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/skynovel"
-                                                >
-                                                    Skynovel
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/skycomics"
-                                                >
-                                                    Skycomics
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/skymommy"
-                                                >
-                                                    Skymommy
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/sky-special"
-                                                >
-                                                    Sky Special
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/tu-sach-chua-lanh"
-                                                >
-                                                    Tủ sách chữa lành
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/tu-sach-quy-co"
-                                                >
-                                                    Tủ sách quý cô
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/song-khac"
-                                                >
-                                                    Sống khác
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/deepbooks"
-                                                >
-                                                    Deepbooks
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/tram-huong-nghiep"
-                                                >
-                                                    Trạm hướng nghiệp
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/i-love-cookbook"
-                                                >
-                                                    I love cookbook
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a
-                                                    class="nav-link"
-                                                    href="/glow-books"
-                                                >
-                                                    Glow Books
-                                                </a>
-                                            </li>
+                                            {categoryBooks.map((category) => (
+                                                <li class="nav-item">
+                                                    <NavLink
+                                                        dataKey={
+                                                            category.maTheLoaiSach
+                                                        }
+                                                        dataName={
+                                                            category.tenTheLoaiSach
+                                                        }
+                                                        onClick={(event) =>
+                                                            handleClickSetSelectedCategory(
+                                                                event
+                                                            )
+                                                        }
+                                                        to={`/${changeString(
+                                                            category.tenTheLoaiSach
+                                                        )}`}
+                                                    >
+                                                        {`
+                                                            ${category.tenTheLoaiSach}
+                                                        `}
+                                                    </NavLink>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </nav>
                                 </div>

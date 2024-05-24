@@ -12,7 +12,6 @@ import {
     fetchAllCategory,
     selectAllCategory,
 } from "../../../redux/reducer/getAllCategory";
-import { fetchAllBook } from "../../../redux/reducer/getAllBooks";
 import { fetchBookSortByDate } from "../../../redux/reducer/getBookSortByDate";
 import { changeString } from "../../../assets/js/handleFunc";
 
@@ -130,10 +129,7 @@ export default function Header(props) {
                                     </div>
                                 </div>
                                 <div className="cart d-flex align-items-center">
-                                    <NavLink
-                                        className="text-light"
-                                        to={"/Cart"}
-                                    >
+                                    <NavLink className="text-light" to="/Cart">
                                         <IoCartOutline size={"1.4em"} />
                                         <span className="mx-1 ">Giỏ hàng</span>
                                     </NavLink>
@@ -181,11 +177,6 @@ export default function Header(props) {
                                                 <NavLink
                                                     to="/allbooks"
                                                     class="a-img"
-                                                    onClick={() => {
-                                                        dispatch(
-                                                            fetchAllBook()
-                                                        );
-                                                    }}
                                                 >
                                                     <span>
                                                         Tủ sách thương hiệu
@@ -223,15 +214,6 @@ export default function Header(props) {
                                                     )}
                                                 </ul>
                                             </li>
-
-                                            <li class="nav-item ">
-                                                <NavLink
-                                                    class="a-img"
-                                                    to="/news"
-                                                >
-                                                    <span>Tin tức báo chí</span>
-                                                </NavLink>
-                                            </li>
                                         </ul>
                                         <ul class="logo_center">
                                             <li class="logo">
@@ -250,9 +232,9 @@ export default function Header(props) {
                                             <li class="nav-item ">
                                                 <NavLink
                                                     class="a-img"
-                                                    to="/author"
+                                                    to="/tin-tuc-bao-chi"
                                                 >
-                                                    <span>Tác giả</span>
+                                                    <span>Tin tức báo chí</span>
                                                 </NavLink>
                                             </li>
 
@@ -265,14 +247,14 @@ export default function Header(props) {
                                                 </NavLink>
                                             </li>
 
-                                            <li class="nav-item ">
+                                            {/* <li class="nav-item ">
                                                 <NavLink
                                                     class="arguments-img"
                                                     to="/admin"
                                                 >
                                                     <span>Quản lý</span>
                                                 </NavLink>
-                                            </li>
+                                            </li> */}
                                         </ul>
                                     </div>
                                 </div>

@@ -187,11 +187,11 @@ const BookBrand = () => {
                                             className="mySwiper2"
                                         >
                                             {booksOfCategory.map((book) => (
-                                                <SwiperSlide key={book.maSach}>
+                                                <SwiperSlide key={book.id_sach}>
                                                     <div className="image">
                                                         <img
                                                             class="image_cate_thumb lazyload loaded"
-                                                            src={book.hinhAnh}
+                                                            src={`http://localhost:8080/images/${book.thumbnail}`}
                                                             alt={book.tenSach}
                                                         />
                                                         <div class="cate-content">

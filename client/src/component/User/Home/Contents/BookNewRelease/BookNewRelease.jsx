@@ -9,6 +9,8 @@ import {
     selectBookSortByDate,
 } from "../../../../../redux/reducer/getBookSortByDate";
 import { useEffect } from "react";
+import { changeString, scrollToTop } from "../../../../../assets/js/handleFunc";
+import { NavLink } from "react-router-dom";
 // import "./SlideShow.scss";
 const BookNewRelease = () => {
     const dispatch = useDispatch();
@@ -63,21 +65,44 @@ const BookNewRelease = () => {
                                                         key={book.maSach}
                                                     >
                                                         <div className="image">
-                                                            <img
-                                                                class="image_cate_thumb lazyload loaded"
-                                                                src={
-                                                                    book.hinhAnh
-                                                                }
-                                                                alt={
+                                                            <NavLink
+                                                                to={`/${changeString(
+                                                                    book.tenSach
+                                                                )}`}
+                                                                title={
                                                                     book.tenSach
                                                                 }
-                                                            />
-                                                            <div class="cate-content">
-                                                                <h3 class="title_cate">
-                                                                    {
+                                                                onClick={
+                                                                    scrollToTop
+                                                                }
+                                                            >
+                                                                <img
+                                                                    class="image_cate_thumb lazyload loaded"
+                                                                    src={`http://localhost:8080/images/${book.thumbnail}`}
+                                                                    alt={
                                                                         book.tenSach
                                                                     }
-                                                                </h3>
+                                                                />
+                                                            </NavLink>
+
+                                                            <div class="cate-content">
+                                                                <NavLink
+                                                                    to={`/${changeString(
+                                                                        book.tenSach
+                                                                    )}`}
+                                                                    title={
+                                                                        book.tenSach
+                                                                    }
+                                                                    onClick={
+                                                                        scrollToTop
+                                                                    }
+                                                                >
+                                                                    <h3 class="title_cate">
+                                                                        {
+                                                                            book.tenSach
+                                                                        }
+                                                                    </h3>
+                                                                </NavLink>
                                                             </div>
                                                         </div>
                                                     </SwiperSlide>

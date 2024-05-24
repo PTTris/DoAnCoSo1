@@ -2,14 +2,13 @@ import ReactPaginate from "react-paginate";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../../../utils/axiosCustomize.js";
-import { changeString } from "../../../../assets/js/handleFunc.js";
+import { changeString, scrollToTop } from "../../../../assets/js/handleFunc.js";
 
 const AllBooksOfCategory = (props) => {
     const LIMIT_PAGE = 5;
     const [books, setbooks] = useState([]);
     const [totalPages, settotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-
     const fetchAllBooksOfCategoryWithPaginate = async (page) => {
         let response = await axios.get(
             `/getAllBooksOfCategoryWithPag/${props.selectedCategoryID}?page=${page}&limit=${LIMIT_PAGE}`
@@ -70,26 +69,29 @@ const AllBooksOfCategory = (props) => {
                                             {books.map((book) => (
                                                 <>
                                                     <div
-                                                        key={book.maSach}
+                                                        key={book.id_sach}
                                                         class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 product-col mb-3 "
                                                     >
                                                         <div class="item_product_main item_option margin-bottom-15">
                                                             <div class="variants product-action">
                                                                 <div class="product-thumbnail">
-                                                                    <a
+                                                                    <NavLink
                                                                         class="image_thumb scale_hover"
-                                                                        href="/bong-bong"
+                                                                        to={`/${changeString(
+                                                                            book.tenSach
+                                                                        )}`}
+                                                                        onClick={
+                                                                            scrollToTop
+                                                                        }
                                                                     >
                                                                         <img
                                                                             class="lazyload loaded"
-                                                                            src={
-                                                                                book.hinhAnh
-                                                                            }
+                                                                            src={`http://localhost:8080/images/${book.thumbnail}`}
                                                                             alt={
                                                                                 book.tenSach
                                                                             }
                                                                         />
-                                                                    </a>
+                                                                    </NavLink>
                                                                 </div>
                                                                 <div class="product-info">
                                                                     <h3 class="product-name">
@@ -97,8 +99,8 @@ const AllBooksOfCategory = (props) => {
                                                                             to={`/${changeString(
                                                                                 book.tenSach
                                                                             )}`}
-                                                                            title={
-                                                                                book.tenSach
+                                                                            onClick={
+                                                                                scrollToTop
                                                                             }
                                                                         >
                                                                             {

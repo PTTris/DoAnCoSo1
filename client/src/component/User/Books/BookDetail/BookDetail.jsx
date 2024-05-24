@@ -1,186 +1,275 @@
 import "./BookDetail.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { selectAllBooks } from "../../../../redux/reducer/getAllBooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { changeString } from "../../../../assets/js/handleFunc";
+import { useEffect, useState } from "react";
+import { FreeMode, Navigation } from "swiper/modules";
+import {
+    fetchAllImagesBook,
+    selectAllImagesBook,
+} from "../../../../redux/reducer/getAllImagesBook";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+
 const BookDetail = () => {
+    const dispatch = useDispatch();
+    const { tenSach } = useParams();
+    const books = useSelector(selectAllBooks);
+    const imgsBook = useSelector(selectAllImagesBook);
+
+    const newBooks = books.filter((book) => {
+        return changeString(book.tenSach) === tenSach;
+    });
+
+    const [imgID, setimgId] = useState(...newBooks);
+    const [quantity, setQuantity] = useState(1);
+
+    useEffect(() => {
+        dispatch(fetchAllImagesBook(imgID.id_sach));
+    }, [dispatch, imgID]);
+
     return (
         <>
             <div class="section wrap-padding-15 wp_product_main clearfix">
                 <div class="details-product section">
                     <div
                         class="bg_product clearfix lazyload"
-                        data-src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/bg-top-product.jpg?1714959329989"
-                        data-was-processed="true"
+                        style={{
+                            backgroundImage:
+                                "url('//bizweb.dktcdn.net/100/465/223/themes/877050/assets/bg-top-product.jpg?1715681543062')",
+                        }}
                     >
                         <div class="container">
                             <div class="row">
                                 <div class="product-detail-left product-images col-xs-12 col-sm-12 col-md-12 col-lg-5 col-lg-5-pro">
                                     <div class="wrapbb">
-                                        <div class="slider-big-video clearfix mb-5">
-                                            <div class="slider">
-                                                <div
-                                                    aria-live="polite"
-                                                    class="slick-list draggable"
+                                        <div class="clearfix mb-5">
+                                            <div className="swiper-container slide-show-images">
+                                                <Swiper
+                                                    style={{
+                                                        "--swiper-navigation-color":
+                                                            "#38a8ea",
+                                                        "--swiper-pagination-color":
+                                                            "#38a8ea",
+                                                    }}
+                                                    spaceBetween={5}
+                                                    navigation={true}
+                                                    modules={[
+                                                        FreeMode,
+                                                        Navigation,
+                                                    ]}
+                                                    className="mySwiper2"
                                                 >
-                                                    <div class="slick-track">
-                                                        <a
-                                                            class="img_bigg slick-slide slick-current slick-active"
-                                                            href="//bizweb.dktcdn.net/thumb/1024x1024/100/465/223/products/b-a-1-b-n-m-a-ng-s-ng-b-y-ng-y-ng-mong.jpg?v=1715072106453"
-                                                            title="Click để xem"
-                                                            rel="lightbox-demo"
-                                                        >
-                                                            <img
-                                                                src="//bizweb.dktcdn.net/thumb/large/100/465/223/products/b-a-1-b-n-m-a-ng-s-ng-b-y-ng-y-ng-mong.jpg?v=1715072106453"
-                                                                data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/products/b-a-1-b-n-m-a-ng-s-ng-b-y-ng-y-ng-mong.jpg?v=1715072106453"
-                                                                alt="Bốn Mùa Đáng Sống, Bảy Ngày Đáng Mong"
-                                                                data-image="https://bizweb.dktcdn.net/100/465/223/products/b-a-1-b-n-m-a-ng-s-ng-b-y-ng-y-ng-mong.jpg?v=1715072106453"
-                                                                class="lazyload img-responsive mx-auto d-block loaded"
-                                                                data-was-processed="true"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                                    {imgsBook &&
+                                                        imgsBook.map((img) => (
+                                                            <SwiperSlide>
+                                                                <img
+                                                                    src={`http://localhost:8080/images/${img.hinhAnh}`}
+                                                                    alt=""
+                                                                />
+                                                            </SwiperSlide>
+                                                        ))}
+                                                </Swiper>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-lg-7-pro details-pro">
-                                    <form
-                                        id="add-to-cart-form"
-                                        action="/cart/add"
-                                        method="post"
-                                        class="form-inline"
-                                    >
-                                        <div class="fw w_100">
-                                            <div class="title_p clearfix">
-                                                <h1 class="title-product">
-                                                    Bốn Mùa Đáng Sống, Bảy Ngày
-                                                    Đáng Mong
-                                                </h1>
-                                            </div>
-
-                                            <div class="product-summary">
-                                                <div class="rte">
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>Tác giả</th>
-                                                                <td>
-                                                                    Phạm Thảo
-                                                                    Ly, Viết Dài
-                                                                    Ai Đọc
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>NXB</th>
-                                                                <td>Dân Trí</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Năm XB</th>
-                                                                <td>2024</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    Ngôn Ngữ
-                                                                </th>
-                                                                <td>
-                                                                    Tiếng Việt
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    Trọng lượng
-                                                                    (gr)
-                                                                </th>
-                                                                <td>220</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    Kích Thước
-                                                                    Bao Bì
-                                                                </th>
-                                                                <td>
-                                                                    20 x 12 x 1
-                                                                    cm
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    Số trang
-                                                                </th>
-                                                                <td>200</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>
-                                                                    Hình thức
-                                                                </th>
-                                                                <td>Bìa Mềm</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                {newBooks.map((book) => (
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-lg-7-pro details-pro">
+                                        <form
+                                            id="add-to-cart-form"
+                                            action="/cart/add"
+                                            method="post"
+                                            class="form-inline"
+                                        >
+                                            <div class="fw w_100">
+                                                <div class="title_p clearfix">
+                                                    <h1 class="title-product">
+                                                        {book.tenSach}
+                                                    </h1>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-product">
-                                            <div class="special-price">
-                                                <span class="price product-price">
-                                                    Liên hệ
-                                                </span>
-                                            </div>
 
-                                            <div class="clearfix form-group  ">
-                                                <div class="custom custom-btn-number show">
-                                                    <label class="sl section">
-                                                        Số lượng:
-                                                    </label>
-                                                    <div class="custom input_number_product custom-btn-number form-control">
-                                                        <button
-                                                            class="btn_num num_1 button button_qty"
-                                                            onclick="var result = document.getElementById('qtym'); var qtypro = result.value; if( !isNaN( qtypro ) &amp;&amp; qtypro > 1 ) result.value--;return false;"
-                                                            type="button"
-                                                        >
-                                                            <i class="fas fa-minus"></i>
-                                                        </button>
-                                                        <input
-                                                            type="text"
-                                                            id="qtym"
-                                                            name="quantity"
-                                                            value="1"
-                                                            maxlength="3"
-                                                            class="form-control prd_quantity"
-                                                        />
-                                                        <button
-                                                            class="btn_num num_2 button button_qty"
-                                                            type="button"
-                                                        >
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
+                                                <div class="product-summary">
+                                                    <div class="rte">
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>
+                                                                        Tác giả
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.tacGia
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>NXB</th>
+                                                                    <td>
+                                                                        {
+                                                                            book.nhaXB
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Năm XB
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.namXB
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Ngôn Ngữ
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.ngonNgu
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Trọng
+                                                                        lượng
+                                                                        (gr)
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.trongLuongGr
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Kích
+                                                                        Thước
+                                                                        Bao Bì
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.kichThuocBaoBi
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Số trang
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.soTrang
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Hình
+                                                                        thức
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.tenHinhThucSach
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
-
-                                                <div class="btn-mua button_actions clearfix">
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"
-                                                    >
-                                                        <span class="txt-main text_1">
-                                                            Thêm vào giỏ hàng
+                                            </div>
+                                            <div class="form-product">
+                                                <div className="price_quantity">
+                                                    <div class="clearfix form-group  ">
+                                                        <div class="custom custom-btn-number show">
+                                                            <label class="sl section">
+                                                                Số lượng:
+                                                            </label>
+                                                            <div class="input_number_product custom-btn-number form-control">
+                                                                <button
+                                                                    class="btn_num num_1"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        if (
+                                                                            quantity <=
+                                                                            1
+                                                                        )
+                                                                            return;
+                                                                        setQuantity(
+                                                                            quantity -
+                                                                                1
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <i class="fas fa-minus"></i>
+                                                                </button>
+                                                                <input
+                                                                    type="number"
+                                                                    id="qtym"
+                                                                    min={1}
+                                                                    value={
+                                                                        quantity
+                                                                    }
+                                                                    maxlength="3"
+                                                                    class="form-control prd_quantity"
+                                                                />
+                                                                <button
+                                                                    class="btn_num num_2"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        if (
+                                                                            quantity >=
+                                                                            book.soLuongTonKho
+                                                                        )
+                                                                            return;
+                                                                        setQuantity(
+                                                                            quantity +
+                                                                                1
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <i class="fas fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="special-price">
+                                                        <span class="price product-price">
+                                                            {book.giaSach} VNĐ
                                                         </span>
-                                                    </button>
-                                                    <button
-                                                        type="submit"
-                                                        class="btn fast btn_base btn_add_cart btn-cart"
-                                                    >
-                                                        <span class="txt-main text_1">
-                                                            Mua ngay
-                                                        </span>
-                                                    </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                            <div class="btn-mua button_actions clearfix">
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"
+                                                >
+                                                    <span class="txt-main text_1">
+                                                        Thêm vào giỏ hàng
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    type="submit"
+                                                    class="btn fast btn_base btn_add_cart btn-cart"
+                                                >
+                                                    <span class="txt-main text_1">
+                                                        Mua ngay
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

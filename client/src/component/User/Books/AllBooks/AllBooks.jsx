@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import axios from "../../../../utils/axiosCustomize.js";
-import { changeString } from "../../../../assets/js/handleFunc.js";
+import { changeString, scrollToTop } from "../../../../assets/js/handleFunc.js";
 
 const AllBooks = () => {
     const LIMIT_PAGE = 12;
@@ -34,6 +34,7 @@ const AllBooks = () => {
     const handlePageClick = async (event) => {
         await fetchAllBooksWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
+        scrollToTop();
     };
 
     return (
@@ -78,25 +79,26 @@ const AllBooks = () => {
                                                 <>
                                                     <div
                                                         key={book.maSach}
+                                                        data-Id={book.maSach}
                                                         class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 product-col mb-3 "
                                                     >
                                                         <div class="item_product_main item_option margin-bottom-15">
                                                             <div class="variants product-action">
                                                                 <div class="product-thumbnail">
-                                                                    <a
+                                                                    <NavLink
                                                                         class="image_thumb scale_hover"
-                                                                        href="/bong-bong"
+                                                                        to={`/${changeString(
+                                                                            book.tenSach
+                                                                        )}`}
                                                                     >
                                                                         <img
                                                                             class="lazyload loaded"
-                                                                            src={
-                                                                                book.hinhAnh
-                                                                            }
+                                                                            src={`http://localhost:8080/images/${book.thumbnail}`}
                                                                             alt={
                                                                                 book.tenSach
                                                                             }
                                                                         />
-                                                                    </a>
+                                                                    </NavLink>
                                                                 </div>
                                                                 <div class="product-info">
                                                                     <h3 class="product-name">
@@ -106,6 +108,9 @@ const AllBooks = () => {
                                                                             )}`}
                                                                             title={
                                                                                 book.tenSach
+                                                                            }
+                                                                            onClick={
+                                                                                scrollToTop
                                                                             }
                                                                         >
                                                                             {

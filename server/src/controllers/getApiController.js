@@ -2,7 +2,11 @@ import pool from "../config/database.js";
 
 const getAllBooks = async (req, res) => {
     try {
-        const [rows, fields] = await pool.execute("SELECT * FROM Sach");
+        const [rows, fields] = await pool.query(
+            `SELECT * FROM Sach, HinhThucSach, TheLoaiSach 
+            WHERE Sach.maHinhThucSach = HinhThucSach.maHinhThucSach
+            AND Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach`
+        );
         return res.status(200).json(rows);
     } catch (error) {
         return res.status(500).send("Error: " + error.message);
@@ -37,7 +41,7 @@ const getAllBooksWithPaginations = async (req, res) => {
 const getBookSortByDate = async (req, res) => {
     try {
         const [rows, fields] = await pool.execute(
-            "SELECT maSach, tenSach, hinhAnh, ngayThemMoi FROM Sach ORDER BY ngayThemMoi DESC LIMIT 8"
+            "SELECT id_sach, tenSach, thumbnail, ngayThemMoi FROM Sach ORDER BY ngayThemMoi DESC LIMIT 8"
         );
         return res.status(200).json(rows);
     } catch (error) {
@@ -62,16 +66,16 @@ const getAllBooksOfCategory = async (req, res) => {
         const [rows, fields] = await pool.query(
             `SELECT 
             maTheLoaiSach, 
-            maSach,
+            id_sach,
             tenSach,
-            hinhAnh
+            thumbnail
         FROM (
             SELECT 
                 maTheLoaiSach, 
-                maSach,
+                id_sach,
                 tenSach,
-                hinhAnh,
-                ROW_NUMBER() OVER (PARTITION BY maTheLoaiSach ORDER BY maSach) AS rn
+                thumbnail,
+                ROW_NUMBER() OVER (PARTITION BY maTheLoaiSach ORDER BY id_sach) AS rn
             FROM Sach
             WHERE maTheLoaiSach = ?
         ) AS RankedBooks
@@ -97,18 +101,18 @@ const getAllBooksOfCategoryWithPag = async (req, res) => {
         const [rows, fields] = await pool.query(
             `SELECT 
             maTheLoaiSach, 
-            maSach,
+            id_sach,
             tenSach,
             giaSach,
-            hinhAnh
+            thumbnail
         FROM (
             SELECT 
                 maTheLoaiSach, 
-                maSach,
+                id_sach,
                 tenSach,
                 giaSach,
-                hinhAnh,
-                ROW_NUMBER() OVER (PARTITION BY maTheLoaiSach ORDER BY maSach) AS rn
+                thumbnail,
+                ROW_NUMBER() OVER (PARTITION BY maTheLoaiSach ORDER BY id_sach) AS rn
             FROM Sach
             WHERE maTheLoaiSach = ?
         ) AS RankedBooks
@@ -133,6 +137,19 @@ const getBookForm = async (req, res) => {
         return res.status(200).json(rows);
     } catch (error) {
         return res.status(404).send("Error: " + error.message);
+    }
+};
+
+const getImagesBook = async (req, res) => {
+    const { id_sach } = req.params;
+    try {
+        const [rows, fields] = await pool.query(
+            "SELECT hinhAnh FROM HinhAnhSach WHERE id_sach = ?",
+            [id_sach]
+        );
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
     }
 };
 
@@ -170,4 +187,5 @@ export {
     getAllBooksOfCategory,
     getAllBooksOfCategoryWithPag,
     getBookForm,
+    getImagesBook,
 };

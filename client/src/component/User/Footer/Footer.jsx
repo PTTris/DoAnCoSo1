@@ -72,22 +72,17 @@ export default function Footer() {
                             </h6>
                             <p>
                                 <a href="#!" className="text-reset">
-                                    Angular
+                                    ExpressJS
                                 </a>
                             </p>
                             <p>
                                 <a href="#!" className="text-reset">
-                                    React
+                                    ReactJS
                                 </a>
                             </p>
                             <p>
                                 <a href="#!" className="text-reset">
-                                    Vue
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    Laravel
+                                    MySQL
                                 </a>
                             </p>
                         </MDBCol>
