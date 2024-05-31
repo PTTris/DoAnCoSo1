@@ -6,17 +6,15 @@ import { changeString, scrollToTop } from "../../../../assets/js/handleFunc.js";
 
 const AllBooksOfCategory = (props) => {
     const LIMIT_PAGE = 5;
-    const [books, setbooks] = useState([]);
-    const [totalPages, settotalPages] = useState(0);
+    const [books, setBooks] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const fetchAllBooksOfCategoryWithPaginate = async (page) => {
         let response = await axios.get(
             `/getAllBooksOfCategoryWithPag/${props.selectedCategoryID}?page=${page}&limit=${LIMIT_PAGE}`
         );
-
-        setbooks(response.data.data);
-
-        settotalPages(response.data.totalPages);
+        setBooks(response.data.data);
+        setTotalPages(response.data.totalPages);
     };
 
     useEffect(() => {

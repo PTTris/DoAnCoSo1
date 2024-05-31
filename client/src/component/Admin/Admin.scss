@@ -1,0 +1,59 @@
+.admin-container {
+    display: flex;
+    .admin-sidebar {
+        .pro-sidebar {
+            height: 100vh;
+            background-color: #606266;
+        }
+    }
+
+    .admin-content {
+        width: 100%;
+        padding: 20px;
+        .admin-header {
+            height: 40px;
+        }
+        .admin-main {
+            height: 40px;
+        }
+
+        .manage-account-container {
+            .title {
+                font-weight: 600;
+                font-size: 24px;
+            }
+            .account-content {
+                .btn-add-account {
+                    font-weight: 700;
+                    font-size: 14px;
+                    margin: 24px 0;
+                    background: #38a8ea;
+                }
+            }
+            .table-container {
+                height: 476px !important;
+                th {
+                    font-size: 18px !important;
+                }
+                td {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .modal-add-accounts {
+            .lable-upload {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 3px;
+                background-color: #3b71ca;
+                padding: 5px 12px;
+                border-radius: 5px;
+                width: fit-content;
+                color: #fff;
+                cursor: pointer;
+            }
+        }
+    }
+}

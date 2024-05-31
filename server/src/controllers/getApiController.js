@@ -153,32 +153,30 @@ const getImagesBook = async (req, res) => {
     }
 };
 
-// const createNewBook = async (req, res) => {
-//     // console.log("check: ", req.file);
-//     const Img = req.file.filename;
-//     let { title, desc, price } = req.body;
+const getAllUsersWithPaginations = async (req, res) => {
+    try {
+        const { page, limit } = req.query;
+        const offset = (page - 1) * limit;
 
-//     await pool.execute(
-//         "INSERT INTO books(`title`, `desc`, `cover`, `price`) values(?, ?, ?, ?)",
-//         [title, desc, Img, price]
-//     );
+        const [rows] = await pool.query(
+            "SELECT * FROM Taikhoan LIMIT ? OFFSET ?",
+            [+limit, +offset]
+        );
+        const [[{ totalData }]] = await pool.query(
+            "SELECT COUNT(*) AS totalData FROM Taikhoan"
+        );
 
-//     return res.status(200).json({
-//         message: "Added a book!",
-//     });
-// };
-
-// const deleteBook = async (req, res) => {
-//     let id = req.params.id;
-//     await pool.execute("DELETE FROM books WHERE id = ?", [id]);
-
-//     return res.status(200).json({
-//         EM: `Xóa `,
-//         ER: 0,
-
-//     });
-// };
-
+        return res.status(200).json({
+            data: rows,
+            page,
+            limit,
+            totalData,
+            totalPages: Math.ceil(totalData / limit),
+        });
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
 export {
     getAllBooks,
     getAllBooksWithPaginations,
@@ -188,4 +186,5 @@ export {
     getAllBooksOfCategoryWithPag,
     getBookForm,
     getImagesBook,
+    getAllUsersWithPaginations,
 };
