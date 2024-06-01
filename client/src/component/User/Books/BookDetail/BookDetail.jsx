@@ -1,6 +1,5 @@
 import "./BookDetail.scss";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Swiper } from "swiper/react";
 import { selectAllBooks } from "../../../../redux/reducer/getAllBooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";

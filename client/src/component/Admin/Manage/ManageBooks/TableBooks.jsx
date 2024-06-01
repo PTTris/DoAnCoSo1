@@ -13,7 +13,7 @@ const TableBooks = (props) => {
         listBooks,
         handleClickDeleteBook,
         handleClickUpdateBook,
-        fetchAllBooksWithPaginate,
+        fetchBooksWithPaginate,
         totalPages,
         currentPage,
         setCurrentPage,
@@ -21,7 +21,7 @@ const TableBooks = (props) => {
 
     /* Paginate */
     const handlePageClick = async (event) => {
-        await fetchAllBooksWithPaginate(+event.selected + 1);
+        await fetchBooksWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
     };
 
