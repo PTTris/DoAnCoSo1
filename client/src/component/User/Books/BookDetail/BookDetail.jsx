@@ -16,13 +16,14 @@ import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+import BookNewRelease from "../../Home/Contents/BookNewRelease/BookNewRelease";
 
 const BookDetail = () => {
     const dispatch = useDispatch();
     const { tenSach } = useParams();
     const books = useSelector(selectAllBooks);
     const imgsBook = useSelector(selectAllImagesBook);
-
+    console.log(books);
     const newBooks = books.filter((book) => {
         return changeString(book.tenSach) === tenSach;
     });
@@ -66,7 +67,7 @@ const BookDetail = () => {
                                                     ]}
                                                     className="mySwiper2"
                                                 >
-                                                    {imgsBook &&
+                                                    {/* {imgsBook &&
                                                         imgsBook.map((img) => (
                                                             <SwiperSlide>
                                                                 <img
@@ -74,7 +75,7 @@ const BookDetail = () => {
                                                                     alt=""
                                                                 />
                                                             </SwiperSlide>
-                                                        ))}
+                                                        ))} */}
                                                 </Swiper>
                                             </div>
                                         </div>
@@ -178,7 +179,7 @@ const BookDetail = () => {
                                                                     </th>
                                                                     <td>
                                                                         {
-                                                                            book.tenHinhThucSach
+                                                                            book.hinhThucSach
                                                                         }
                                                                     </td>
                                                                 </tr>
@@ -451,115 +452,8 @@ const BookDetail = () => {
                                     </div>
                                 </div>
 
-                                <div className="prodcut-relevant">
-                                    <div class="col-xl-12 col-12">
-                                        <div class="heading text-center">
-                                            <h2>
-                                                <a
-                                                    href="/tin-tuc-bao-chi"
-                                                    title="Tin tức nổi bật"
-                                                >
-                                                    Sản phẩm liên quan
-                                                </a>
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-12 col-12">
-                                        <div className="swiper-container">
-                                            <Swiper
-                                                slidesPerView={2}
-                                                spaceBetween={50}
-                                                pagination={{
-                                                    clickable: true,
-                                                }}
-                                                breakpoints={{
-                                                    390: {
-                                                        slidesPerView: 2,
-                                                        spaceBetween: 10,
-                                                    },
-                                                    820: {
-                                                        slidesPerView: 3,
-                                                        spaceBetween: 20,
-                                                    },
-                                                    1024: {
-                                                        slidesPerView: 4,
-                                                        spaceBetween: 30,
-                                                    },
-                                                }}
-                                                modules={[Pagination]}
-                                                className="mySwiper2"
-                                            >
-                                                <SwiperSlide>
-                                                    <div className="image">
-                                                        <img
-                                                            class="image_cate_thumb lazyload loaded"
-                                                            src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_2.jpg?1714959329989"
-                                                            data-src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_2.jpg?1714959329989"
-                                                            alt="Dạo Này Em Có Ổn Không?"
-                                                            data-was-processed="true"
-                                                        />
-                                                        <div class="cate-content">
-                                                            <h3 class="title_cate">
-                                                                Dạo Này Em Có Ổn
-                                                                Không?
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                </SwiperSlide>
-                                                <SwiperSlide>
-                                                    <div className="image">
-                                                        <img
-                                                            class="image_cate_thumb lazyload loaded"
-                                                            src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_3.jpg?1714959329989"
-                                                            data-src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_3.jpg?1714959329989"
-                                                            alt="Vẻ Đẹp Ngôn Từ"
-                                                            data-was-processed="true"
-                                                        />
-                                                        <div class="cate-content">
-                                                            <h3 class="title_cate">
-                                                                Vẻ Đẹp Ngôn Từ
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                </SwiperSlide>
-                                                <SwiperSlide>
-                                                    <div className="image">
-                                                        <img
-                                                            class="image_cate_thumb lazyload loaded"
-                                                            src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_4.jpg?1714959329989"
-                                                            data-src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_4.jpg?1714959329989"
-                                                            alt="Đến Nơi Nên Đến Yêu Người Nên Yêu "
-                                                            data-was-processed="true"
-                                                        />
-                                                        <div class="cate-content">
-                                                            <h3 class="title_cate">
-                                                                Đến Nơi Nên Đến
-                                                                Yêu Người Nên
-                                                                Yêu
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                </SwiperSlide>
-                                                <SwiperSlide>
-                                                    <div className="image">
-                                                        <img
-                                                            class="image_cate_thumb lazyload loaded"
-                                                            src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_5.jpg?1714959329989"
-                                                            data-src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/sec_category_5.jpg?1714959329989"
-                                                            alt="Giả mã bí ẩn tiền mã hóa "
-                                                            data-was-processed="true"
-                                                        />
-                                                        <div class="cate-content">
-                                                            <h3 class="title_cate">
-                                                                Giả mã bí ẩn
-                                                                tiền mã hóa
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                </SwiperSlide>
-                                            </Swiper>
-                                        </div>
-                                    </div>
+                                <div class="col-xl-12 col-lg-12 col-12">
+                                    <BookNewRelease />
                                 </div>
                             </div>
                         </div>

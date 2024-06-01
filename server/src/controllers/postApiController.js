@@ -1,10 +1,62 @@
+import { log } from "console";
 import pool from "../config/database.js";
 
+const postCreateBook = async (req, res) => {
+    const {
+        tenSach,
+        tacGia,
+        nhaXB,
+        nguoiDich,
+        namXB,
+        ngonNgu,
+        trongLuongGr,
+        kichThuocBaoBi,
+        soTrang,
+        giaSach,
+        soLuongTonKho,
+        hinhThucSach,
+        maTheLoaiSach,
+    } = req.body;
+    const thumbnail = req.file.filename;
+    console.log(thumbnail);
+    try {
+        const sql = `insert into Sach 
+        (tenSach, tacGia, nhaXB, nguoiDich, namXB, ngonNgu, trongLuongGr, 
+        kichThuocBaoBi, soTrang, giaSach, soLuongTonKho, thumbnail, hinhThucSach, maTheLoaiSach)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        await pool.query(sql, [
+            tenSach,
+            tacGia,
+            nhaXB,
+            nguoiDich,
+            +namXB,
+            ngonNgu,
+            +trongLuongGr,
+            kichThuocBaoBi,
+            +soTrang,
+            +giaSach,
+            +soLuongTonKho,
+            thumbnail,
+            hinhThucSach,
+            maTheLoaiSach,
+        ]);
+        res.status(200).json({
+            EC: 0,
+            EM: "Tạo sách thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Tạo sách thất bại",
+            Err: err,
+        });
+    }
+};
 const postCreateAccount = async (req, res) => {
     const { email, tenTaiKhoan, matKhau, vaiTro } = req.body;
     try {
         const sql =
-            "INSERT INTO TaiKhoan (email,tenTaiKhoan,matKhau,vaiTro) VALUES (?, ?, ?, ?)";
+            "INSERT INTO taikhoan (email,tenTaiKhoan,matKhau,vaiTro) VALUES (?, ?, ?, ?)";
         await pool.query(sql, [email, tenTaiKhoan, matKhau, vaiTro]);
         res.status(200).json({
             EC: 0,
@@ -36,4 +88,4 @@ const uploadImages = async (req, res) => {
     }
 };
 
-export { uploadImages, postCreateAccount };
+export { uploadImages, postCreateAccount, postCreateBook };

@@ -17,30 +17,27 @@
             height: 40px;
         }
 
-        .manage-account-container {
-            .title {
-                font-weight: 600;
-                font-size: 24px;
-            }
-            .account-content {
-                .btn-add-account {
-                    font-weight: 700;
-                    font-size: 14px;
-                    margin: 24px 0;
-                    background: #38a8ea;
-                }
-            }
-            .table-container {
-                height: 476px !important;
-                th {
-                    font-size: 18px !important;
-                }
-                td {
-                    font-size: 16px;
-                }
+        .title {
+            font-weight: 600;
+            font-size: 24px;
+        }
+        .account-content {
+            .btn-add-account {
+                font-weight: 700;
+                font-size: 14px;
+                margin: 24px 0;
+                background: #38a8ea;
             }
         }
-
+        .table-container {
+            height: 476px !important;
+            th {
+                font-size: 18px !important;
+            }
+            td {
+                font-size: 16px;
+            }
+        }
         .modal-add-accounts {
             .lable-upload {
                 display: flex;

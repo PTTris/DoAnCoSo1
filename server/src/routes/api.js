@@ -14,11 +14,14 @@ import {
     getImagesBook,
     getAllUsersWithPaginations,
 } from "../controllers/getApiController.js";
+
 import {
     postCreateAccount,
+    postCreateBook,
     uploadImages,
 } from "../controllers/postApiController.js";
-import { deleteAccount } from "../controllers/deleteController.js";
+
+import { deleteAccount, deleteBook } from "../controllers/deleteController.js";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -49,10 +52,12 @@ const initAPIRoute = (app) => {
 
     // postAPI
     router.post("/postCreateAccount", postCreateAccount);
+    router.post("/postCreateBook", upload.single("thumbnail"), postCreateBook);
     router.post("/postImagesBook", upload.array("images", 10), uploadImages);
 
     //deleteAPI
     router.delete("/deleteAccount/:taiKhoan_ID", deleteAccount);
+    router.delete("/deleteBook/:id_sach", deleteBook);
 
     return app.use("/api/v1", router);
 };

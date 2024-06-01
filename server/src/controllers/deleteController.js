@@ -41,4 +41,26 @@ const deleteAccount = async (req, res) => {
     }
 };
 
-export { deleteAccount };
+const deleteBook = async (req, res) => {
+    const id_sach = req.params.id_sach;
+    try {
+        const deleteImagesSQL = "DELETE FROM hinhanhsach WHERE id_sach = ?";
+        await pool.query(deleteImagesSQL, [id_sach]);
+
+        const deleteBookSql = "DELETE FROM sach WHERE id_sach = ?";
+        await pool.query(deleteBookSql, [id_sach]);
+
+        res.status(200).json({
+            EC: 0,
+            EM: "Xóa sách thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Xóa sách thất bại",
+            Err: err,
+        });
+    }
+};
+
+export { deleteAccount, deleteBook };

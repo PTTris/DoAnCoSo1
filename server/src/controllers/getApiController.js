@@ -3,9 +3,8 @@ import pool from "../config/database.js";
 const getAllBooks = async (req, res) => {
     try {
         const [rows, fields] = await pool.query(
-            `SELECT * FROM Sach, HinhThucSach, TheLoaiSach 
-            WHERE Sach.maHinhThucSach = HinhThucSach.maHinhThucSach
-            AND Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach`
+            `SELECT * FROM Sach, TheLoaiSach 
+            WHERE Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach`
         );
         return res.status(200).json(rows);
     } catch (error) {
@@ -18,10 +17,11 @@ const getAllBooksWithPaginations = async (req, res) => {
         const { page, limit } = req.query;
         const offset = (page - 1) * limit;
 
-        const [rows] = await pool.query("SELECT * FROM Sach LIMIT ? OFFSET ?", [
-            +limit,
-            +offset,
-        ]);
+        const [rows] = await pool.query(
+            `SELECT * FROM Sach, TheLoaiSach 
+            WHERE Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach ORDER BY id_sach DESC LIMIT ? OFFSET ?`,
+            [+limit, +offset]
+        );
         const [[{ totalData }]] = await pool.query(
             "SELECT COUNT(*) AS totalData FROM Sach"
         );

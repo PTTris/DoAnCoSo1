@@ -26,7 +26,7 @@ const getAllBooks = createSlice({
             })
             .addCase(fetchAllBook.fulfilled, (state, action) => {
                 state.loading = false;
-                state.books = action.payload; // Gán dữ liệu từ action payload vào state.books
+                state.books = action.payload;
             })
             .addCase(fetchAllBook.rejected, (state, action) => {
                 state.loading = false;

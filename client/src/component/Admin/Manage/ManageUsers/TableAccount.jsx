@@ -1,12 +1,11 @@
 import { Table } from "react-bootstrap";
 import React from "react";
 import ReactPaginate from "react-paginate";
-import { MdDelete, MdSystemUpdateAlt } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 const TableAccount = (props) => {
     const {
         listAccount,
-        handleClickUpdateUser,
         handleClickDeleteAccount,
         fetchAccountWithPaginate,
         totalPages,
@@ -61,13 +60,6 @@ const TableAccount = (props) => {
                                             {user.vaiTro}
                                         </td>
                                         <td className=" fs-2 col-2 text-center">
-                                            <MdSystemUpdateAlt
-                                                size={"1.5rem"}
-                                                onClick={() =>
-                                                    handleClickUpdateUser(user)
-                                                }
-                                                cursor={"pointer"}
-                                            />
                                             <MdDelete
                                                 size={"1.5rem"}
                                                 className="text-danger ms-2"

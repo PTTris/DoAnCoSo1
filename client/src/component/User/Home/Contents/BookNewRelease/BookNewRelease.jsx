@@ -36,23 +36,23 @@ const BookNewRelease = () => {
                             <div class="col-xl-12 col-lg-12 col-12">
                                 <div className="swiper-container">
                                     <Swiper
-                                        slidesPerView={2}
-                                        spaceBetween={10}
+                                        slidesPerView={4}
+                                        spaceBetween={20}
                                         pagination={{
                                             clickable: true,
                                         }}
                                         breakpoints={{
                                             390: {
-                                                slidesPerView: 2,
-                                                spaceBetween: 10,
+                                                slidesPerView: 3,
+                                                spaceBetween: 5,
                                             },
                                             820: {
-                                                slidesPerView: 3,
-                                                spaceBetween: 20,
+                                                slidesPerView: 4,
+                                                spaceBetween: 10,
                                             },
                                             1024: {
-                                                slidesPerView: 4,
-                                                spaceBetween: 30,
+                                                slidesPerView: 5,
+                                                spaceBetween: 15,
                                             },
                                         }}
                                         modules={[Pagination]}

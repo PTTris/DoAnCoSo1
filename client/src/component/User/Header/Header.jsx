@@ -20,7 +20,6 @@ export default function Header(props) {
     const [isShowListBookSelf, setShowListBookSelf] = useState(true);
 
     const categoryBooks = useSelector(selectAllCategory);
-
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchAllCategory());
