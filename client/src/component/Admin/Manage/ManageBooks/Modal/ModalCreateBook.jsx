@@ -17,7 +17,7 @@ const ModalCreateBook = (props) => {
     const [nhaXB, setNhaXB] = useState("");
     const [nguoiDich, setNguoiDich] = useState("");
     const [namXB, setNamXB] = useState(new Date().getFullYear());
-    const [ngonNgu, setngonNgu] = useState("");
+    const [ngonNgu, setNgonNgu] = useState("");
     const [trongLuongGr, setTrongLuongGr] = useState();
     const [kichThuocBaoBi, setKichThuocBaoBi] = useState();
     const [soTrang, setSoTrang] = useState();
@@ -26,26 +26,20 @@ const ModalCreateBook = (props) => {
     const [thumbnail, setThumbnail] = useState();
     const [hinhThucSach, setHinhThucSach] = useState("Bìa mềm");
     const [maTheLoaiSach, setTheLoaiSach] = useState("");
-
+    const [validationErrors, setValidationErrors] = useState({});
     const categoryBooks = useSelector(selectAllCategory);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchAllCategory());
     }, [dispatch]);
 
-    const validate = (state, message) => {
-        if (!state) {
-            toast.error(message);
-            return;
-        }
-    };
     const handleClose = () => {
         setShow(false);
         setTenSach("");
         setTacGia("");
         setNhaXB("");
         setNguoiDich("");
-        setngonNgu("");
+        setNgonNgu("");
         setTrongLuongGr("");
         setKichThuocBaoBi("");
         setSoTrang("");
@@ -53,9 +47,31 @@ const ModalCreateBook = (props) => {
         setSoLuongTonKho("");
         setThumbnail("");
         setTheLoaiSach("");
+        setValidationErrors({});
     };
 
     const handleSubmitCreateAccount = async () => {
+        let errors = {};
+        if (!tenSach) errors.tenSach = true;
+        if (!tacGia) errors.tacGia = true;
+        if (!nhaXB) errors.nhaXB = true;
+        if (!namXB) errors.namXB = true;
+        if (!ngonNgu) errors.ngonNgu = true;
+        if (!trongLuongGr) errors.trongLuongGr = true;
+        if (!kichThuocBaoBi) errors.kichThuocBaoBi = true;
+        if (!soTrang) errors.soTrang = true;
+        if (!giaSach) errors.giaSach = true;
+        if (!soLuongTonKho) errors.soLuongTonKho = true;
+        if (!thumbnail) errors.thumbnail = true;
+        if (!maTheLoaiSach) errors.maTheLoaiSach = true;
+
+        setValidationErrors(errors);
+
+        if (Object.keys(errors).length > 0) {
+            toast.error("Vui lòng điền đầy đủ thông tin.");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("tenSach", tenSach);
         formData.append("tacGia", tacGia);
@@ -87,6 +103,18 @@ const ModalCreateBook = (props) => {
         }
     };
 
+    const handleInputChange = (setter) => (event) => {
+        const { value, files } = event.target;
+        const fieldName = setter.name;
+
+        setValidationErrors((prev) => ({
+            ...prev,
+            [fieldName]: !value && !files?.length,
+        }));
+
+        setter(files?.[0] || value);
+    };
+
     return (
         <>
             <Modal
@@ -101,36 +129,60 @@ const ModalCreateBook = (props) => {
                 <Modal.Body>
                     <form className="row g-3">
                         <div className="col-md-6">
-                            <label className="form-label">Tên sách</label>
+                            <label className="form-label">
+                                Tên sách
+                                {validationErrors.tenSach && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.tenSach && !tenSach
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: Đam mê hái được tiền"
-                                onChange={(event) =>
-                                    setTenSach(event.target.value)
-                                }
+                                value={tenSach}
+                                onChange={handleInputChange(setTenSach)}
                             />
                         </div>
                         <div className="col-md-3">
-                            <label className="form-label">Tác giả</label>
+                            <label className="form-label">
+                                Tác giả
+                                {validationErrors.tacGia && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.tacGia && !tacGia
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: Phan Thanh Trí"
-                                onChange={(event) =>
-                                    setTacGia(event.target.value)
-                                }
+                                value={tacGia}
+                                onChange={handleInputChange(setTacGia)}
                             />
                         </div>
                         <div className="col-md-3">
-                            <label className="form-label">Nhà xuất bản</label>
+                            <label className="form-label">
+                                Nhà xuất bản
+                                {validationErrors.nhaXB && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.nhaXB && !nhaXB
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: Thế giới"
-                                onChange={(event) =>
-                                    setNhaXB(event.target.value)
-                                }
+                                value={nhaXB}
+                                onChange={handleInputChange(setNhaXB)}
                             />
                         </div>
                         <div className="col-md-3">
@@ -141,127 +193,208 @@ const ModalCreateBook = (props) => {
                                 type="text"
                                 className="form-control"
                                 placeholder="VD: Phan Thanh Trí"
-                                onChange={(event) =>
-                                    setNguoiDich(event.target.value)
-                                }
+                                value={nguoiDich}
+                                onChange={handleInputChange(setNguoiDich)}
                             />
                         </div>
                         <div className="col-md-3">
-                            <label className="form-label">Thể loại sách</label>
+                            <label className="form-label">
+                                Thể loại sách
+                                {validationErrors.maTheLoaiSach && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <select
-                                className="form-select"
-                                onChange={(event) =>
-                                    setTheLoaiSach(event.target.value)
-                                }
+                                className={`form-select ${
+                                    validationErrors.maTheLoaiSach &&
+                                    !maTheLoaiSach
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
+                                value={maTheLoaiSach}
+                                onChange={handleInputChange(setTheLoaiSach)}
                             >
+                                <option value="">Chọn thể loại</option>
                                 {categoryBooks &&
                                     categoryBooks.map((book) => (
-                                        <option value={book.maTheLoaiSach}>
+                                        <option
+                                            value={book.maTheLoaiSach}
+                                            key={book.maTheLoaiSach}
+                                        >
                                             {book.tenTheLoaiSach}
                                         </option>
                                     ))}
                             </select>
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Năm xuất bản</label>
+                            <label className="form-label">
+                                Năm xuất bản
+                                {validationErrors.namXB && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
-                                className="form-control"
                                 type="text"
+                                className={`form-control ${
+                                    validationErrors.namXB && !namXB
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 value={namXB}
-                                onChange={(event) =>
-                                    setNamXB(event.target.value)
-                                }
+                                onChange={handleInputChange(setNamXB)}
                             />
                         </div>
 
                         <div className="col-md-4">
-                            <label className="form-label">Kích thước</label>
+                            <label className="form-label">
+                                Kích thước
+                                {validationErrors.kichThuocBaoBi && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.kichThuocBaoBi &&
+                                    !kichThuocBaoBi
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="21 x 14.5 x 1.1"
-                                onChange={(event) =>
-                                    setKichThuocBaoBi(event.target.value)
-                                }
+                                value={kichThuocBaoBi}
+                                onChange={handleInputChange(setKichThuocBaoBi)}
                             />
                         </div>
                         <div className="col-md-3">
-                            <label className="form-label">Ngôn ngữ</label>
+                            <label className="form-label">
+                                Ngôn ngữ
+                                {validationErrors.ngonNgu && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.ngonNgu && !ngonNgu
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: Tiếng Việt"
-                                onChange={(event) =>
-                                    setngonNgu(event.target.value)
-                                }
+                                value={ngonNgu}
+                                onChange={handleInputChange(setNgonNgu)}
                             />
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Trọng lượng</label>
+                            <label className="form-label">
+                                Trọng lượng
+                                {validationErrors.trongLuongGr && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.trongLuongGr &&
+                                    !trongLuongGr
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: 190 (Gr)"
-                                onChange={(event) =>
-                                    setTrongLuongGr(event.target.value)
-                                }
+                                value={trongLuongGr}
+                                onChange={handleInputChange(setTrongLuongGr)}
                             />
                         </div>
                         <div className="col-md-2">
-                            <label className="form-label">Số trang</label>
+                            <label className="form-label">
+                                Số trang
+                                {validationErrors.soTrang && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${
+                                    validationErrors.soTrang && !soTrang
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: 200"
-                                onChange={(event) =>
-                                    setSoTrang(event.target.value)
-                                }
+                                value={soTrang}
+                                onChange={handleInputChange(setSoTrang)}
                             />
                         </div>
-
                         <div className="col-md-2">
-                            <label className="form-label">Số lượng tồn</label>
+                            <label className="form-label">
+                                Số lượng tồn
+                                {validationErrors.soLuongTonKho && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
+                                className={`form-control ${
+                                    validationErrors.soLuongTonKho &&
+                                    !soLuongTonKho
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 placeholder="VD: 33"
-                                className="form-control"
-                                onChange={(event) =>
-                                    setSoLuongTonKho(event.target.value)
-                                }
+                                value={soLuongTonKho}
+                                onChange={handleInputChange(setSoLuongTonKho)}
                             />
                         </div>
 
                         <div className="col-md-3">
-                            <label className="form-label">Hình thức sách</label>
+                            <label className="form-label">
+                                Hình thức sách
+                                {validationErrors.hinhThucSach && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <select
                                 className="form-select"
-                                onChange={(event) =>
-                                    setHinhThucSach(event.target.value)
-                                }
+                                value={hinhThucSach}
+                                onChange={handleInputChange(setHinhThucSach)}
                             >
-                                <option selected value={"Bìa mềm"}>
-                                    Bìa mềm
-                                </option>
-                                <option value={"Bìa cứng"}>Bìa cứng</option>
+                                <option value="Bìa mềm">Bìa mềm</option>
+                                <option value="Bìa cứng">Bìa cứng</option>
                             </select>
                         </div>
 
                         <div className="col-md-4">
-                            <label className="form-label">Giá sách</label>
+                            <label className="form-label">
+                                Giá sách
+                                {validationErrors.giaSach && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="text"
-                                className="form-control"
-                                placeholder="VD: 99.000"
-                                onChange={(event) =>
-                                    setGiaSach(event.target.value)
-                                }
+                                className={`form-control ${
+                                    validationErrors.giaSach && !giaSach
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
+                                placeholder="VD: 200,000"
+                                value={giaSach}
+                                onChange={handleInputChange(setGiaSach)}
                             />
                         </div>
                         <div className="col-md-8">
-                            <label className="form-label">Thumbnail</label>
+                            <label className="form-label">
+                                Ảnh bìa sách
+                                {validationErrors.thumbnail && (
+                                    <span className="text-danger">*</span>
+                                )}
+                            </label>
                             <input
                                 type="file"
-                                className="form-control"
+                                multiple
+                                className={`form-control ${
+                                    validationErrors.thumbnail && !thumbnail
+                                        ? "is-invalid"
+                                        : ""
+                                }`}
                                 onChange={(event) =>
                                     setThumbnail(event.target.files[0])
                                 }

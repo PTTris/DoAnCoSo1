@@ -18,7 +18,6 @@ const postCreateBook = async (req, res) => {
         maTheLoaiSach,
     } = req.body;
     const thumbnail = req.file.filename;
-    console.log(thumbnail);
     try {
         const sql = `insert into Sach 
         (tenSach, tacGia, nhaXB, nguoiDich, namXB, ngonNgu, trongLuongGr, 
@@ -81,10 +80,16 @@ const uploadImages = async (req, res) => {
 
     try {
         await pool.query(sql, [values]);
-        res.status(200).send("Images uploaded successfully");
+        res.status(200).json({
+            EC: 0,
+            EM: "Thêm hình ảnh sách thành công",
+        });
     } catch (err) {
-        console.error("Error inserting image paths to MySQL: ", err);
-        res.status(500).send("Error uploading images");
+        res.status(500).json({
+            EC: 1,
+            EM: "Thêm hình ảnh sách thất bại",
+            Err: err,
+        });
     }
 };
 

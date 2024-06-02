@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../utils/axiosCustomize.js";
+import { toast } from "react-toastify";
 
 const UploadImages = () => {
     const [files, setFiles] = useState([]);
@@ -21,19 +22,17 @@ const UploadImages = () => {
             formData.append("images", files[i]);
         }
 
-        try {
-            const response = await axios.post(
-                "http://localhost:8080/api/v1/postImagesBook",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-            console.log(response.data);
-        } catch (error) {
-            console.error("Error uploading images:", error);
+        const response = await axios.post("/postImagesBook", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        if (response.data && response.data.EC !== 0) {
+            toast.error(response.data.EM);
+        }
+        if (response.data && response.data.EC === 0) {
+            toast.success(response.data.EM);
         }
     };
 

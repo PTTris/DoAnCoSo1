@@ -5,15 +5,18 @@ import axios from "../../../../utils/axiosCustomize.js";
 import TableBooks from "./TableBooks";
 import ModalDeleteBook from "./Modal/ModalDeleteBook.jsx";
 import ModalCreateBook from "./Modal/ModalCreateBook.jsx";
+import ModalCreateImagesBook from "./Modal/ModalCreateImagesBook.jsx";
 
 const ManageBooks = () => {
     const LIMIT_PAGE = 4;
     const [showModalCreate, setShowModalCreate] = useState(false);
+    const [showModalCreateImages, setShowModalCreateImages] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalUpdate, setShowModalUpdate] = useState(false);
 
     const [listBooks, setListBooks] = useState([]);
     const [dataDelete, setDataDelete] = useState({});
+    const [dataCreateImages, setDataCreateImages] = useState({});
     const [dataUpdate, setDataUpdate] = useState({});
     const [totalPages, settotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,6 +34,11 @@ const ManageBooks = () => {
     useEffect(() => {
         fetchAllBooksWithPaginate(1);
     }, []);
+
+    const handleClickCreateImages = (book) => {
+        setShowModalCreateImages(true);
+        setDataCreateImages(book);
+    };
 
     const handleClickDeleteBook = (book) => {
         setShowModalDelete(true);
@@ -57,6 +65,7 @@ const ManageBooks = () => {
                     <TableBooks
                         listBooks={listBooks}
                         handleClickDeleteBook={handleClickDeleteBook}
+                        handleClickCreateImages={handleClickCreateImages}
                         fetchAllBooksWithPaginate={fetchAllBooksWithPaginate}
                         totalPages={totalPages}
                         currentPage={currentPage}
@@ -68,6 +77,13 @@ const ManageBooks = () => {
                 show={showModalCreate}
                 setShow={setShowModalCreate}
                 fetchAllBooksWithPaginate={fetchAllBooksWithPaginate}
+                setCurrentPage={setCurrentPage}
+            />
+            <ModalCreateImagesBook
+                show={showModalCreateImages}
+                setShow={setShowModalCreateImages}
+                fetchAllBooksWithPaginate={fetchAllBooksWithPaginate}
+                dataCreateImages={dataCreateImages}
                 setCurrentPage={setCurrentPage}
             />
             <ModalDeleteBook

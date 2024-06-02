@@ -13,7 +13,8 @@ const TableBooks = (props) => {
         listBooks,
         handleClickDeleteBook,
         handleClickUpdateBook,
-        fetchBooksWithPaginate,
+        handleClickCreateImages,
+        fetchAllBooksWithPaginate,
         totalPages,
         currentPage,
         setCurrentPage,
@@ -21,7 +22,7 @@ const TableBooks = (props) => {
 
     /* Paginate */
     const handlePageClick = async (event) => {
-        await fetchBooksWithPaginate(+event.selected + 1);
+        await fetchAllBooksWithPaginate(+event.selected + 1);
         setCurrentPage(+event.selected + 1);
     };
 
@@ -90,7 +91,9 @@ const TableBooks = (props) => {
                                                 size={"1.5rem"}
                                                 className="text-success ms-2"
                                                 onClick={() =>
-                                                    handleClickDeleteBook(book)
+                                                    handleClickCreateImages(
+                                                        book
+                                                    )
                                                 }
                                                 cursor={"pointer"}
                                             />

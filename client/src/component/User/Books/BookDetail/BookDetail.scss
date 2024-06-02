@@ -5,7 +5,11 @@
             width: 100%;
             height: 100%;
         }
-
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #38a8ea;
+            font-weight: 700;
+        }
         .swiper-slide {
             text-align: center;
             font-size: 18px;

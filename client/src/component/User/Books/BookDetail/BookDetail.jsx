@@ -1,5 +1,5 @@
 import "./BookDetail.scss";
-import { Swiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { selectAllBooks } from "../../../../redux/reducer/getAllBooks";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -27,7 +27,7 @@ const BookDetail = () => {
         return changeString(book.tenSach) === tenSach;
     });
 
-    const [imgID, setimgId] = useState(...newBooks);
+    const [imgID] = useState(...newBooks);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ const BookDetail = () => {
                                                     ]}
                                                     className="mySwiper2"
                                                 >
-                                                    {/* {imgsBook &&
+                                                    {imgsBook &&
                                                         imgsBook.map((img) => (
                                                             <SwiperSlide>
                                                                 <img
@@ -74,7 +74,7 @@ const BookDetail = () => {
                                                                     alt=""
                                                                 />
                                                             </SwiperSlide>
-                                                        ))} */}
+                                                        ))}
                                                 </Swiper>
                                             </div>
                                         </div>
