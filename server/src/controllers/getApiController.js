@@ -13,28 +13,51 @@ const getAllBooks = async (req, res) => {
 };
 
 const getAllBooksWithPaginations = async (req, res) => {
-    try {
-        const { page, limit } = req.query;
-        const offset = (page - 1) * limit;
+    const { tenSach, page, limit } = req.query;
+    const offset = (page - 1) * limit;
 
-        const [rows] = await pool.query(
-            `SELECT * FROM Sach, TheLoaiSach 
+    if (tenSach) {
+        try {
+            const [rows] = await pool.query(
+                `SELECT * FROM Sach, TheLoaiSach 
+            WHERE Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach and tenSach LIKE ? ORDER BY id_sach DESC LIMIT ? OFFSET ?`,
+                [`%${tenSach}%`, +limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM Sach"
+            );
+
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
+    } else {
+        try {
+            const [rows] = await pool.query(
+                `SELECT * FROM Sach, TheLoaiSach 
             WHERE Sach.maTheLoaiSach = TheLoaiSach.maTheLoaiSach ORDER BY id_sach DESC LIMIT ? OFFSET ?`,
-            [+limit, +offset]
-        );
-        const [[{ totalData }]] = await pool.query(
-            "SELECT COUNT(*) AS totalData FROM Sach"
-        );
+                [+limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM Sach"
+            );
 
-        return res.status(200).json({
-            data: rows,
-            page,
-            limit,
-            totalData,
-            totalPages: Math.ceil(totalData / limit),
-        });
-    } catch (error) {
-        return res.status(500).send("Error: " + error.message);
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            r;
+        }
     }
 };
 
@@ -177,14 +200,93 @@ const getAllUsersWithPaginations = async (req, res) => {
         return res.status(500).send("Error: " + error.message);
     }
 };
+
+const getAllCategoriesWithPaginations = async (req, res) => {
+    try {
+        const { page, limit } = req.query;
+        const offset = (page - 1) * limit;
+
+        const [rows] = await pool.query(
+            "SELECT * FROM TheLoaiSach LIMIT ? OFFSET ?",
+            [+limit, +offset]
+        );
+        const [[{ totalData }]] = await pool.query(
+            "SELECT COUNT(*) AS totalData FROM TheLoaiSach"
+        );
+
+        return res.status(200).json({
+            data: rows,
+            page,
+            limit,
+            totalData,
+            totalPages: Math.ceil(totalData / limit),
+        });
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getDescriptionBook = async (req, res) => {
+    const { id_sach } = req.params;
+    try {
+        const [rows, fields] = await pool.query(
+            "SELECT * FROM MoTaSach WHERE id_sach = ?",
+            [id_sach]
+        );
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+// Tìm kiếm sách
+const searchBooks = async (req, res) => {
+    const { query, page, limit } = req.query;
+    const offset = (page - 1) * limit;
+    if (!query) {
+        return res.status(400).json({
+            EC: 1,
+            EM: "Không thể tìm kiếm",
+        });
+    }
+
+    try {
+        const sql = `SELECT * FROM Sach 
+                     WHERE tenSach LIKE ? LIMIT ? OFFSET ?`;
+        const [rows] = await pool.query(sql, [`%${query}%`, +limit, +offset]);
+
+        const [[{ totalData }]] = await pool.query(
+            `SELECT COUNT(*) as totalData FROM Sach WHERE tenSach LIKE ?`,
+            [`%${query}%`]
+        );
+
+        return res.status(200).json({
+            data: rows,
+            page,
+            limit,
+            totalData,
+            totalPages: Math.ceil(totalData / limit),
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            EC: 1,
+            EM: "Không tìm thấy sách!",
+        });
+    }
+};
+
 export {
+    searchBooks,
     getAllBooks,
-    getAllBooksWithPaginations,
-    getBookSortByDate,
-    getAllCategoryBook,
-    getAllBooksOfCategory,
-    getAllBooksOfCategoryWithPag,
     getBookForm,
     getImagesBook,
+    getBookSortByDate,
+    getAllCategoryBook,
+    getDescriptionBook,
+    getAllBooksOfCategory,
+    getAllBooksWithPaginations,
     getAllUsersWithPaginations,
+    getAllBooksOfCategoryWithPag,
+    getAllCategoriesWithPaginations,
 };

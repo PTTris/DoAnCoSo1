@@ -3,23 +3,25 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../../../utils/axiosCustomize.js";
 import { changeString, scrollToTop } from "../../../../assets/js/handleFunc.js";
-
+import "../Books.scss";
 const AllBooksOfCategory = (props) => {
     const LIMIT_PAGE = 5;
+    const { selectedCategoryID } = props;
     const [books, setBooks] = useState([]);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const fetchAllBooksOfCategoryWithPaginate = async (page) => {
+
+    const fetchAllBooksOfCategoryWithPaginate = async (data, page) => {
         let response = await axios.get(
-            `/getAllBooksOfCategoryWithPag/${props.selectedCategoryID}?page=${page}&limit=${LIMIT_PAGE}`
+            `/getAllBooksOfCategoryWithPag/${data}?page=${page}&limit=${LIMIT_PAGE}`
         );
         setBooks(response.data.data);
         setTotalPages(response.data.totalPages);
     };
 
     useEffect(() => {
-        fetchAllBooksOfCategoryWithPaginate(1);
-    }, [props.selectedCategoryID]);
+        fetchAllBooksOfCategoryWithPaginate(selectedCategoryID, 1);
+    }, [selectedCategoryID]);
 
     const handlePageClick = async (event) => {
         await fetchAllBooksOfCategoryWithPaginate(+event.selected + 1);
@@ -28,17 +30,17 @@ const AllBooksOfCategory = (props) => {
 
     return (
         <>
-            <section class="bread-crumb">
-                <span class="crumb-border"></span>
-                <div class="container">
-                    <div class="rows">
-                        <div class="col-xs-12 a-left">
-                            <ul class="breadcrumb">
-                                <li class="home">
+            <section className="bread-crumb">
+                <span className="crumb-border"></span>
+                <div className="container">
+                    <div className="rows">
+                        <div className="col-xs-12 a-left">
+                            <ul className="breadcrumb">
+                                <li className="home">
                                     <NavLink to="/">
                                         <span>Trang Chủ</span>
                                     </NavLink>
-                                    <span class="mr_lr">&nbsp;/&nbsp;</span>
+                                    <span className="mr_lr">&nbsp;/&nbsp;</span>
                                 </li>
 
                                 <li>
@@ -49,32 +51,50 @@ const AllBooksOfCategory = (props) => {
                     </div>
                 </div>
             </section>
-            <div class="section wrap_background">
-                <div class="container ">
-                    <div class="bg_collection section">
-                        <div class="row">
-                            <div class="main_container collection col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                <div class="slider-items-products section">
-                                    <div class="collectiontitle">
-                                        <h1 class="cat-heading">
+            <div className="section wrap_background">
+                <div className="container ">
+                    <div className="bg_collection section">
+                        <div className="row">
+                            <div className="main_container collection col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <div className="slider-items-products section">
+                                    <div className="collectiontitle">
+                                        <h1 className="cat-heading">
                                             {props.nameCategory}
                                         </h1>
                                     </div>
                                 </div>
-                                <div class="category-products products">
-                                    <section class="products-view products-view-grid collection_reponsive list_hover_pro">
-                                        <div class="row">
+                                <div className="category-products products">
+                                    <section className="products-view products-view-grid collection_reponsive list_hover_pro">
+                                        <div className="row">
                                             {books.map((book) => (
-                                                <>
-                                                    <div
-                                                        key={book.id_sach}
-                                                        class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 product-col mb-3 "
-                                                    >
-                                                        <div class="item_product_main item_option margin-bottom-15">
-                                                            <div class="variants product-action">
-                                                                <div class="product-thumbnail">
+                                                <div
+                                                    key={book.id_sach}
+                                                    className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 product-col mb-3 "
+                                                >
+                                                    <div className="item_product_main item_option margin-bottom-15">
+                                                        <div className="variants product-action">
+                                                            <div className="product-thumbnail">
+                                                                <NavLink
+                                                                    className="image_thumb scale_hover"
+                                                                    to={`/${changeString(
+                                                                        book.tenSach
+                                                                    )}`}
+                                                                    onClick={
+                                                                        scrollToTop
+                                                                    }
+                                                                >
+                                                                    <img
+                                                                        className="lazyload loaded"
+                                                                        src={`http://localhost:8080/images/${book.thumbnail}`}
+                                                                        alt={
+                                                                            book.tenSach
+                                                                        }
+                                                                    />
+                                                                </NavLink>
+                                                            </div>
+                                                            <div className="product-info">
+                                                                <h3 className="product-name">
                                                                     <NavLink
-                                                                        class="image_thumb scale_hover"
                                                                         to={`/${changeString(
                                                                             book.tenSach
                                                                         )}`}
@@ -82,43 +102,23 @@ const AllBooksOfCategory = (props) => {
                                                                             scrollToTop
                                                                         }
                                                                     >
-                                                                        <img
-                                                                            class="lazyload loaded"
-                                                                            src={`http://localhost:8080/images/${book.thumbnail}`}
-                                                                            alt={
-                                                                                book.tenSach
-                                                                            }
-                                                                        />
+                                                                        {
+                                                                            book.tenSach
+                                                                        }
                                                                     </NavLink>
-                                                                </div>
-                                                                <div class="product-info">
-                                                                    <h3 class="product-name">
-                                                                        <NavLink
-                                                                            to={`/${changeString(
-                                                                                book.tenSach
-                                                                            )}`}
-                                                                            onClick={
-                                                                                scrollToTop
-                                                                            }
-                                                                        >
-                                                                            {
-                                                                                book.tenSach
-                                                                            }
-                                                                        </NavLink>
-                                                                    </h3>
-                                                                    <div class="price-box">
-                                                                        <span>
-                                                                            {
-                                                                                book.giaSach
-                                                                            }
-                                                                            &nbsp;VNĐ
-                                                                        </span>
-                                                                    </div>
+                                                                </h3>
+                                                                <div className="price-box">
+                                                                    <span>
+                                                                        {
+                                                                            book.giaSach
+                                                                        }
+                                                                        &nbsp;VNĐ
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </>
+                                                </div>
                                             ))}
                                         </div>
                                     </section>

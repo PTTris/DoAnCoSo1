@@ -4,6 +4,9 @@
         .pro-sidebar {
             height: 100vh;
             background-color: #606266;
+            .pro-item-content {
+                font-size: 16px;
+            }
         }
     }
 
@@ -21,8 +24,8 @@
             font-weight: 600;
             font-size: 24px;
         }
-        .account-content {
-            .btn-add-account {
+        .content {
+            .btn-add {
                 font-weight: 700;
                 font-size: 14px;
                 margin: 24px 0;
@@ -51,6 +54,28 @@
                 color: #fff;
                 cursor: pointer;
             }
+        }
+    }
+
+    .form-admin {
+        margin: 60px auto 0;
+        width: 400px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 2px 10px 21px 3px rgba(147, 147, 147, 0.62);
+        -webkit-box-shadow: 2px 10px 21px 3px rgba(147, 147, 147, 0.62);
+        -moz-box-shadow: 2px 10px 21px 3px rgba(147, 147, 147, 0.62);
+        .input-form {
+            margin-bottom: 24px;
+        }
+        button {
+            margin-top: 10px;
+            background-color: #38a8ea;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 700;
         }
     }
 }

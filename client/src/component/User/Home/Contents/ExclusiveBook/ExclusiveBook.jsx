@@ -6,7 +6,7 @@ import { Autoplay } from "swiper/modules";
 const ExclusiveBook = () => {
     return (
         <>
-            <div class="col-xl-12 col-lg-12 col-12">
+            <div className="col-xl-12 col-lg-12 col-12">
                 <div className="exclusive-book-container">
                     <div className="swiper-container">
                         <Swiper
@@ -37,55 +37,45 @@ const ExclusiveBook = () => {
                             <SwiperSlide>
                                 <div className="image">
                                     <img
-                                        class="lazyload img-responsive loaded"
+                                        className="lazyload img-responsive loaded"
                                         src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_1.jpg?1714959329989"
-                                        data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_1.jpg?1714959329989"
                                         alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                        data-was-processed="true"
                                     />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="image">
                                     <img
-                                        class="lazyload img-responsive loaded"
+                                        className="lazyload img-responsive loaded"
                                         src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_2.jpg?1714959329989"
-                                        data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_2.jpg?1714959329989"
                                         alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                        data-was-processed="true"
                                     />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="image">
                                     <img
-                                        class="lazyload img-responsive loaded"
+                                        className="lazyload img-responsive loaded"
                                         src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_3.jpg?1714959329989"
-                                        data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_3.jpg?1714959329989"
                                         alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                        data-was-processed="true"
                                     />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="image">
                                     <img
-                                        class="lazyload img-responsive loaded"
+                                        className="lazyload img-responsive loaded"
                                         src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_4.jpg?1714959329989"
-                                        data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_4.jpg?1714959329989"
                                         alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                        data-was-processed="true"
                                     />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="image">
                                     <img
-                                        class="lazyload img-responsive loaded"
+                                        className="lazyload img-responsive loaded"
                                         src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_5.jpg?1714959329989"
-                                        data-src="//bizweb.dktcdn.net/thumb/large/100/465/223/themes/877050/assets/picture_5.jpg?1714959329989"
                                         alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
-                                        data-was-processed="true"
                                     />
                                 </div>
                             </SwiperSlide>

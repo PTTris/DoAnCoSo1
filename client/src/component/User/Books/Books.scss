@@ -17,21 +17,37 @@
     }
 }
 
+.not-found {
+    font-family: "Quicksand", sans-serif;
+    text-transform: none;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
 .bg_collection {
     background: #fff;
     padding: 0;
     margin: 50px 0 30px;
 
-    .collectiontitle h1 {
-        font-size: 25px;
-        font-family: "Freeman", sans-serif;
-        font-weight: 400;
-        text-transform: uppercase;
-        padding: 0;
-        margin-bottom: 20px;
-        color: #282828;
+    .collectiontitle {
+        h1 {
+            font-size: 25px;
+            font-family: "Freeman", sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            padding: 0;
+            margin-bottom: 20px;
+            color: #282828;
+        }
+        .count-items {
+            font-family: "Quicksand", sans-serif;
+            text-transform: none;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
     }
-    .category-products {
+    .category-products,
+    .search-products {
         width: 100%;
         float: left;
         .item_product_main {

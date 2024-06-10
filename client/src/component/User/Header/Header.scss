@@ -66,13 +66,13 @@
                     }
                     button {
                         position: absolute;
-                        left: -38px;
+                        left: -22px;
                         top: -20px;
                         z-index: 999;
                         display: inline-block;
                         height: 40px;
                         line-height: 39px;
-                        padding: 0 10px;
+                        padding: 0 1px;
                         text-align: center;
                         white-space: nowrap;
                         outline: none !important;
@@ -226,7 +226,8 @@
                 border-radius: 0px;
                 padding: 0;
                 height: 125px;
-                a {
+                a,
+                .list-brand {
                     display: block;
                     text-align: left;
                     padding: 0px 0px 0 0;
@@ -251,6 +252,10 @@
                     }
                 }
                 &:hover {
+                    .list-brand {
+                        color: #38a8ea;
+                        cursor: default;
+                    }
                     .item_small {
                         overflow: visible;
                         max-height: 3000px;

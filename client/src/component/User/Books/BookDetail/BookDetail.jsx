@@ -16,40 +16,54 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import BookNewRelease from "../../Home/Contents/BookNewRelease/BookNewRelease";
+import {
+    fetchAllDescBook,
+    selectAllDescBook,
+} from "../../../../redux/reducer/getDescriptionBook";
 
 const BookDetail = () => {
     const dispatch = useDispatch();
     const { tenSach } = useParams();
     const books = useSelector(selectAllBooks);
     const imgsBook = useSelector(selectAllImagesBook);
-    console.log(books);
-    const newBooks = books.filter((book) => {
+    const descBook = useSelector(selectAllDescBook);
+    const updatedBooks = books.filter((book) => {
         return changeString(book.tenSach) === tenSach;
     });
-
-    const [imgID] = useState(...newBooks);
+    const [data, setData] = useState(
+        updatedBooks.length > 0 ? updatedBooks[0] : {}
+    );
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
-        dispatch(fetchAllImagesBook(imgID.id_sach));
-    }, [dispatch, imgID]);
+        if (updatedBooks.length > 0) {
+            setData(updatedBooks[0]);
+        }
+    }, [updatedBooks]);
+
+    useEffect(() => {
+        if (data.id_sach) {
+            dispatch(fetchAllImagesBook(data.id_sach));
+            dispatch(fetchAllDescBook(data.id_sach));
+        }
+    }, [dispatch, data.id_sach]);
 
     return (
         <>
-            <div class="section wrap-padding-15 wp_product_main clearfix">
-                <div class="details-product section">
+            <div className="section wrap-padding-15 wp_product_main clearfix">
+                <div className="details-product section">
                     <div
-                        class="bg_product clearfix lazyload"
+                        className="bg_product clearfix lazyload"
                         style={{
                             backgroundImage:
                                 "url('//bizweb.dktcdn.net/100/465/223/themes/877050/assets/bg-top-product.jpg?1715681543062')",
                         }}
                     >
-                        <div class="container">
-                            <div class="row">
-                                <div class="product-detail-left product-images col-xs-12 col-sm-12 col-md-12 col-lg-5 col-lg-5-pro">
-                                    <div class="wrapbb">
-                                        <div class="clearfix mb-5">
+                        <div className="container">
+                            <div className="row">
+                                <div className="product-detail-left product-images col-xs-12 col-sm-12 col-md-12 col-lg-5 col-lg-5-pro">
+                                    <div className="wrapbb">
+                                        <div className="clearfix mb-5">
                                             <div className="swiper-container slide-show-images">
                                                 <Swiper
                                                     style={{
@@ -67,38 +81,54 @@ const BookDetail = () => {
                                                     className="mySwiper2"
                                                 >
                                                     {imgsBook &&
-                                                        imgsBook.map((img) => (
-                                                            <SwiperSlide>
-                                                                <img
-                                                                    src={`http://localhost:8080/images/${img.hinhAnh}`}
-                                                                    alt=""
-                                                                />
-                                                            </SwiperSlide>
-                                                        ))}
+                                                        imgsBook.map(
+                                                            (img, index) => (
+                                                                <SwiperSlide>
+                                                                    <img
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        src={`http://localhost:8080/images/${img.hinhAnh}`}
+                                                                        alt=""
+                                                                    />
+                                                                </SwiperSlide>
+                                                            )
+                                                        )}
                                                 </Swiper>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {newBooks.map((book) => (
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-lg-7-pro details-pro">
+                                {updatedBooks.map((book) => (
+                                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-lg-7-pro details-pro">
                                         <form
                                             id="add-to-cart-form"
                                             action="/cart/add"
                                             method="post"
-                                            class="form-inline"
+                                            className="form-inline"
                                         >
-                                            <div class="fw w_100">
-                                                <div class="title_p clearfix">
-                                                    <h1 class="title-product">
+                                            <div className="fw w_100">
+                                                <div className="title_p clearfix">
+                                                    <h1 className="title-product">
                                                         {book.tenSach}
                                                     </h1>
                                                 </div>
 
-                                                <div class="product-summary">
-                                                    <div class="rte">
+                                                <div className="product-summary">
+                                                    <div className="rte">
                                                         <table>
                                                             <tbody>
+                                                                <tr>
+                                                                    <th>
+                                                                        Thể loại
+                                                                        sách
+                                                                    </th>
+                                                                    <td>
+                                                                        {
+                                                                            book.tenTheLoaiSach
+                                                                        }
+                                                                    </td>
+                                                                </tr>
                                                                 <tr>
                                                                     <th>
                                                                         Tác giả
@@ -187,16 +217,16 @@ const BookDetail = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-product">
+                                            <div className="form-product">
                                                 <div className="price_quantity">
-                                                    <div class="clearfix form-group  ">
-                                                        <div class="custom custom-btn-number show">
-                                                            <label class="sl section">
+                                                    <div className="clearfix form-group  ">
+                                                        <div className="custom custom-btn-number show">
+                                                            <label className="sl section">
                                                                 Số lượng:
                                                             </label>
-                                                            <div class="input_number_product custom-btn-number form-control">
+                                                            <div className="input_number_product custom-btn-number form-control">
                                                                 <button
-                                                                    class="btn_num num_1"
+                                                                    className="btn_num num_1"
                                                                     type="button"
                                                                     onClick={() => {
                                                                         if (
@@ -210,7 +240,7 @@ const BookDetail = () => {
                                                                         );
                                                                     }}
                                                                 >
-                                                                    <i class="fas fa-minus"></i>
+                                                                    <i className="fas fa-minus"></i>
                                                                 </button>
                                                                 <input
                                                                     type="number"
@@ -220,10 +250,10 @@ const BookDetail = () => {
                                                                         quantity
                                                                     }
                                                                     maxlength="3"
-                                                                    class="form-control prd_quantity"
+                                                                    className="form-control prd_quantity"
                                                                 />
                                                                 <button
-                                                                    class="btn_num num_2"
+                                                                    className="btn_num num_2"
                                                                     type="button"
                                                                     onClick={() => {
                                                                         if (
@@ -237,32 +267,32 @@ const BookDetail = () => {
                                                                         );
                                                                     }}
                                                                 >
-                                                                    <i class="fas fa-plus"></i>
+                                                                    <i className="fas fa-plus"></i>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="special-price">
-                                                        <span class="price product-price">
+                                                    <div className="special-price">
+                                                        <span className="price product-price">
                                                             {book.giaSach} VNĐ
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="btn-mua button_actions clearfix">
+                                            <div className="btn-mua button_actions clearfix">
                                                 <button
                                                     type="submit"
-                                                    class="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"
+                                                    className="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"
                                                 >
-                                                    <span class="txt-main text_1">
+                                                    <span className="txt-main text_1">
                                                         Thêm vào giỏ hàng
                                                     </span>
                                                 </button>
                                                 <button
                                                     type="submit"
-                                                    class="btn fast btn_base btn_add_cart btn-cart"
+                                                    className="btn fast btn_base btn_add_cart btn-cart"
                                                 >
-                                                    <span class="txt-main text_1">
+                                                    <span className="txt-main text_1">
                                                         Mua ngay
                                                     </span>
                                                 </button>
@@ -273,176 +303,41 @@ const BookDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-12">
-                                <div class="tab_h">
-                                    <div class="section bg_white">
-                                        <div class="product-tab e-tabs not-dqtab">
-                                            <ul class="tabs tabs-title clearfix">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xl-12 col-lg-12 col-12">
+                                <div className="tab_h">
+                                    <div className="section bg_white">
+                                        <div className="product-tab e-tabs not-dqtab">
+                                            <ul className="tabs tabs-title clearfix">
                                                 <li
-                                                    class="tab-link active"
+                                                    className="tab-link active"
                                                     data-tab="#tab-1"
                                                 >
-                                                    <h2 class="title-head margin-top-0 cate">
+                                                    <h2 className="title-head margin-top-0 cate">
                                                         <span>
                                                             Mô tả sản phẩm
                                                         </span>
                                                     </h2>
                                                 </li>
                                             </ul>
-                                            <div class="tab-float">
+                                            <div className="tab-float">
                                                 <div
                                                     id="tab-1"
-                                                    class="tab-content active content_extab"
+                                                    className="tab-content active content_extab"
                                                 >
-                                                    <div class="rte product_getcontent">
+                                                    <div className="rte product_getcontent">
                                                         <div id="content">
-                                                            <p>&nbsp;</p>
-                                                            <p>
-                                                                <strong>
-                                                                    Bốn Mùa Đáng
-                                                                    Sống, Bảy
-                                                                    Ngày Đáng
-                                                                    Mong
-                                                                </strong>
-                                                            </p>
-                                                            <p>
-                                                                Cuộc đời này dài
-                                                                rộng thế, liệu
-                                                                có một nơi nào
-                                                                đủ ấm áp để bạn
-                                                                chọn dừng chân?
-                                                            </p>
-                                                            <p>
-                                                                Ở đó, bạn sẽ cảm
-                                                                nhận từng làn
-                                                                gió khi mùa xuân
-                                                                sang, lắng nghe
-                                                                tiếng ve kêu râm
-                                                                ran khi mùa hè
-                                                                tới, ngắm nhìn
-                                                                mùa thu với
-                                                                những chiếc lá
-                                                                vàng thay áo hay
-                                                                mùa đông của cái
-                                                                lạnh cắt da… Với
-                                                                cuốn sách “Bốn
-                                                                mùa đáng sống,
-                                                                bảy ngày đáng
-                                                                mong” bạn sẽ
-                                                                được dẫn tới một
-                                                                nơi như thế, nơi
-                                                                mà nỗi buồn
-                                                                không còn u tối
-                                                                và muộn phiền
-                                                                không nặng nề,
-                                                                một cuốn sách sẽ
-                                                                giúp bạn tìm lại
-                                                                những rung động
-                                                                đẹp đẽ của tâm
-                                                                hồn.
-                                                            </p>
-                                                            <p>
-                                                                - “Bốn mùa đáng
-                                                                sống” - bốn mùa
-                                                                trôi qua, dẫu có
-                                                                lúc hạnh phúc,
-                                                                có khi lại khó
-                                                                khăn vất vả, ta
-                                                                đều cảm ơn tháng
-                                                                ngày đi qua và
-                                                                cùng cầu chúc
-                                                                cho một khởi đầu
-                                                                tươi mới, vui vẻ
-                                                                và dịu dàng hơn
-                                                                cứ thế mà đi qua
-                                                                Xuân Hạ Thu Đông
-                                                            </p>
-                                                            <p>
-                                                                - “Bảy ngày đáng
-                                                                mong” - mỗi ngày
-                                                                đều phải nhắc
-                                                                nhở bản thân
-                                                                đừng mãi than
-                                                                phiền. Nếu như
-                                                                bạn không đuổi
-                                                                kịp bình mình
-                                                                lúc 5h sáng, vậy
-                                                                hãy thử ngắm
-                                                                hoàng hôn lúc 6h
-                                                                chiều bởi khoảnh
-                                                                khắc nào cũng
-                                                                đáng giá.&nbsp;
-                                                                &nbsp;
-                                                            </p>
-                                                            <p>
-                                                                Suy cho cùng,
-                                                                hoàng hôn miễn
-                                                                phí, xuân hạ thu
-                                                                đông cũng vậy,
-                                                                đừng cảm thấy
-                                                                cuộc đời này là
-                                                                vô
-                                                                nghĩa.&nbsp;&nbsp;
-                                                            </p>
-                                                            <p>
-                                                                Gửi gắm trong
-                                                                200 trang sách
-                                                                là những câu
-                                                                chuyện thăng
-                                                                trầm ai rồi cũng
-                                                                phải đi qua…,
-                                                                nhưng bằng lời
-                                                                văn của tác giả
-                                                                Phạm Thảo Ly
-                                                                (Viết dài ai
-                                                                đọc) bạn sẽ cảm
-                                                                thấy nhẹ nhàng,
-                                                                như khi trở về
-                                                                nhà sau những
-                                                                giờ phút căng
-                                                                thẳng, để tâm
-                                                                trí hoàn toàn
-                                                                rộng mở, trước
-                                                                cánh đồng xanh,
-                                                                trong góc quán
-                                                                nhỏ, bên cạnh
-                                                                một người bạn
-                                                                hợp ý, bất kể
-                                                                mới quen biết
-                                                                hay đã thân
-                                                                thuộc từ lâu.
-                                                            </p>
-                                                            <p>
-                                                                Hy vọng bạn đi
-                                                                qua bốn mùa đều
-                                                                thấy đáng sống,
-                                                                bảy ngày với bạn
-                                                                đều là ngày đáng
-                                                                mong. Mỗi phút
-                                                                mỗi giây trôi
-                                                                qua đều có thể
-                                                                hết mình sống
-                                                                cho thật trọn
-                                                                vẹn. Bởi vốn dĩ
-                                                                đến được cuộc
-                                                                đời này và đi
-                                                                đến ngày hôm nay
-                                                                đã chẳng dễ dàng
-                                                                gì. Hoa không nở
-                                                                mãi nhưng sẽ vẫn
-                                                                luôn có hoa đang
-                                                                bung nở. Một
-                                                                thái độ sống đẹp
-                                                                sẽ là vị thuốc
-                                                                tốt để chữa lành
-                                                                tất cả. Bốn mùa
-                                                                tuy dài đằng
-                                                                đẵng, nhưng cũng
-                                                                sẽ mênh mông rực
-                                                                rỡ vô cùng.
-                                                            </p>
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html:
+                                                                        descBook.length !==
+                                                                        0
+                                                                            ? descBook[0]
+                                                                                  .noiDung
+                                                                            : "Hiện tại nội dung chưa cập nhật",
+                                                                }}
+                                                            ></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -451,7 +346,7 @@ const BookDetail = () => {
                                     </div>
                                 </div>
 
-                                <div class="col-xl-12 col-lg-12 col-12">
+                                <div className="col-xl-12 col-lg-12 col-12">
                                     <BookNewRelease />
                                 </div>
                             </div>

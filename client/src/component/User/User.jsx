@@ -11,6 +11,9 @@ const User = (props) => {
                         setSelectedCategory={props.setSelectedCategory}
                         setSelectedCategoryID={props.setSelectedCategoryID}
                         setNameCategory={props.setNameCategory}
+                        isAdmin={props.isAdmin}
+                        setDataSearch={props.setDataSearch}
+                        dataSearch={props.dataSearch}
                     />
                 </div>
                 <div className="main-container">

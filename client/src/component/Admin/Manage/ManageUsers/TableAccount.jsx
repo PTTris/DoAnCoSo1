@@ -1,12 +1,13 @@
 import { Table } from "react-bootstrap";
 import React from "react";
 import ReactPaginate from "react-paginate";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdSystemUpdateAlt } from "react-icons/md";
 
 const TableAccount = (props) => {
     const {
         listAccount,
         handleClickDeleteAccount,
+        handleClickUpdateAccount,
         fetchAccountWithPaginate,
         totalPages,
         currentPage,
@@ -48,9 +49,9 @@ const TableAccount = (props) => {
                     <tbody>
                         {listAccount &&
                             listAccount.length > 0 &&
-                            listAccount.map((user) => {
+                            listAccount.map((user, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td className="text-center col-1">
                                             {user.taiKhoan_ID}
                                         </td>
@@ -60,6 +61,16 @@ const TableAccount = (props) => {
                                             {user.vaiTro}
                                         </td>
                                         <td className=" fs-2 col-2 text-center">
+                                            <MdSystemUpdateAlt
+                                                size={"1.5rem"}
+                                                className="ms-2"
+                                                cursor={"pointer"}
+                                                onClick={() =>
+                                                    handleClickUpdateAccount(
+                                                        user
+                                                    )
+                                                }
+                                            />
                                             <MdDelete
                                                 size={"1.5rem"}
                                                 className="text-danger ms-2"

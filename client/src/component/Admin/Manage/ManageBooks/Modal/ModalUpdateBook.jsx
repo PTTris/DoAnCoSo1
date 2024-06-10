@@ -3,53 +3,73 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import axios from "../../../../../utils/axiosCustomize.js";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    fetchAllCategory,
-    selectAllCategory,
-} from "../../../../../redux/reducer/getAllCategory.js";
+import { useSelector } from "react-redux";
+import { selectAllCategory } from "../../../../../redux/reducer/getAllCategory.js";
+import _ from "lodash";
+const ModalUpdateBook = (props) => {
+    const {
+        show,
+        setShowModalUpdate,
+        dataUpdate,
+        fetchAllBooksWithPaginate,
+        setCurrentPage,
+    } = props;
 
-const ModalCreateBook = (props) => {
-    const { show, setShow, fetchAllBooksWithPaginate, setCurrentPage } = props;
-
-    const [tenSach, setTenSach] = useState("");
-    const [tacGia, setTacGia] = useState("");
-    const [nhaXB, setNhaXB] = useState("");
-    const [nguoiDich, setNguoiDich] = useState("");
-    const [namXB, setNamXB] = useState(new Date().getFullYear());
-    const [ngonNgu, setNgonNgu] = useState("Tiếng việt");
+    const [tenSach, setTenSach] = useState();
+    const [tacGia, setTacGia] = useState();
+    const [nhaXB, setNhaXB] = useState();
+    const [nguoiDich, setNguoiDich] = useState();
+    const [namXB, setNamXB] = useState();
+    const [ngonNgu, setNgonNgu] = useState();
     const [trongLuongGr, setTrongLuongGr] = useState();
     const [kichThuocBaoBi, setKichThuocBaoBi] = useState();
     const [soTrang, setSoTrang] = useState();
     const [giaSach, setGiaSach] = useState();
     const [soLuongTonKho, setSoLuongTonKho] = useState();
     const [thumbnail, setThumbnail] = useState();
-    const [hinhThucSach, setHinhThucSach] = useState("Bìa mềm");
-    const [maTheLoaiSach, setTheLoaiSach] = useState("");
+    const [hinhThucSach, setHinhThucSach] = useState();
+    const [maTheLoaiSach, setMaTheLoaiSach] = useState();
+
     const [validationErrors, setValidationErrors] = useState({});
     const categoryBooks = useSelector(selectAllCategory);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchAllCategory());
-    }, [dispatch]);
 
-    const handleClose = () => {
-        setShow(false);
-        setTenSach("");
-        setTacGia("");
-        setNhaXB("");
-        setNguoiDich("");
-        setTrongLuongGr("");
-        setKichThuocBaoBi("");
-        setSoTrang("");
-        setGiaSach("");
-        setSoLuongTonKho("");
-        setThumbnail("");
-        setTheLoaiSach("");
-        setValidationErrors({});
+    useEffect(() => {
+        if (!_.isEmpty(dataUpdate)) {
+            setTenSach(dataUpdate.tenSach);
+            setTacGia(dataUpdate.tacGia);
+            setNhaXB(dataUpdate.nhaXB);
+            setNguoiDich(dataUpdate.nguoiDich);
+            setNamXB(dataUpdate.namXB);
+            setNgonNgu(dataUpdate.ngonNgu);
+            setTrongLuongGr(dataUpdate.trongLuongGr);
+            setKichThuocBaoBi(dataUpdate.kichThuocBaoBi);
+            setSoTrang(dataUpdate.soTrang);
+            setGiaSach(dataUpdate.giaSach);
+            setSoLuongTonKho(dataUpdate.soLuongTonKho);
+            setHinhThucSach(dataUpdate.hinhThucSach);
+            setMaTheLoaiSach(dataUpdate.maTheLoaiSach);
+        }
+    }, [dataUpdate]);
+
+    const handleInputChange = (setter) => (event) => {
+        const { value, files } = event.target;
+        const fieldName = setter.name;
+
+        setValidationErrors((prev) => ({
+            ...prev,
+            [fieldName]: !value && !files?.length,
+        }));
+
+        setter(files?.[0] || value);
     };
 
-    const handleSubmitCreateAccount = async () => {
+    const handleClose = () => {
+        setShowModalUpdate(!show);
+        setThumbnail();
+    };
+
+    const handleSubmitUpdateBook = async (event) => {
+        event.preventDefault();
         let errors = {};
         if (!tenSach) errors.tenSach = true;
         if (!tacGia) errors.tacGia = true;
@@ -61,7 +81,6 @@ const ModalCreateBook = (props) => {
         if (!soTrang) errors.soTrang = true;
         if (!giaSach) errors.giaSach = true;
         if (!soLuongTonKho) errors.soLuongTonKho = true;
-        if (!thumbnail) errors.thumbnail = true;
         if (!maTheLoaiSach) errors.maTheLoaiSach = true;
 
         setValidationErrors(errors);
@@ -70,7 +89,6 @@ const ModalCreateBook = (props) => {
             toast.error("Vui lòng điền đầy đủ thông tin.");
             return;
         }
-
         const formData = new FormData();
         formData.append("tenSach", tenSach);
         formData.append("tacGia", tacGia);
@@ -87,10 +105,13 @@ const ModalCreateBook = (props) => {
         formData.append("hinhThucSach", hinhThucSach);
         formData.append("maTheLoaiSach", maTheLoaiSach);
 
-        let response = await axios.post("/postCreateBook", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
-
+        const response = await axios.put(
+            `/updateBook/${dataUpdate.id_sach}`,
+            formData,
+            {
+                headers: { "Content-Type": "multipart/form-data" },
+            }
+        );
         if (response.data && response.data.EC !== 0) {
             toast.error(response.data.EM);
         }
@@ -102,28 +123,16 @@ const ModalCreateBook = (props) => {
         }
     };
 
-    const handleInputChange = (setter) => (event) => {
-        const { value, files } = event.target;
-        const fieldName = setter.name;
-
-        setValidationErrors((prev) => ({
-            ...prev,
-            [fieldName]: !value && !files?.length,
-        }));
-
-        setter(files?.[0] || value);
-    };
-
     return (
         <>
             <Modal
                 show={show}
                 onHide={handleClose}
-                size="xl"
+                size="lg"
                 className="modal-add-users"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Tạo tài khoản</Modal.Title>
+                    <Modal.Title>Chi tiết sách</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form className="row g-3">
@@ -211,14 +220,14 @@ const ModalCreateBook = (props) => {
                                         : ""
                                 }`}
                                 value={maTheLoaiSach}
-                                onChange={handleInputChange(setTheLoaiSach)}
+                                onChange={handleInputChange(setMaTheLoaiSach)}
                             >
                                 <option value="">Chọn thể loại</option>
                                 {categoryBooks &&
                                     categoryBooks.map((book) => (
                                         <option
-                                            key={book.maTheLoaiSach}
                                             value={book.maTheLoaiSach}
+                                            key={book.maTheLoaiSach}
                                         >
                                             {book.tenTheLoaiSach}
                                         </option>
@@ -388,11 +397,7 @@ const ModalCreateBook = (props) => {
                             <input
                                 type="file"
                                 multiple
-                                className={`form-control ${
-                                    validationErrors.thumbnail && !thumbnail
-                                        ? "is-invalid"
-                                        : ""
-                                }`}
+                                className={`form-control `}
                                 onChange={(event) =>
                                     setThumbnail(event.target.files[0])
                                 }
@@ -401,12 +406,29 @@ const ModalCreateBook = (props) => {
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Hủy
+                    <Button
+                        onClick={handleClose}
+                        style={{
+                            fontSize: "14px",
+                            fontWeight: 700,
+                            color: "#000",
+                            backgroundColor: "#fff",
+                            paddingLeft: "30px",
+                            paddingRight: "30px",
+                        }}
+                    >
+                        Thoát
                     </Button>
                     <Button
-                        variant="primary"
-                        onClick={handleSubmitCreateAccount}
+                        style={{
+                            fontSize: "14px",
+                            fontWeight: 700,
+                            color: "#fff",
+                            backgroundColor: "#38a8ea",
+                            paddingLeft: "30px",
+                            paddingRight: "30px",
+                        }}
+                        onClick={handleSubmitUpdateBook}
                     >
                         Xác nhận
                     </Button>
@@ -416,4 +438,4 @@ const ModalCreateBook = (props) => {
     );
 };
 
-export default ModalCreateBook;
+export default ModalUpdateBook;

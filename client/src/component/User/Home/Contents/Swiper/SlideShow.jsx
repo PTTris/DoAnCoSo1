@@ -23,7 +23,7 @@ export default function SlideShow() {
                         height="787"
                         src="https://bizweb.dktcdn.net/100/465/223/themes/877050/assets/slider_1.jpg?1714959329989"
                         alt="Slider 1"
-                        class="img-responsive center-block"
+                        className="img-responsive center-block"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
@@ -31,8 +31,8 @@ export default function SlideShow() {
                         width="1920"
                         height="787"
                         src="https://bizweb.dktcdn.net/100/465/223/themes/877050/assets/slider_2.jpg?1714959329989"
-                        alt="Slider 3"
-                        class="img-responsive center-block"
+                        alt="Slider 2"
+                        className="img-responsive center-block"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
@@ -41,7 +41,7 @@ export default function SlideShow() {
                         height="787"
                         src="https://down-tx-vn.img.susercontent.com/vn-11134210-7r98o-lv41zm6pmxei4c.webp"
                         alt="Slider 3"
-                        class="img-responsive center-block"
+                        className="img-responsive center-block"
                     />
                 </SwiperSlide>
             </Swiper>

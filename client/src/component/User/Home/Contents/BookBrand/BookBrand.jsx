@@ -41,65 +41,65 @@ const BookBrand = () => {
 
     return (
         <>
-            <section class="panner-book-brand">
+            <section className="panner-book-brand">
                 <section
-                    class="section_why clearfix lazyload"
+                    className="section_why clearfix lazyload"
                     style={{
                         backgroundImage:
-                            'url("//bizweb.dktcdn.net/100/465/223/themes/877050/assets/bg_why.jpg?1714959329989");',
+                            'url("//bizweb.dktcdn.net/100/465/223/themes/877050/assets/bg_why.jpg?1714959329989")',
                     }}
                 >
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-12">
-                                <div class="heading clearfix">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xl-6 col-lg-6 col-12">
+                                <div className="heading clearfix">
                                     <h2>
                                         <span></span>
                                     </h2>
-                                    <p class="text_small"></p>
+                                    <p className="text_small"></p>
                                 </div>
-                                <div class="wrap_item">
-                                    <div class="col-item-srv">
-                                        <div class="service_item_ed">
-                                            <span class="iconx">
+                                <div className="wrap_item">
+                                    <div className="col-item-srv">
+                                        <div className="service_item_ed">
+                                            <span className="iconx">
                                                 <img
                                                     alt=""
                                                     src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/icon_why_1.png?1714959329989"
                                                 />
                                             </span>
-                                            <div class="content_srv">
-                                                <span class="title_service"></span>
-                                                <span class="content_service"></span>
+                                            <div className="content_srv">
+                                                <span className="title_service"></span>
+                                                <span className="content_service"></span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-item-srv">
-                                        <div class="service_item_ed">
-                                            <span class="iconx">
+                                    <div className="col-item-srv">
+                                        <div className="service_item_ed">
+                                            <span className="iconx">
                                                 <img
                                                     alt=""
                                                     src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/icon_why_2.png?1714959329989"
                                                 />
                                             </span>
-                                            <div class="content_srv">
-                                                <span class="title_service"></span>
-                                                <span class="content_service"></span>
+                                            <div className="content_srv">
+                                                <span className="title_service"></span>
+                                                <span className="content_service"></span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-item-srv">
-                                        <div class="service_item_ed">
-                                            <span class="iconx">
+                                    <div className="col-item-srv">
+                                        <div className="service_item_ed">
+                                            <span className="iconx">
                                                 <img
                                                     alt=""
                                                     src="//bizweb.dktcdn.net/100/465/223/themes/877050/assets/icon_why_3.png?1714959329989"
                                                 />
                                             </span>
-                                            <div class="content_srv">
-                                                <span class="title_service"></span>
-                                                <span class="content_service"></span>
+                                            <div className="content_srv">
+                                                <span className="title_service"></span>
+                                                <span className="content_service"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -110,24 +110,24 @@ const BookBrand = () => {
                 </section>
             </section>
 
-            <section class="types-of-brand">
-                <div class="section_tab_feature lazyload">
-                    <div class="container">
-                        <div class="row">
-                            <div class="section tabwrap">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="heading clearfix text-center">
-                                        <h2 class="title_tab">
+            <section className="types-of-brand">
+                <div className="section_tab_feature lazyload">
+                    <div className="container">
+                        <div className="row">
+                            <div className="section tabwrap">
+                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div className="heading clearfix text-center">
+                                        <h2 className="title_tab">
                                             Tủ sách thương hiệu Skybooks
                                         </h2>
                                     </div>
                                 </div>
 
-                                <div class=" navbar-pills tabs tabs-title tabtitle1 closetab ajax clearfix wrap_tab_index">
-                                    <ul class=" twrap tabs tabs-title tabtitle1 clearfix">
+                                <div className=" navbar-pills tabs tabs-title tabtitle1 closetab ajax clearfix wrap_tab_index">
+                                    <ul className=" twrap tabs tabs-title tabtitle1 clearfix">
                                         {categories.map((category) => (
                                             <li
-                                                class={`item ${
+                                                className={`item ${
                                                     changeBookOfCategory ===
                                                     category.maTheLoaiSach
                                                         ? "current"
@@ -145,7 +145,7 @@ const BookBrand = () => {
                                     </ul>
                                 </div>
 
-                                <div class="col-xl-12 col-lg-12 col-12">
+                                <div className="col-xl-12 col-lg-12 col-12">
                                     <div className="swiper-container">
                                         <Swiper
                                             slidesPerView={4}
@@ -190,12 +190,12 @@ const BookBrand = () => {
                                                 <SwiperSlide key={book.id_sach}>
                                                     <div className="image">
                                                         <img
-                                                            class="image_cate_thumb lazyload loaded"
+                                                            className="image_cate_thumb lazyload loaded"
                                                             src={`http://localhost:8080/images/${book.thumbnail}`}
                                                             alt={book.tenSach}
                                                         />
-                                                        <div class="cate-content">
-                                                            <h3 class="title_cate">
+                                                        <div className="cate-content">
+                                                            <h3 className="title_cate">
                                                                 {book.tenSach}
                                                             </h3>
                                                         </div>

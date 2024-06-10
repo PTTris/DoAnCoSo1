@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import axios from "../../../../../utils/axiosCustomize.js";
+import { validateEmail } from "../../../../../assets/js/handleFunc.js";
 
 const ModalCreateAccount = (props) => {
     const { show, setShow, fetchAccountWithPaginate, setCurrentPage } = props;
@@ -18,14 +19,6 @@ const ModalCreateAccount = (props) => {
         setPassword("");
         setUsername("");
         setRole("USER");
-    };
-
-    const validateEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
     };
 
     const handleSubmitCreateAccount = async () => {
@@ -135,7 +128,7 @@ const ModalCreateAccount = (props) => {
                         variant="primary"
                         onClick={handleSubmitCreateAccount}
                     >
-                        Lưu thay đổi
+                        Tạo tài khoản
                     </Button>
                 </Modal.Footer>
             </Modal>

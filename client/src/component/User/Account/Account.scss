@@ -24,11 +24,22 @@
     .h-custom {
         height: 100%;
         margin-bottom: 30px;
+        padding: 10px 20px !important;
+    }
+    footer {
+        margin-top: 50px !important;
     }
 }
 
-@media (max-width: 1366px) {
+@media (min-width: 450px) and (max-width: 990px) {
+    footer {
+        margin-top: 50px !important;
+    }
+}
+
+@media (min-width: 991px) {
     .h-custom {
+        height: 100vh !important;
         .btn-login {
             width: 100%;
         }

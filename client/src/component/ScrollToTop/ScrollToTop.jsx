@@ -21,7 +21,7 @@ const ScrollButton = () => {
             onClick={scrollToTop}
             style={{ display: visible ? "inline" : "none" }}
         >
-            <i class="fa fa-angle-up" aria-hidden="true"></i>
+            <i className="fa fa-angle-up" aria-hidden="true"></i>
         </button>
     );
 };

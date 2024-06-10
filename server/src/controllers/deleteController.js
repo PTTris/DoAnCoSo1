@@ -47,6 +47,9 @@ const deleteBook = async (req, res) => {
         const deleteImagesSQL = "DELETE FROM hinhanhsach WHERE id_sach = ?";
         await pool.query(deleteImagesSQL, [id_sach]);
 
+        const deleteDescSQL = "DELETE FROM motasach WHERE id_sach = ?";
+        await pool.query(deleteDescSQL, [id_sach]);
+
         const deleteBookSql = "DELETE FROM sach WHERE id_sach = ?";
         await pool.query(deleteBookSql, [id_sach]);
 
@@ -63,4 +66,24 @@ const deleteBook = async (req, res) => {
     }
 };
 
-export { deleteAccount, deleteBook };
+const deleteCategory = async (req, res) => {
+    const maTheLoaiSach = req.params.maTheLoaiSach;
+    try {
+        const deleteCategorySql =
+            "DELETE FROM theloaisach WHERE maTheLoaiSach = ?";
+        await pool.query(deleteCategorySql, [maTheLoaiSach]);
+
+        res.status(200).json({
+            EC: 0,
+            EM: "Xóa thể loại sách thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Xóa thể loại sách thất bại",
+            Err: err,
+        });
+    }
+};
+
+export { deleteAccount, deleteBook, deleteCategory };

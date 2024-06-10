@@ -3,12 +3,12 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import axios from "../../../../../utils/axiosCustomize.js";
 
-const ModalDeleteAccount = (props) => {
+const ModalDeleteCategory = (props) => {
     const {
         show,
         setShow,
         dataDelete,
-        fetchAccountWithPaginate,
+        fetchAllCategoriesWithPaginate,
         setCurrentPage,
     } = props;
 
@@ -18,7 +18,7 @@ const ModalDeleteAccount = (props) => {
 
     const handleSubmitDelete = async () => {
         let response = await axios.delete(
-            `/deleteAccount/${dataDelete.taiKhoan_ID}`
+            `/deleteCategory/${dataDelete.maTheLoaiSach}`
         );
 
         if (response.data && response.data.EC !== 0) {
@@ -26,9 +26,9 @@ const ModalDeleteAccount = (props) => {
         }
         if (response.data && response.data.EC === 0) {
             toast.success(response.data.EM);
-            handleClose();
-            await fetchAccountWithPaginate(1);
+            await fetchAllCategoriesWithPaginate(1);
             setCurrentPage(1);
+            handleClose();
         }
     };
 
@@ -57,4 +57,4 @@ const ModalDeleteAccount = (props) => {
     );
 };
 
-export default ModalDeleteAccount;
+export default ModalDeleteCategory;

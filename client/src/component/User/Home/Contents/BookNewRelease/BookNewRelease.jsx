@@ -22,18 +22,18 @@ const BookNewRelease = () => {
 
     return (
         <>
-            <section class="book-new-release">
-                <section class="section_category clearfix">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-12">
-                                <div class="heading clearfix text-center">
+            <section className="book-new-release">
+                <section className="section_category clearfix">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xl-12 col-lg-12 col-12">
+                                <div className="heading clearfix text-center">
                                     <h2>
                                         <span>SÁCH MỚI PHÁT HÀNH </span>
                                     </h2>
                                 </div>
                             </div>
-                            <div class="col-xl-12 col-lg-12 col-12">
+                            <div className="col-xl-12 col-lg-12 col-12">
                                 <div className="swiper-container">
                                     <Swiper
                                         slidesPerView={4}
@@ -43,15 +43,15 @@ const BookNewRelease = () => {
                                         }}
                                         breakpoints={{
                                             390: {
-                                                slidesPerView: 3,
+                                                slidesPerView: 2,
                                                 spaceBetween: 5,
                                             },
                                             820: {
-                                                slidesPerView: 4,
+                                                slidesPerView: 3,
                                                 spaceBetween: 10,
                                             },
                                             1024: {
-                                                slidesPerView: 5,
+                                                slidesPerView: 4,
                                                 spaceBetween: 15,
                                             },
                                         }}
@@ -77,7 +77,7 @@ const BookNewRelease = () => {
                                                                 }
                                                             >
                                                                 <img
-                                                                    class="image_cate_thumb lazyload loaded"
+                                                                    className="image_cate_thumb lazyload loaded"
                                                                     src={`http://localhost:8080/images/${book.thumbnail}`}
                                                                     alt={
                                                                         book.tenSach
@@ -85,7 +85,7 @@ const BookNewRelease = () => {
                                                                 />
                                                             </NavLink>
 
-                                                            <div class="cate-content">
+                                                            <div className="cate-content">
                                                                 <NavLink
                                                                     to={`/${changeString(
                                                                         book.tenSach
@@ -97,7 +97,7 @@ const BookNewRelease = () => {
                                                                         scrollToTop
                                                                     }
                                                                 >
-                                                                    <h3 class="title_cate">
+                                                                    <h3 className="title_cate">
                                                                         {
                                                                             book.tenSach
                                                                         }

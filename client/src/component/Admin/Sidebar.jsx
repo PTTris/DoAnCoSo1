@@ -37,7 +37,6 @@ const SideBar = (props) => {
                                 fontSize: 14,
                                 letterSpacing: "1px",
                                 overflow: "hidden",
-                                // textOverflow: 'ellipsis',
                                 whiteSpace: "nowrap",
                             }}
                         >
@@ -72,11 +71,7 @@ const SideBar = (props) => {
                         </MenuItem>
                     </Menu>
                     <Menu iconShape="circle">
-                        <SubMenu
-                            title={"Quản lý"}
-                            // suffix={<span className="badge yellow">3</span>}
-                            icon={<FaRegLaughWink />}
-                        >
+                        <SubMenu title={"Quản lý"} icon={<FaRegLaughWink />}>
                             <MenuItem>
                                 Quản lý tài khoản
                                 <Link to="/admin/quan-ly-tai-khoan" />
@@ -85,8 +80,8 @@ const SideBar = (props) => {
                                 Quản lý sách <Link to="/admin/quan-ly-sach" />
                             </MenuItem>
                             <MenuItem>
-                                Quản lý tin tức
-                                <Link to="/admin/quan-ly-tin-tuc" />
+                                Quản lý thể loại sách
+                                <Link to="/admin/quan-ly-the-loai-sach" />
                             </MenuItem>
                         </SubMenu>
                     </Menu>
@@ -101,10 +96,13 @@ const SideBar = (props) => {
                     >
                         <span
                             className="sidebar-btn"
-                            style={{ color: "#fff", cursor: "pointer" }}
+                            style={{
+                                color: "#fff",
+                                cursor: "pointer",
+                            }}
                             onClick={() => navigate("/")}
                         >
-                            SkyBooks
+                            Sky Books
                         </span>
                     </div>
                 </SidebarFooter>

@@ -1,17 +1,13 @@
 import { Table } from "react-bootstrap";
 import React from "react";
 import ReactPaginate from "react-paginate";
-import {
-    MdDelete,
-    MdSystemUpdateAlt,
-    MdRemoveRedEye,
-    MdOutlineImage,
-} from "react-icons/md";
-
+import { MdDelete, MdSystemUpdateAlt, MdRemoveRedEye } from "react-icons/md";
+import { FaRegPlusSquare } from "react-icons/fa";
 const TableBooks = (props) => {
     const {
         listBooks,
         handleClickDeleteBook,
+        handleClickViewBook,
         handleClickUpdateBook,
         handleClickCreateImages,
         fetchAllBooksWithPaginate,
@@ -51,7 +47,13 @@ const TableBooks = (props) => {
                                 Năm XB
                             </th>
                             <th className="text-center fs-6" scope="col">
+                                Thể loại sách
+                            </th>
+                            <th className="text-center fs-6" scope="col">
                                 Hình thức
+                            </th>
+                            <th className="text-center fs-6" scope="col">
+                                Ngôn ngữ
                             </th>
                             <th className="text-center fs-6" scope="col">
                                 Giá sách
@@ -66,7 +68,7 @@ const TableBooks = (props) => {
                             listBooks.length > 0 &&
                             listBooks.map((book) => {
                                 return (
-                                    <tr>
+                                    <tr key={book.id_sach}>
                                         <td className="text-center col-1">
                                             {book.id_sach}
                                         </td>
@@ -78,6 +80,9 @@ const TableBooks = (props) => {
                                         <td className="text-center">
                                             {book.namXB}
                                         </td>
+                                        <td className="text-center">
+                                            {book.tenTheLoaiSach}
+                                        </td>
                                         <td
                                             style={{
                                                 width: "115px",
@@ -85,9 +90,12 @@ const TableBooks = (props) => {
                                         >
                                             {book.hinhThucSach}
                                         </td>
+                                        <td className="text-center">
+                                            {book.ngonNgu}
+                                        </td>
                                         <td>{book.giaSach}</td>
                                         <td className=" fs-2 col-2 text-center">
-                                            <MdOutlineImage
+                                            <FaRegPlusSquare
                                                 size={"1.5rem"}
                                                 className="text-success ms-2"
                                                 onClick={() =>
@@ -101,7 +109,7 @@ const TableBooks = (props) => {
                                                 size={"1.5rem"}
                                                 className="text-info ms-2"
                                                 onClick={() =>
-                                                    handleClickDeleteBook(book)
+                                                    handleClickViewBook(book)
                                                 }
                                                 cursor={"pointer"}
                                             />

@@ -4,20 +4,19 @@ import HomePage from "./component/User/Home/HomePage";
 import Login from "./component/User/Account/Login/Login";
 import Register from "./component/User/Account/Register/Register";
 import AllBooks from "./component/User/Books/AllBooks/AllBooks";
-import News from "./component/User/News/News";
 import Contact from "./component/User/Contact/Contact";
 import BookDetail from "./component/User/Books/BookDetail/BookDetail";
 import Cart from "./component/User/Cart/Cart";
 import AllBooksOfCategory from "./component/User/Books/AllBooksOfCategory/AllBooksOfCategory";
 import { useState } from "react";
-import UploadImages from "./component/UploadImages";
 import Admin from "./component/Admin/Admin";
 import Dashboard from "./component/Admin/Content/Dashboard";
 import ManageBooks from "./component/Admin/Manage/ManageBooks/ManageBooks";
-import ManageNews from "./component/Admin/Manage/ManageNews/ManageNews";
 import ManageAccount from "./component/Admin/Manage/ManageUsers/ManageAccount";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ManageCategory from "./component/Admin/Manage/ManageCategory/ManageCategory";
+import SearchBook from "./component/User/Search/SearchBook";
 
 function App() {
     let currentUrl = window.location.href;
@@ -26,23 +25,26 @@ function App() {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [nameCategory, setNameCategory] = useState("");
     const [selectedCategoryID, setSelectedCategoryID] = useState("");
+    const [dataSearch, setDataSearch] = useState("");
 
     return (
         <>
             <Routes>
                 <Route
                     path="/"
+                    exact
                     element={
                         <User
                             setSelectedCategory={setSelectedCategory}
                             setSelectedCategoryID={setSelectedCategoryID}
                             setNameCategory={setNameCategory}
+                            setDataSearch={setDataSearch}
+                            dataSearch={dataSearch}
                         />
                     }
                 >
                     <Route index element={<HomePage />} />
-                    <Route path="/allbooks" element={<AllBooks />} />
-
+                    <Route path="/tat-ca-san-pham" element={<AllBooks />} />
                     <Route
                         path={`${selectedCategory}`}
                         element={
@@ -52,27 +54,19 @@ function App() {
                             />
                         }
                     />
-
-                    <Route
-                        path="/tin-tuc-bao-chi"
-                        element={
-                            <News
-                                setSelectedCategory={setSelectedCategory}
-                                setSelectedCategoryID={setSelectedCategoryID}
-                                setNameCategory={setNameCategory}
-                            />
-                        }
-                    />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/:tenSach" element={<BookDetail />} />
+                    <Route
+                        path="/tim-kiem"
+                        element={<SearchBook dataSearch={dataSearch} />}
+                    />
                 </Route>
 
                 <Route path="/dang-nhap" element={<Login />} />
                 <Route path="/dang-ky" element={<Register />} />
-                <Route path="/test1" element={<UploadImages />} />
 
-                <Route path="/admin" element={<Admin />}>
+                <Route path="/admin" exact element={<Admin />}>
                     <Route index element={<Dashboard />} />
                     <Route
                         path="/admin/quan-ly-tai-khoan"
@@ -83,8 +77,8 @@ function App() {
                         element={<ManageBooks />}
                     />
                     <Route
-                        path="/admin/quan-ly-tin-tuc"
-                        element={<ManageNews />}
+                        path="/admin/quan-ly-the-loai-sach"
+                        element={<ManageCategory />}
                     />
                 </Route>
             </Routes>
