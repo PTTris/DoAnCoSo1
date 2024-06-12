@@ -3,24 +3,24 @@ import React from "react";
 import ReactPaginate from "react-paginate";
 import { MdDelete, MdSystemUpdateAlt, MdRemoveRedEye } from "react-icons/md";
 import { FaRegPlusSquare } from "react-icons/fa";
-const TableBooks = (props) => {
-    const {
-        listBooks,
-        handleClickDeleteBook,
-        handleClickViewBook,
-        handleClickUpdateBook,
-        handleClickCreateImages,
-        fetchAllBooksWithPaginate,
-        totalPages,
-        currentPage,
-        setCurrentPage,
-    } = props;
+const TableCarts = (props) => {
+    // const {
+    //     listBooks,
+    //     handleClickDeleteBook,
+    //     handleClickViewBook,
+    //     handleClickUpdateBook,
+    //     handleClickCreateImages,
+    //     fetchAllBooksWithPaginate,
+    //     totalPages,
+    //     currentPage,
+    //     setCurrentPage,
+    // } = props;
 
     /* Paginate */
-    const handlePageClick = async (event) => {
-        await fetchAllBooksWithPaginate(+event.selected + 1);
-        setCurrentPage(+event.selected + 1);
-    };
+    // const handlePageClick = async (event) => {
+    //     await fetchAllBooksWithPaginate(+event.selected + 1);
+    //     setCurrentPage(+event.selected + 1);
+    // };
 
     return (
         <>
@@ -63,7 +63,7 @@ const TableBooks = (props) => {
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {/* <tbody>
                         {listBooks &&
                             listBooks.length > 0 &&
                             listBooks?.map((book) => {
@@ -140,11 +140,11 @@ const TableBooks = (props) => {
                                 </td>
                             </tr>
                         )}
-                    </tbody>
+                    </tbody> */}
                 </Table>
             </div>
 
-            <div
+            {/* <div
                 className="paginater-container"
                 style={{ display: "flex", justifyContent: "center" }}
             >
@@ -169,9 +169,9 @@ const TableBooks = (props) => {
                     renderOnZeroPageCount={null}
                     forcePage={currentPage - 1}
                 />
-            </div>
+            </div> */}
         </>
     );
 };
 
-export default TableBooks;
+export default TableCarts;

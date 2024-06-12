@@ -1,43 +1,57 @@
 import "./BookBrand.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Grid, Pagination } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/grid";
 import "swiper/css/pagination";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllCategory } from "../../../../../redux/reducer/getAllCategory";
 import {
-    fetchAllBooksOfCategory,
-    selectAllBooksOfCategory,
-} from "../../../../../redux/reducer/getAllBooksOfCategory";
+    fetchAllCategory,
+    selectAllCategory,
+} from "../../../../../redux/reducer/getAllCategory";
 import { useEffect, useState } from "react";
-import { fetchAllBook } from "../../../../../redux/reducer/getAllBooks";
+import { changeString, scrollToTop } from "../../../../../assets/js/handleFunc";
+import { NavLink } from "react-router-dom";
+import {
+    fetchAllBook,
+    selectAllBooks,
+} from "../../../../../redux/reducer/getAllBooks.js";
 
 const BookBrand = () => {
     const dispatch = useDispatch();
     const categories = useSelector(selectAllCategory);
-    const [changeBookOfCategory, setchangeBookOfCategory] = useState(
-        categories[0].maTheLoaiSach
-    );
-    const booksOfCategory = useSelector(selectAllBooksOfCategory);
+    const books = useSelector(selectAllBooks);
+    const [dataChangeBooks, setDataChangeBooks] = useState([]);
 
-    useEffect(() => {
-        dispatch(fetchAllBook());
-        dispatch(fetchAllBooksOfCategory(changeBookOfCategory));
-    }, [dispatch, changeBookOfCategory, categories]);
-
-    const handleOnClickChange = (event) => {
-        const maTheLoaiSach = event.target.getAttribute("data");
-
-        setchangeBookOfCategory(maTheLoaiSach);
-
+    const handleClickChangeCategory = (event) => {
+        setDataChangeBooks(
+            books?.filter(
+                (book) => book.tenTheLoaiSach === event.target.innerHTML
+            )
+        );
         const allListItem = document.querySelectorAll("ul.twrap li.item");
         allListItem.forEach((item) => {
             item.classList.remove("current");
         });
         event.target.classList.add("current");
     };
+
+    useEffect(() => {
+        if (categories?.length > 0) {
+            const initialCategory = categories[0];
+            setDataChangeBooks(
+                books?.filter(
+                    (book) =>
+                        book.tenTheLoaiSach === initialCategory.tenTheLoaiSach
+                )
+            );
+        }
+    }, [categories, books]);
+
+    useEffect(() => {
+        dispatch(fetchAllCategory());
+        dispatch(fetchAllBook());
+    }, [dispatch]);
 
     return (
         <>
@@ -123,20 +137,19 @@ const BookBrand = () => {
                                     </div>
                                 </div>
 
-                                <div className=" navbar-pills tabs tabs-title tabtitle1 closetab ajax clearfix wrap_tab_index">
+                                <div className=" navbar-pills tabs clearfix">
                                     <ul className=" twrap tabs tabs-title tabtitle1 clearfix">
-                                        {categories.map((category) => (
+                                        {categories?.map((category, index) => (
                                             <li
                                                 className={`item ${
-                                                    changeBookOfCategory ===
-                                                    category.maTheLoaiSach
-                                                        ? "current"
-                                                        : ""
+                                                    index === 0 && "current"
                                                 }`}
                                                 key={category.maTheLoaiSach}
                                                 data={category.maTheLoaiSach}
                                                 onClick={(event) => {
-                                                    handleOnClickChange(event);
+                                                    handleClickChangeCategory(
+                                                        event
+                                                    );
                                                 }}
                                             >
                                                 {category.tenTheLoaiSach}
@@ -186,18 +199,45 @@ const BookBrand = () => {
                                             modules={[Grid, Pagination]}
                                             className="mySwiper2"
                                         >
-                                            {booksOfCategory.map((book) => (
-                                                <SwiperSlide key={book.id_sach}>
+                                            {dataChangeBooks?.map((book) => (
+                                                <SwiperSlide key={book.maSach}>
                                                     <div className="image">
-                                                        <img
-                                                            className="image_cate_thumb lazyload loaded"
-                                                            src={`http://localhost:8080/images/${book.thumbnail}`}
-                                                            alt={book.tenSach}
-                                                        />
+                                                        <NavLink
+                                                            to={`/${changeString(
+                                                                book.tenSach
+                                                            )}`}
+                                                            title={book.tenSach}
+                                                            onClick={
+                                                                scrollToTop
+                                                            }
+                                                        >
+                                                            <img
+                                                                className="image_cate_thumb lazyload loaded"
+                                                                src={`http://localhost:8080/images/${book.thumbnail}`}
+                                                                alt={
+                                                                    book.tenSach
+                                                                }
+                                                            />
+                                                        </NavLink>
+
                                                         <div className="cate-content">
-                                                            <h3 className="title_cate">
-                                                                {book.tenSach}
-                                                            </h3>
+                                                            <NavLink
+                                                                to={`/${changeString(
+                                                                    book.tenSach
+                                                                )}`}
+                                                                title={
+                                                                    book.tenSach
+                                                                }
+                                                                onClick={
+                                                                    scrollToTop
+                                                                }
+                                                            >
+                                                                <h3 className="title_cate">
+                                                                    {
+                                                                        book.tenSach
+                                                                    }
+                                                                </h3>
+                                                            </NavLink>
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>

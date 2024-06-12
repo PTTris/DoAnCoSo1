@@ -83,6 +83,10 @@ const SideBar = (props) => {
                                 Quản lý thể loại sách
                                 <Link to="/admin/quan-ly-the-loai-sach" />
                             </MenuItem>
+                            <MenuItem>
+                                Quản lý giỏ hàng
+                                <Link to="/admin/quan-ly-gio-hang" />
+                            </MenuItem>
                         </SubMenu>
                     </Menu>
                 </SidebarContent>

@@ -47,7 +47,7 @@ const ModalUpdateAccount = (props) => {
         formData.append("tenTaiKhoan", tenTaiKhoan);
 
         let response = await axios.put(
-            `/updateAccount/${dataUpdate.taiKhoan_ID}`,
+            `/updateAccount/${dataUpdate.id_taiKhoan}`,
             formData
         );
 
@@ -77,7 +77,7 @@ const ModalUpdateAccount = (props) => {
                         <div className="col-md-4">
                             <label className="form-label">
                                 Tài khoản ID
-                                {validationErrors.taiKhoan_ID && (
+                                {validationErrors.id_taiKhoan && (
                                     <span className="text-danger">*</span>
                                 )}
                             </label>
@@ -85,7 +85,7 @@ const ModalUpdateAccount = (props) => {
                                 type="text"
                                 disabled
                                 className={`form-control`}
-                                value={dataUpdate.taiKhoan_ID}
+                                value={dataUpdate.id_taiKhoan}
                             />
                         </div>
                         <div className="col-md-8">

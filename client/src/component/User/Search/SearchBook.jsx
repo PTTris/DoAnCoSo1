@@ -10,6 +10,7 @@ const SearchBook = ({ dataSearch }) => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalData, setTotalData] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+
     const fetchAllBooksOfCategoryWithPaginate = async (data, page) => {
         const response = await axios.get(
             `/searchBooks/?query=${data}&limit=${LIMIT_PAGE}&page=${page}`
@@ -31,6 +32,7 @@ const SearchBook = ({ dataSearch }) => {
         setCurrentPage(+event.selected + 1);
         scrollToTop();
     };
+
     return (
         <div>
             <section className="bread-crumb">
@@ -75,7 +77,7 @@ const SearchBook = ({ dataSearch }) => {
                                         <div className="search-products products">
                                             <section className="products-view ">
                                                 <div className="row">
-                                                    {books.map((book) => (
+                                                    {books?.map((book) => (
                                                         <>
                                                             <div
                                                                 key={
@@ -121,10 +123,12 @@ const SearchBook = ({ dataSearch }) => {
                                                                             </h3>
                                                                             <div className="price-box">
                                                                                 <span>
-                                                                                    {
+                                                                                    {Number.parseFloat(
                                                                                         book.giaSach
-                                                                                    }
-                                                                                    &nbsp;VNĐ
+                                                                                    ).toLocaleString(
+                                                                                        "vi-VN"
+                                                                                    )}{" "}
+                                                                                    VNĐ
                                                                                 </span>
                                                                             </div>
                                                                         </div>

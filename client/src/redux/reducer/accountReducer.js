@@ -9,11 +9,10 @@ const accountReducer = createSlice({
     },
     reducers: {
         LOGIN: (state, action) => {
-            state.account = action.payload[0];
+            state.account = action.payload;
             state.isAuthenticated = true;
         },
         ISADMIN: (state, action) => {
-            console.log(action.payload);
             state.isAdmin = action.payload;
         },
         LOGOUT: (state) => {

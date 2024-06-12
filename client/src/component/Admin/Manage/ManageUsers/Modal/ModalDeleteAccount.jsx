@@ -18,7 +18,7 @@ const ModalDeleteAccount = (props) => {
 
     const handleSubmitDelete = async () => {
         let response = await axios.delete(
-            `/deleteAccount/${dataDelete.taiKhoan_ID}`
+            `/deleteAccount/${dataDelete.id_taiKhoan}`
         );
 
         if (response.data && response.data.EC !== 0) {

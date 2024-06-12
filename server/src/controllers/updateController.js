@@ -1,13 +1,13 @@
 import pool from "../config/database.js";
 
 const updateAccount = async (req, res) => {
-    const taiKhoan_ID = req.params.taiKhoan_ID;
+    const id_taiKhoan = req.params.id_taiKhoan;
     const { tenTaiKhoan } = req.body;
     try {
         const sql = `UPDATE taiKhoan
-            set tenTaiKhoan = ? WHERE taiKhoan_ID = ?
+            set tenTaiKhoan = ? WHERE id_taiKhoan = ?
             `;
-        await pool.query(sql, [tenTaiKhoan, taiKhoan_ID]);
+        await pool.query(sql, [tenTaiKhoan, id_taiKhoan]);
         res.status(200).json({
             EC: 0,
             EM: "Cập nhật tài khoản thành công",

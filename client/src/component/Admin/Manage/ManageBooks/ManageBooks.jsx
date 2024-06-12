@@ -17,7 +17,6 @@ const ManageBooks = () => {
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const [showModalView, setShowModalView] = useState(false);
-
     const [listBooks, setListBooks] = useState([]);
     const [dataSearch, setDataSearch] = useState([]);
     const [dataDelete, setDataDelete] = useState({});
@@ -46,6 +45,7 @@ const ManageBooks = () => {
     };
 
     useEffect(() => {
+        // fetchBook lần đầu chạy set = true để call API
         if (dataSearch === "" || fetchBook) fetchAllBooksWithPaginate(1);
     }, [dataSearch, fetchBook]);
 

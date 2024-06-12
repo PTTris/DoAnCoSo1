@@ -66,7 +66,7 @@ const AllBooksOfCategory = (props) => {
                                 <div className="category-products products">
                                     <section className="products-view products-view-grid collection_reponsive list_hover_pro">
                                         <div className="row">
-                                            {books.map((book) => (
+                                            {books?.map((book) => (
                                                 <div
                                                     key={book.id_sach}
                                                     className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 product-col mb-3 "

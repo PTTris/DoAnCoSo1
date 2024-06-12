@@ -23,7 +23,7 @@ const ModalViewBook = (props) => {
 
     useEffect(() => {
         dispatch(fetchAllImagesBook(dataView.id_sach));
-    }, [dispatch, dataView.id_sach]);
+    }, [dispatch, dataView.id_sach, imgsBook]);
 
     return (
         <>
@@ -178,7 +178,7 @@ const ModalViewBook = (props) => {
                                     className="mySwiper2"
                                 >
                                     {imgsBook &&
-                                        imgsBook.map((img) => (
+                                        imgsBook?.map((img) => (
                                             <SwiperSlide key={img.id_hinhAnh}>
                                                 <img
                                                     src={`http://localhost:8080/images/${img.hinhAnh}`}

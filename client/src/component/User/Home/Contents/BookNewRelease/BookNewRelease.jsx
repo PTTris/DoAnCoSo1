@@ -60,11 +60,27 @@ const BookNewRelease = () => {
                                     >
                                         {booksNewRelease &&
                                             booksNewRelease.map((book) => (
-                                                <>
-                                                    <SwiperSlide
-                                                        key={book.maSach}
-                                                    >
-                                                        <div className="image">
+                                                <SwiperSlide key={book.maSach}>
+                                                    <div className="image">
+                                                        <NavLink
+                                                            to={`/${changeString(
+                                                                book.tenSach
+                                                            )}`}
+                                                            title={book.tenSach}
+                                                            onClick={
+                                                                scrollToTop
+                                                            }
+                                                        >
+                                                            <img
+                                                                className="image_cate_thumb lazyload loaded"
+                                                                src={`http://localhost:8080/images/${book.thumbnail}`}
+                                                                alt={
+                                                                    book.tenSach
+                                                                }
+                                                            />
+                                                        </NavLink>
+
+                                                        <div className="cate-content">
                                                             <NavLink
                                                                 to={`/${changeString(
                                                                     book.tenSach
@@ -76,37 +92,15 @@ const BookNewRelease = () => {
                                                                     scrollToTop
                                                                 }
                                                             >
-                                                                <img
-                                                                    className="image_cate_thumb lazyload loaded"
-                                                                    src={`http://localhost:8080/images/${book.thumbnail}`}
-                                                                    alt={
+                                                                <h3 className="title_cate">
+                                                                    {
                                                                         book.tenSach
                                                                     }
-                                                                />
+                                                                </h3>
                                                             </NavLink>
-
-                                                            <div className="cate-content">
-                                                                <NavLink
-                                                                    to={`/${changeString(
-                                                                        book.tenSach
-                                                                    )}`}
-                                                                    title={
-                                                                        book.tenSach
-                                                                    }
-                                                                    onClick={
-                                                                        scrollToTop
-                                                                    }
-                                                                >
-                                                                    <h3 className="title_cate">
-                                                                        {
-                                                                            book.tenSach
-                                                                        }
-                                                                    </h3>
-                                                                </NavLink>
-                                                            </div>
                                                         </div>
-                                                    </SwiperSlide>
-                                                </>
+                                                    </div>
+                                                </SwiperSlide>
                                             ))}
                                     </Swiper>
                                 </div>

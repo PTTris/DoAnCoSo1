@@ -253,6 +253,7 @@ const searchBooks = async (req, res) => {
     try {
         const sql = `SELECT * FROM Sach 
                      WHERE tenSach LIKE ? LIMIT ? OFFSET ?`;
+
         const [rows] = await pool.query(sql, [`%${query}%`, +limit, +offset]);
 
         const [[{ totalData }]] = await pool.query(
@@ -276,7 +277,23 @@ const searchBooks = async (req, res) => {
     }
 };
 
+const getCart = async (req, res) => {
+    const { id_taiKhoan } = req.params;
+    const sql = `SELECT * from Sach, GioHang, taikhoan 
+    WHERE sach.id_sach = gioHang.id_sach 
+    AND gioHang.id_taiKhoan = taikhoan.id_taiKhoan 
+    AND taikhoan.id_taiKhoan = ?;`;
+
+    try {
+        const [rows] = await pool.query(sql, [id_taiKhoan]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
 export {
+    getCart,
     searchBooks,
     getAllBooks,
     getBookForm,

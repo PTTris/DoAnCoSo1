@@ -17,11 +17,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageCategory from "./component/Admin/Manage/ManageCategory/ManageCategory";
 import SearchBook from "./component/User/Search/SearchBook";
+import ManageCart from "./component/Admin/Manage/ManageCart/ManageCart";
+import Paid from "./component/User/Paid/Paid";
 
 function App() {
     let currentUrl = window.location.href;
     let newUrl = currentUrl.replace(/%20/g, "-");
     window.history.replaceState(null, "", newUrl);
+
     const [selectedCategory, setSelectedCategory] = useState("");
     const [nameCategory, setNameCategory] = useState("");
     const [selectedCategoryID, setSelectedCategoryID] = useState("");
@@ -54,13 +57,14 @@ function App() {
                             />
                         }
                     />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/lien-he" element={<Contact />} />
+                    <Route path="/gio-hang" element={<Cart />} />
                     <Route path="/:tenSach" element={<BookDetail />} />
                     <Route
                         path="/tim-kiem"
                         element={<SearchBook dataSearch={dataSearch} />}
                     />
+                    <Route path="/thanh-toan-thanh-cong" element={<Paid />} />
                 </Route>
 
                 <Route path="/dang-nhap" element={<Login />} />
@@ -79,6 +83,10 @@ function App() {
                     <Route
                         path="/admin/quan-ly-the-loai-sach"
                         element={<ManageCategory />}
+                    />
+                    <Route
+                        path="/admin/quan-ly-gio-hang"
+                        element={<ManageCart />}
                     />
                 </Route>
             </Routes>

@@ -13,9 +13,8 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         if (!email) {
             toast.error("Vui lòng nhập email");
             return;
@@ -71,7 +70,7 @@ const Login = () => {
                             />
                         </div>
                         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                            <form onSubmit={handleSubmit}>
+                            <div>
                                 <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                                     <p className="lead fw-normal mb-0 me-3">
                                         Đăng nhập với
@@ -104,40 +103,44 @@ const Login = () => {
                                     </p>
                                 </div>
 
-                                <div className="form-outline mb-4">
-                                    <label className="form-label" for="email">
-                                        Email address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        className="form-control form-control-lg"
-                                        placeholder="Nhập địa chỉ email"
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                    />
-                                </div>
+                                <form onSubmit={(event) => handleSubmit(event)}>
+                                    <div className="form-outline mb-4">
+                                        <label
+                                            className="form-label"
+                                            for="email"
+                                        >
+                                            Email address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            className="form-control form-control-lg"
+                                            placeholder="Nhập địa chỉ email"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                        />
+                                    </div>
 
-                                <div className="form-outline mb-3">
-                                    <label
-                                        className="form-label"
-                                        for="password"
-                                    >
-                                        Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Nhập mật khẩu tối thiểu 8 kí tự"
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
-                                    />
-                                </div>
+                                    <div className="form-outline mb-3">
+                                        <label
+                                            className="form-label"
+                                            for="password"
+                                        >
+                                            Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            className="form-control form-control-lg"
+                                            placeholder="Nhập mật khẩu tối thiểu 8 kí tự"
+                                            onChange={(e) =>
+                                                setPassword(e.target.value)
+                                            }
+                                        />
+                                    </div>
 
-                                {/* <div className="d-flex justify-content-between align-items-center">
+                                    {/* <div className="d-flex justify-content-between align-items-center">
                                     <div className="form-check mb-0">
                                         <input
                                             className="form-check-input me-2"
@@ -157,28 +160,30 @@ const Login = () => {
                                     </a>
                                 </div> */}
 
-                                <div className="text-center text-lg-start mt-4 pt-2">
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary btn-lg px-5 btn-login"
-                                        onClick={handleSubmit}
-                                    >
-                                        Đăng nhập
-                                    </button>
-                                    <p className="small fw-bold mt-2 pt-1 mb-0">
-                                        Bạn chưa có tài khoản?{" "}
-                                        <NavLink to="/dang-ky">Đăng ký</NavLink>
-                                    </p>
-                                    <div className="return-home">
-                                        <NavLink
-                                            to="/"
-                                            className="btn-return-home"
+                                    <div className="text-center text-lg-start mt-4 pt-2">
+                                        <button
+                                            className="btn btn-primary btn-lg px-5 btn-login"
+                                            onClick={handleSubmit}
                                         >
-                                            {"<-- Trở về trang chủ"}
-                                        </NavLink>
+                                            Đăng nhập
+                                        </button>
+                                        <p className="small fw-bold mt-3 pt-1 mb-0">
+                                            Bạn chưa có tài khoản?{" "}
+                                            <NavLink to="/dang-ky">
+                                                Đăng ký
+                                            </NavLink>
+                                        </p>
+                                        <div className="return-home">
+                                            <NavLink
+                                                to="/"
+                                                className="btn-return-home"
+                                            >
+                                                {"<-- Trở về trang chủ"}
+                                            </NavLink>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

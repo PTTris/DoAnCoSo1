@@ -1,13 +1,13 @@
 import pool from "../config/database.js";
 
 const deleteAccount = async (req, res) => {
-    const { taiKhoan_ID } = req.params;
+    const { id_taiKhoan } = req.params;
 
     try {
         // Kiểm tra vai trò của tài khoản trước khi xóa
         const checkRoleSql =
-            "SELECT vaiTro FROM taikhoan WHERE taiKhoan_ID = ?";
-        const [rows] = await pool.query(checkRoleSql, [taiKhoan_ID]);
+            "SELECT vaiTro FROM taikhoan WHERE id_taiKhoan = ?";
+        const [rows] = await pool.query(checkRoleSql, [id_taiKhoan]);
 
         if (rows.length === 0) {
             return res.status(404).json({
@@ -25,8 +25,8 @@ const deleteAccount = async (req, res) => {
         }
 
         // Thực hiện xóa tài khoản nếu không phải là admin
-        const deleteSql = "DELETE FROM taikhoan WHERE taiKhoan_ID = ?";
-        await pool.query(deleteSql, [taiKhoan_ID]);
+        const deleteSql = "DELETE FROM taikhoan WHERE id_taiKhoan = ?";
+        await pool.query(deleteSql, [id_taiKhoan]);
 
         res.status(200).json({
             EC: 0,
@@ -86,4 +86,23 @@ const deleteCategory = async (req, res) => {
     }
 };
 
-export { deleteAccount, deleteBook, deleteCategory };
+const deleteCart = async (req, res) => {
+    const id_gioHang = req.params.id_gioHang;
+    try {
+        const deleteCartSql = "DELETE FROM GioHang WHERE id_gioHang = ?";
+        await pool.query(deleteCartSql, [id_gioHang]);
+
+        res.status(200).json({
+            EC: 0,
+            EM: "Xóa sản phẩm trong giỏ hàng thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Xóa sản phẩm trong giỏ hàng thất bại",
+            Err: err,
+        });
+    }
+};
+
+export { deleteAccount, deleteBook, deleteCategory, deleteCart };

@@ -49,11 +49,11 @@ const TableAccount = (props) => {
                     <tbody>
                         {listAccount &&
                             listAccount.length > 0 &&
-                            listAccount.map((user, index) => {
+                            listAccount?.map((user, index) => {
                                 return (
                                     <tr key={index}>
                                         <td className="text-center col-1">
-                                            {user.taiKhoan_ID}
+                                            {user.id_taiKhoan}
                                         </td>
                                         <td>{user.tenTaiKhoan}</td>
                                         <td>{user.email}</td>

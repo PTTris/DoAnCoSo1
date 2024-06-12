@@ -32,9 +32,11 @@ const Admin = () => {
                 "access-token": token,
             },
         });
+
         if (responseAdmin.data.EC === 1) {
             navigate("/");
         }
+
         dispatch(LOGIN(responseLogin.data.DATA));
         dispatch(ISADMIN(responseAdmin.data.isADMIN));
     };

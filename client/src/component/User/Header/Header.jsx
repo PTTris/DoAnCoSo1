@@ -1,9 +1,10 @@
+import "./Header.scss";
 // --- Icon ---
 import { FaPhoneVolume } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
-import "./Header.scss";
+import { MdDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,11 +20,13 @@ import {
     selectIsAdmin,
     selectIsAuthenticated,
 } from "../../../redux/reducer/accountReducer";
+import axios from "../../../utils/axiosCustomize.js";
 
 export default function Header(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [dataSearch, setDataSearch] = useState();
+    const [dataBooksCart, setDataBooksCart] = useState();
     const [isShowMenuRight, setShowMenuRight] = useState(true);
     const [isShowListBookSelf, setShowListBookSelf] = useState(true);
     const categoryBooks = useSelector(selectAllCategory);
@@ -31,9 +34,18 @@ export default function Header(props) {
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const isAdmin = useSelector(selectIsAdmin);
 
+    const fetchBooksInCart = async (id) => {
+        const response = await axios(`/getCart/${id}`);
+        setDataBooksCart(response.data);
+    };
+
+    useEffect(() => {
+        fetchBooksInCart(account.id_taiKhoan);
+    }, [account.id_taiKhoan, dataBooksCart]);
+
     useEffect(() => {
         dispatch(fetchAllCategory());
-    }, [dispatch]);
+    }, [dispatch, account.id_taiKhoan]);
 
     const handleShowListBookSelf = () => {
         const listBookself = document.querySelector(".list-bookself");
@@ -45,7 +57,6 @@ export default function Header(props) {
             setShowListBookSelf(!isShowListBookSelf);
         }
     };
-
     const handleShowWrapMenuRight = (event) => {
         const wrapMenuRight = document.querySelector(".wrapmenu_right");
         const opacityMenu = document.querySelector(".opacity_menu");
@@ -80,6 +91,10 @@ export default function Header(props) {
     const handleSubmitSearch = (event) => {
         props.setDataSearch(dataSearch);
         navigate("/tim-kiem");
+    };
+
+    const handleDeleteCart = async (book) => {
+        await axios.delete(`/deleteCart/${book.id_gioHang}`);
     };
     return (
         <header>
@@ -195,7 +210,10 @@ export default function Header(props) {
                                     </div>
                                 </div>
                                 <div className="cart d-flex align-items-center">
-                                    <NavLink className="text-light" to="/Cart">
+                                    <NavLink
+                                        className="text-light"
+                                        to="/gio-hang"
+                                    >
                                         <IoCartOutline size={"1.4em"} />
                                         <span className="mx-1 ">Giỏ hàng</span>
                                     </NavLink>
@@ -205,9 +223,52 @@ export default function Header(props) {
                                             id="cart-sidebar"
                                             className="mini-products-list count_li"
                                         >
-                                            <div className="no-item">
-                                                <p>Không có sản phẩm nào.</p>
-                                            </div>
+                                            {dataBooksCart?.length > 0 ? (
+                                                dataBooksCart?.map((book) => (
+                                                    <li className="cart-item">
+                                                        <div className="thumbnail">
+                                                            <img
+                                                                src={`http://localhost:8080/images/${book.thumbnail}`}
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                        <div className="detail">
+                                                            {book.tenSach}
+                                                        </div>
+                                                        <div className="quantity">
+                                                            {book.soLuong}
+                                                        </div>
+                                                        <div className="price">
+                                                            {Number.parseFloat(
+                                                                book.giaSach
+                                                            ).toLocaleString(
+                                                                "vi-VN"
+                                                            )}{" "}
+                                                            VNĐ
+                                                        </div>
+                                                        <div className="action">
+                                                            <MdDelete
+                                                                size={"1.5rem"}
+                                                                className="text-danger ms-2"
+                                                                cursor={
+                                                                    "pointer"
+                                                                }
+                                                                onClick={() =>
+                                                                    handleDeleteCart(
+                                                                        book
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <div className="no-item">
+                                                    <p>
+                                                        Không có sản phẩm nào.
+                                                    </p>
+                                                </div>
+                                            )}
                                         </ul>
                                     </div>
                                 </div>
@@ -247,7 +308,7 @@ export default function Header(props) {
                                                     <i className="fa fa-caret-down"></i>
                                                 </div>
                                                 <ul className="item_small hidden-sm hidden-xs">
-                                                    {categoryBooks.map(
+                                                    {categoryBooks?.map(
                                                         (category, index) => (
                                                             <li key={index}>
                                                                 <NavLink
@@ -259,11 +320,11 @@ export default function Header(props) {
                                                                     }
                                                                     onClick={(
                                                                         event
-                                                                    ) =>
+                                                                    ) => {
                                                                         handleClickSetSelectedCategory(
                                                                             event
-                                                                        )
-                                                                    }
+                                                                        );
+                                                                    }}
                                                                     to={`/${changeString(
                                                                         category.tenTheLoaiSach
                                                                     )}`}
@@ -304,7 +365,7 @@ export default function Header(props) {
                                             <li className="nav-item ">
                                                 <NavLink
                                                     className="arguments-img"
-                                                    to="/contact"
+                                                    to="/lien-he"
                                                 >
                                                     <span>Liên hệ</span>
                                                 </NavLink>
@@ -317,6 +378,7 @@ export default function Header(props) {
                     </div>
                 </div>
             </div>
+
             {/* Responsive */}
             <div className="wraphead_mobile clearfix d-sm-block d-md-block d-lg-none d-xl-none">
                 <div className="container">
@@ -345,9 +407,9 @@ export default function Header(props) {
                                         <div className="carthd">
                                             <div className="mini-cart text-xs-center">
                                                 <div className="heading-cart cart_header">
-                                                    <a
+                                                    <Link
                                                         className="img_hover_cart"
-                                                        href="/cart"
+                                                        to="/gio-hang"
                                                         title="Giỏ hàng"
                                                     >
                                                         <div className="icon_hotline">
@@ -364,7 +426,7 @@ export default function Header(props) {
                                                                 Giỏ hàng
                                                             </span>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -374,23 +436,41 @@ export default function Header(props) {
                             <div className="wrapmenu">
                                 <div className="section margin-bottom-10 margin-top-15 a-left">
                                     <form
-                                        action="/search"
-                                        method="get"
                                         className="input-group search-bar"
-                                        role="search"
+                                        onSubmit={(event) => {
+                                            event.preventDefault();
+                                            handleSubmitSearch();
+                                        }}
                                     >
                                         <input
                                             type="text"
                                             name="query"
-                                            required=""
+                                            required
                                             placeholder="Tìm sản phẩm bạn mong muốn..."
                                             className="input-group-field auto-search"
+                                            onChange={(event) => {
+                                                setDataSearch(
+                                                    event.target.value
+                                                );
+                                            }}
                                         />
-                                        <button
-                                            type="submit"
-                                            className="visible_index btn icon-fallback-text"
-                                        >
-                                            <i className="fa fa-search"></i>
+                                        <button className=" btn icon-fallback-text">
+                                            {props.dataSearch ? (
+                                                <Link
+                                                    to={"/tim-kiem"}
+                                                    onClick={handleSubmitSearch}
+                                                >
+                                                    <IoSearch
+                                                        size={"1.7em"}
+                                                        color="#000"
+                                                    />
+                                                </Link>
+                                            ) : (
+                                                <IoSearch
+                                                    size={"1.7em"}
+                                                    color="#000"
+                                                />
+                                            )}
                                         </button>
                                     </form>
                                 </div>
@@ -412,13 +492,25 @@ export default function Header(props) {
                     <div className="wrapmenu_full menumain_full">
                         <div className="containers">
                             <div className="contenttop">
-                                <div className="section mb-2 mt-1">
-                                    <a className="btnx" href="/account/login">
-                                        Đăng nhập
-                                    </a>
-                                    &nbsp;/&nbsp;
-                                    <a href="/account/register">Đăng ký</a>
-                                </div>
+                                {isAuthenticated ? (
+                                    <div className="section mb-2 mt-1">
+                                        <Link className="btnx">
+                                            {account.tenTaiKhoan}
+                                        </Link>
+                                        &nbsp;/&nbsp;
+                                        <Link onClick={handleLogout}>
+                                            Đăng xuất
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="section mb-2 mt-1">
+                                        <Link className="btnx" to="/dang-nhap">
+                                            Đăng nhập
+                                        </Link>
+                                        &nbsp;/&nbsp;
+                                        <Link to="/dang-ky">Đăng ký</Link>
+                                    </div>
+                                )}
                             </div>
                             <div className="menu_mobile">
                                 <ul className="ul_collections">
@@ -427,9 +519,9 @@ export default function Header(props) {
                                     </li>
 
                                     <li className="level0 level-top parent">
-                                        <a href="/collections/all">
+                                        <NavLink to="/tat-ca-san-pham">
                                             Tủ sách thương hiệu
-                                        </a>
+                                        </NavLink>
 
                                         <i
                                             className="cursor-pointer fa fa-plus show-list-bookself"
@@ -439,94 +531,61 @@ export default function Header(props) {
                                             className="level0 list-bookself"
                                             style={{ display: "none" }}
                                         >
-                                            <li className="level1 ">
-                                                <a href="/skybooks">
-                                                    <span>Skybooks</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/skynovel">
-                                                    <span>Skynovel</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/skycomics">
-                                                    <span>Skycomics</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/skymommy">
-                                                    <span>Skymommy</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/sky-special">
-                                                    <span>Sky Special</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/tu-sach-chua-lanh">
-                                                    <span>
-                                                        Tủ sách chữa lành
-                                                    </span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/tu-sach-quy-co">
-                                                    <span>Tủ sách quý cô</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/song-khac">
-                                                    <span>Sống khác</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/deepbooks">
-                                                    <span>Deepbooks</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/tram-huong-nghiep">
-                                                    <span>
-                                                        Trạm hướng nghiệp
-                                                    </span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/i-love-cookbook">
-                                                    <span>I love cookbook</span>
-                                                </a>
-                                            </li>
-
-                                            <li className="level1 ">
-                                                <a href="/glow-books">
-                                                    <span>Glow Books</span>
-                                                </a>
-                                            </li>
+                                            {categoryBooks &&
+                                                categoryBooks?.map(
+                                                    (category, index) => (
+                                                        <li
+                                                            key={index}
+                                                            className="level1 "
+                                                        >
+                                                            <NavLink
+                                                                data-key={
+                                                                    category.maTheLoaiSach
+                                                                }
+                                                                data-name={
+                                                                    category.tenTheLoaiSach
+                                                                }
+                                                                onClick={(
+                                                                    event
+                                                                ) => {
+                                                                    handleClickSetSelectedCategory(
+                                                                        event
+                                                                    );
+                                                                    const wrapMenuRight =
+                                                                        document.querySelector(
+                                                                            ".wrapmenu_right"
+                                                                        );
+                                                                    const opacityMenu =
+                                                                        document.querySelector(
+                                                                            ".opacity_menu"
+                                                                        );
+                                                                    event.stopPropagation();
+                                                                    wrapMenuRight.classList.remove(
+                                                                        "open_sidebar_menu"
+                                                                    );
+                                                                    opacityMenu.classList.remove(
+                                                                        "open_opacity"
+                                                                    );
+                                                                    setShowMenuRight(
+                                                                        true
+                                                                    );
+                                                                }}
+                                                                to={`/${changeString(
+                                                                    category.tenTheLoaiSach
+                                                                )}`}
+                                                            >
+                                                                {`
+                                                                        ${category.tenTheLoaiSach}
+                                                                    `}
+                                                            </NavLink>
+                                                        </li>
+                                                    )
+                                                )}
                                         </ul>
                                     </li>
 
                                     <li className="level0 level-top parent">
-                                        <NavLink to="/news">Tin tức</NavLink>
-                                    </li>
-
-                                    <li className="level0 level-top parent">
-                                        <a href="/tac-gia">Tác giả</a>
-                                    </li>
-
-                                    <li className="level0 level-top parent">
-                                        <a href="/lien-he">Liên hệ</a>
+                                        <Link to="/lien-he">Liên hệ</Link>
                                     </li>
                                 </ul>
                             </div>

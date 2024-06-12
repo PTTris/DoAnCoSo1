@@ -21,7 +21,7 @@
     height: 45px;
     line-height: 45px;
     position: relative;
-    z-index: 1;
+    z-index: 99;
     background: #606266;
     color: #fff;
 
@@ -184,13 +184,37 @@
                 ul#cart-sidebar {
                     margin: 0;
                     padding: 5px 5px 0 0;
-                    max-height: 625px;
-                    min-width: 325px;
                     position: relative;
+                    z-index: 9999;
                     p {
                         margin: 0;
                         padding: 10px 15px 15px 15px;
                         color: #282828;
+                        min-width: 250px;
+                    }
+                    .cart-item {
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        padding: 10px 15px 15px 15px;
+                        color: #282828;
+                        font-weight: 700;
+                        .thumbnail {
+                            img {
+                                object-fit: cover;
+                                width: 90px;
+                            }
+                        }
+                        .detail {
+                            margin-left: 20px;
+                            min-width: 150px;
+                            line-height: 2.5;
+                        }
+                        .price {
+                            margin-left: 20px;
+                            min-width: 120px;
+                            color: #38a8ea;
+                        }
                     }
                 }
             }
@@ -506,7 +530,7 @@
 @media (max-width: 767px) {
     .wrapmenu_right,
     .wrapmenu_full {
-        width: 280px !important;
+        width: 300px !important;
     }
 }
 

@@ -1,39 +1,53 @@
 import "./BookDetail.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { selectAllBooks } from "../../../../redux/reducer/getAllBooks";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { changeString } from "../../../../assets/js/handleFunc";
-import { useEffect, useState } from "react";
-import { FreeMode, Navigation } from "swiper/modules";
+import {
+    fetchAllBook,
+    selectAllBooks,
+} from "../../../../redux/reducer/getAllBooks";
 import {
     fetchAllImagesBook,
     selectAllImagesBook,
 } from "../../../../redux/reducer/getAllImagesBook";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { changeString, scrollToTop } from "../../../../assets/js/handleFunc";
+import { useEffect, useState } from "react";
+import { FreeMode, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import BookNewRelease from "../../Home/Contents/BookNewRelease/BookNewRelease";
+import axios from "../../../../utils/axiosCustomize.js";
 import {
-    fetchAllDescBook,
-    selectAllDescBook,
-} from "../../../../redux/reducer/getDescriptionBook";
+    selectAccount,
+    selectIsAuthenticated,
+} from "../../../../redux/reducer/accountReducer.js";
 
 const BookDetail = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { tenSach } = useParams();
+    const [descBook, setDescBook] = useState();
+    const [quantity, setQuantity] = useState(1);
+    const account = useSelector(selectAccount);
     const books = useSelector(selectAllBooks);
     const imgsBook = useSelector(selectAllImagesBook);
-    const descBook = useSelector(selectAllDescBook);
+    const isAuthenticated = useSelector(selectIsAuthenticated);
     const updatedBooks = books.filter((book) => {
         return changeString(book.tenSach) === tenSach;
     });
     const [data, setData] = useState(
         updatedBooks.length > 0 ? updatedBooks[0] : {}
     );
-    const [quantity, setQuantity] = useState(1);
+    // fetchAPI
+    const fetchDescription = async (id) => {
+        const response = await axios.get(`/getDescriptionBook/${id}`);
+        setDescBook(
+            response.data[0]?.noiDung || "Hiện tại nội dung chưa cập nhật"
+        );
+    };
 
     useEffect(() => {
         if (updatedBooks.length > 0) {
@@ -42,12 +56,49 @@ const BookDetail = () => {
     }, [updatedBooks]);
 
     useEffect(() => {
-        if (data.id_sach) {
-            dispatch(fetchAllImagesBook(data.id_sach));
-            dispatch(fetchAllDescBook(data.id_sach));
-        }
-    }, [dispatch, data.id_sach]);
+        dispatch(fetchAllBook());
+        dispatch(fetchAllImagesBook(data.id_sach));
+    }, [dispatch, data.id_sach, tenSach]);
 
+    useEffect(() => {
+        fetchDescription(data.id_sach);
+    }, [data.id_sach, tenSach]);
+
+    const handleIncrease = (max) => {
+        if (quantity <= max) setQuantity((prevQuantity) => prevQuantity + 1);
+    };
+
+    const handleDecrease = () => {
+        setQuantity((prevQuantity) => Math.max(1, prevQuantity - 1));
+    };
+
+    const handleChange = (event) => {
+        const value = Math.max(1, Number(event.target.value));
+        setQuantity(value);
+    };
+
+    const handleAddToCart = async (book) => {
+        if (isAuthenticated) {
+            const formData = new URLSearchParams();
+            formData.append("id_taiKhoan", account.id_taiKhoan);
+            formData.append("id_sach", book.id_sach);
+            formData.append("quantity", quantity);
+            await axios.post("/postCreateCart", formData);
+        } else navigate("/dang-nhap");
+    };
+
+    const handleBuyBook = async (book) => {
+        if (isAuthenticated) {
+            const formData = new URLSearchParams();
+            formData.append("id_taiKhoan", account.id_taiKhoan);
+            formData.append("id_sach", book.id_sach);
+            formData.append("quantity", quantity);
+            const response = await axios.post("/postCreateCart", formData);
+            if (response.data.EC === 0) {
+                navigate("/gio-hang");
+            }
+        } else navigate("/dang-nhap");
+    };
     return (
         <>
             <div className="section wrap-padding-15 wp_product_main clearfix">
@@ -81,7 +132,7 @@ const BookDetail = () => {
                                                     className="mySwiper2"
                                                 >
                                                     {imgsBook &&
-                                                        imgsBook.map(
+                                                        imgsBook?.map(
                                                             (img, index) => (
                                                                 <SwiperSlide>
                                                                     <img
@@ -103,8 +154,6 @@ const BookDetail = () => {
                                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-lg-7-pro details-pro">
                                         <form
                                             id="add-to-cart-form"
-                                            action="/cart/add"
-                                            method="post"
                                             className="form-inline"
                                         >
                                             <div className="fw w_100">
@@ -228,17 +277,9 @@ const BookDetail = () => {
                                                                 <button
                                                                     className="btn_num num_1"
                                                                     type="button"
-                                                                    onClick={() => {
-                                                                        if (
-                                                                            quantity <=
-                                                                            1
-                                                                        )
-                                                                            return;
-                                                                        setQuantity(
-                                                                            quantity -
-                                                                                1
-                                                                        );
-                                                                    }}
+                                                                    onClick={
+                                                                        handleDecrease
+                                                                    }
                                                                 >
                                                                     <i className="fas fa-minus"></i>
                                                                 </button>
@@ -249,23 +290,20 @@ const BookDetail = () => {
                                                                     value={
                                                                         quantity
                                                                     }
-                                                                    maxlength="3"
+                                                                    maxLength="3"
                                                                     className="form-control prd_quantity"
+                                                                    onChange={
+                                                                        handleChange
+                                                                    }
                                                                 />
                                                                 <button
                                                                     className="btn_num num_2"
                                                                     type="button"
-                                                                    onClick={() => {
-                                                                        if (
-                                                                            quantity >=
+                                                                    onClick={() =>
+                                                                        handleIncrease(
                                                                             book.soLuongTonKho
                                                                         )
-                                                                            return;
-                                                                        setQuantity(
-                                                                            quantity +
-                                                                                1
-                                                                        );
-                                                                    }}
+                                                                    }
                                                                 >
                                                                     <i className="fas fa-plus"></i>
                                                                 </button>
@@ -274,23 +312,36 @@ const BookDetail = () => {
                                                     </div>
                                                     <div className="special-price">
                                                         <span className="price product-price">
-                                                            {book.giaSach} VNĐ
+                                                            {Number.parseFloat(
+                                                                book.giaSach
+                                                            ).toLocaleString(
+                                                                "vi-VN"
+                                                            )}{" "}
+                                                            VNĐ
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="btn-mua button_actions clearfix">
                                                 <button
-                                                    type="submit"
-                                                    className="btn btn_base normal_button btn_add_cart add_to_cart btn-cart"
+                                                    className="btn btn_base"
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        scrollToTop();
+                                                        handleAddToCart(book);
+                                                    }}
                                                 >
                                                     <span className="txt-main text_1">
                                                         Thêm vào giỏ hàng
                                                     </span>
                                                 </button>
                                                 <button
-                                                    type="submit"
-                                                    className="btn fast btn_base btn_add_cart btn-cart"
+                                                    className="btn  btn_base"
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        scrollToTop();
+                                                        handleBuyBook(book);
+                                                    }}
                                                 >
                                                     <span className="txt-main text_1">
                                                         Mua ngay
@@ -330,12 +381,7 @@ const BookDetail = () => {
                                                         <div id="content">
                                                             <div
                                                                 dangerouslySetInnerHTML={{
-                                                                    __html:
-                                                                        descBook.length !==
-                                                                        0
-                                                                            ? descBook[0]
-                                                                                  .noiDung
-                                                                            : "Hiện tại nội dung chưa cập nhật",
+                                                                    __html: descBook,
                                                                 }}
                                                             ></div>
                                                         </div>

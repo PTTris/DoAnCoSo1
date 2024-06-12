@@ -19,21 +19,25 @@ import {
     getDescriptionBook,
     getAllCategoriesWithPaginations,
     searchBooks,
+    getCart,
 } from "../controllers/getApiController.js";
 
 import {
+    postCreateCategory,
     postCreateAccount,
     postCreateBook,
     uploadImages,
     uploadDesc,
     register,
     login,
-    postCreateCategory,
+    postCreateCart,
+    postCreateOrder,
 } from "../controllers/postApiController.js";
 
 import {
     deleteAccount,
     deleteBook,
+    deleteCart,
     deleteCategory,
 } from "../controllers/deleteController.js";
 import {
@@ -91,24 +95,28 @@ const initAPIRoute = (app) => {
         getAllCategoriesWithPaginations
     );
     router.get("/searchBooks", searchBooks);
+    router.get("/getCart/:id_taiKhoan", getCart);
 
     // postAPI
     router.post("/postCreateAccount", postCreateAccount);
     router.post("/postCreateCategory", postCreateCategory);
+    router.post("/postCreateCart", postCreateCart);
     router.post("/postCreateBook", upload.single("thumbnail"), postCreateBook);
     router.post("/postImagesBook", upload.array("images", 10), uploadImages);
     router.post("/postDescBook", uploadDesc);
+    router.post("/postCreateOrder", postCreateOrder);
 
     // updateAPI
-    router.put("/updateAccount/:taiKhoan_ID", updateAccount);
     router.put("/updateBook/:id_sach", upload.single("thumbnail"), updateBook);
+    router.put("/updateAccount/:id_taiKhoan", updateAccount);
     router.put("/updateCategory/:maTheLoaiSach", updateCategory);
 
     //deleteAPI
-    router.delete("/deleteAccount/:taiKhoan_ID", deleteAccount);
+    router.delete("/deleteAccount/:id_taiKhoan", deleteAccount);
     router.delete("/deleteBook/:id_sach", deleteBook);
     router.delete("/deleteCategory/:maTheLoaiSach", deleteCategory);
-    updateAccount;
+    router.delete("/deleteCart/:id_gioHang", deleteCart);
+
     // Authentication
     router.post("/register", register);
     router.post("/login", login);

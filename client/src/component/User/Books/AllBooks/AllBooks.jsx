@@ -69,7 +69,7 @@ const AllBooks = () => {
                                 <div className="category-products products">
                                     <section className="products-view products-view-grid collection_reponsive list_hover_pro">
                                         <div className="row">
-                                            {data.map((book) => (
+                                            {data?.map((book) => (
                                                 <div
                                                     key={book.maSach}
                                                     data-Id={book.maSach}
@@ -89,6 +89,9 @@ const AllBooks = () => {
                                                                         src={`http://localhost:8080/images/${book.thumbnail}`}
                                                                         alt={
                                                                             book.tenSach
+                                                                        }
+                                                                        onClick={
+                                                                            scrollToTop
                                                                         }
                                                                     />
                                                                 </NavLink>

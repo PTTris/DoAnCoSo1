@@ -25,6 +25,7 @@ const postCreateBook = async (req, res) => {
         (tenSach, tacGia, nhaXB, nguoiDich, namXB, ngonNgu, trongLuongGr, 
         kichThuocBaoBi, soTrang, giaSach, soLuongTonKho, thumbnail, hinhThucSach, maTheLoaiSach)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
         await pool.query(sql, [
             tenSach,
             tacGia,
@@ -75,7 +76,6 @@ const postCreateAccount = async (req, res) => {
 
 const postCreateCategory = async (req, res) => {
     const { maTheLoaiSach, tenTheLoaiSach } = req.body;
-    console.log(maTheLoaiSach, tenTheLoaiSach);
     try {
         const sql =
             "insert into TheLoaiSach (maTheLoaiSach, tenTheLoaiSach) VALUES (?, ?)";
@@ -92,7 +92,6 @@ const postCreateCategory = async (req, res) => {
             EM: "Tạo thể loại sách thất bại",
             Err: err,
         });
-        console.log(err);
     }
 };
 
@@ -133,6 +132,66 @@ const uploadDesc = async (req, res) => {
         res.status(500).json({
             EC: 1,
             EM: "Thêm nội dung sách thất bại",
+            Err: err,
+        });
+    }
+};
+
+const postCreateCart = async (req, res) => {
+    const { id_sach, id_taiKhoan, quantity } = req.body;
+    const checkSql = `SELECT * FROM GioHang WHERE id_sach = ? AND id_taiKhoan = ?`;
+    const updateSql = `UPDATE GioHang SET soLuong = soLuong + ? WHERE id_sach = ? AND id_taiKhoan = ?`;
+    const insertSql = `INSERT INTO GioHang (id_sach, id_taiKhoan, soLuong) VALUES (?, ?, ?)`;
+
+    try {
+        const [rows] = await pool.query(checkSql, [id_sach, id_taiKhoan]);
+
+        if (rows.length > 0) {
+            // Sách đã tồn tại trong giỏ hàng, cập nhật số lượng
+            await pool.query(updateSql, [quantity, id_sach, id_taiKhoan]);
+            res.status(200).json({
+                EC: 0,
+                EM: "Cập nhật số lượng sách trong giỏ hàng thành công",
+            });
+        } else {
+            // Sách chưa tồn tại trong giỏ hàng, thêm sách vào giỏ hàng
+            await pool.query(insertSql, [id_sach, id_taiKhoan, quantity]);
+            res.status(200).json({
+                EC: 0,
+                EM: "Thêm sách vào giỏ hàng thành công",
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Thêm vào giỏ hàng sách thất bại",
+            Err: err,
+        });
+    }
+};
+
+const postCreateOrder = async (req, res) => {
+    const { id_taiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien } =
+        req.body;
+
+    const sql = `INSERT INTO DonHang (id_taiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien) 
+                VALUES (?, ?, ?, ?, ?, ?)`;
+
+    try {
+        await pool.query(sql, [
+            id_taiKhoan,
+            hoTenKH,
+            diaChiKH,
+            SDT,
+            soLuongSanPham,
+            tongTien,
+        ]);
+        res.status(200).json({
+            EC: 0,
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
             Err: err,
         });
     }
@@ -184,15 +243,19 @@ const login = async (req, res) => {
             });
 
         const token = jwt.sign(
-            { id: user.taiKhoan_ID, role: user.vaiTro },
+            { id: user.id_taiKhoan, role: user.vaiTro },
             process.env.SECRET_KEY,
             {
-                expiresIn: "30m",
+                expiresIn: "1h",
             }
         );
 
         res.status(200).json({
-            DATA: rows,
+            DATA: {
+                id_taiKhoan: user.id_taiKhoan,
+                email: user.email,
+                tenTaiKhoan: user.tenTaiKhoan,
+            },
             EC: 0,
             EM: "Đăng nhập thành công!",
             token: token,
@@ -207,9 +270,11 @@ const login = async (req, res) => {
 };
 
 export {
-    postCreateAccount,
     postCreateCategory,
+    postCreateAccount,
+    postCreateOrder,
     postCreateBook,
+    postCreateCart,
     uploadImages,
     uploadDesc,
     register,

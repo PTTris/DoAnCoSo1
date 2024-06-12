@@ -215,7 +215,7 @@ const ModalCreateBook = (props) => {
                             >
                                 <option value="">Chọn thể loại</option>
                                 {categoryBooks &&
-                                    categoryBooks.map((book) => (
+                                    categoryBooks?.map((book) => (
                                         <option
                                             key={book.maTheLoaiSach}
                                             value={book.maTheLoaiSach}

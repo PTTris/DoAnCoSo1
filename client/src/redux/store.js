@@ -18,4 +18,5 @@ const store = createStore(
 );
 let persistor = persistStore(store);
 
+// persistor.purge();
 export { store, persistor };

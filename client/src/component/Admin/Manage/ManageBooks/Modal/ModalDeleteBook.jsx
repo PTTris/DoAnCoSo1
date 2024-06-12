@@ -18,7 +18,6 @@ const ModalDeleteBook = (props) => {
 
     const handleSubmitDelete = async () => {
         let response = await axios.delete(`/deleteBook/${dataDelete.id_sach}`);
-        console.log(response.data);
 
         if (response.data && response.data.EC !== 0) {
             toast.error(response.data.EM);
