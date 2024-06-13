@@ -105,4 +105,28 @@ const deleteCart = async (req, res) => {
     }
 };
 
-export { deleteAccount, deleteBook, deleteCategory, deleteCart };
+const deleteOrder = async (req, res) => {
+    const id_donHang = req.params.id_donHang;
+
+    try {
+        const deleteOrderDetailSql =
+            "DELETE FROM Chitietdonhang WHERE id_donHang = ?";
+        await pool.query(deleteOrderDetailSql, [id_donHang]);
+
+        const deleteOrderSql = "DELETE FROM DonHang WHERE id_donHang = ?";
+        await pool.query(deleteOrderSql, [id_donHang]);
+
+        res.status(200).json({
+            EC: 0,
+            EM: "Xóa đơn hàng thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Xóa đơn hàng thất bại",
+            Err: err,
+        });
+    }
+};
+
+export { deleteAccount, deleteBook, deleteCategory, deleteCart, deleteOrder };

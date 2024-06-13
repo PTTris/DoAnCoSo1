@@ -24,6 +24,7 @@ import {
     selectAccount,
     selectIsAuthenticated,
 } from "../../../../redux/reducer/accountReducer.js";
+import { fetchAllCarts } from "../../../../redux/reducer/getCarts.js";
 
 const BookDetail = () => {
     const navigate = useNavigate();
@@ -82,8 +83,9 @@ const BookDetail = () => {
             const formData = new URLSearchParams();
             formData.append("id_taiKhoan", account.id_taiKhoan);
             formData.append("id_sach", book.id_sach);
-            formData.append("quantity", quantity);
+            formData.append("soLuongSach", quantity);
             await axios.post("/postCreateCart", formData);
+            dispatch(fetchAllCarts(account.id_taiKhoan));
         } else navigate("/dang-nhap");
     };
 
@@ -92,8 +94,9 @@ const BookDetail = () => {
             const formData = new URLSearchParams();
             formData.append("id_taiKhoan", account.id_taiKhoan);
             formData.append("id_sach", book.id_sach);
-            formData.append("quantity", quantity);
+            formData.append("soLuongSach", quantity);
             const response = await axios.post("/postCreateCart", formData);
+            dispatch(fetchAllCarts(account.id_taiKhoan));
             if (response.data.EC === 0) {
                 navigate("/gio-hang");
             }

@@ -80,7 +80,7 @@ const ManageBooks = () => {
             <h1 className="title text-center">Quản lý sách</h1>
             <div className="content">
                 <button
-                    className="btn-add btn btn-primary"
+                    className="btn-hs-bg btn btn-primary"
                     onClick={() => setShowModalCreateBook(!showModalCreateBook)}
                 >
                     Tạo sách mới

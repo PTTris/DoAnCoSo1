@@ -152,13 +152,32 @@
             float: left;
             position: relative;
             &:hover {
-                span {
+                a > span {
                     opacity: 0.7;
                 }
                 .top-cart-content {
                     display: block;
                 }
             }
+
+            .count_item {
+                background: #fff;
+                border-radius: 50%;
+                width: 13px;
+                height: 13px;
+                line-height: 13px;
+                text-align: center;
+                position: absolute;
+                left: 12px;
+                bottom: 8px;
+                text-decoration: none;
+                text-transform: none;
+                font-style: initial;
+                font-size: 11px;
+                color: #38a8ea;
+                font-weight: bold;
+            }
+
             .top-cart-content {
                 right: 0px;
                 top: 45px;

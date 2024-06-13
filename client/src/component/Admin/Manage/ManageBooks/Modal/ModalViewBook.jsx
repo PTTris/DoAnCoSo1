@@ -135,6 +135,7 @@ const ModalViewBook = (props) => {
                                 value={dataView.soTrang}
                             />
                         </div>
+
                         <div className="col-md-2">
                             <label className="form-label">Số lượng tồn</label>
                             <input
@@ -156,12 +157,14 @@ const ModalViewBook = (props) => {
                         </div>
 
                         <div className="col-md-2">
-                            <label className="form-label">Giá sách</label>
+                            <label className="form-label">Giá sách(VNĐ)</label>
                             <input
                                 type="text"
                                 disabled
                                 className={`form-control text-center`}
-                                value={dataView.giaSach}
+                                value={Number.parseFloat(
+                                    dataView.giaSach
+                                ).toLocaleString("vi-VN")}
                             />
                         </div>
                         <div className="col-md-12 img-slide">

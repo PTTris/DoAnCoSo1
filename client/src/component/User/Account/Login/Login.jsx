@@ -37,7 +37,7 @@ const Login = () => {
             password,
         });
 
-        if (responseLogin.data && responseLogin.data.EC !== 0) {
+        if (responseLogin.data && responseLogin.data.EC === 1) {
             toast.error(responseLogin.data.EM);
         }
 
@@ -139,26 +139,6 @@ const Login = () => {
                                             }
                                         />
                                     </div>
-
-                                    {/* <div className="d-flex justify-content-between align-items-center">
-                                    <div className="form-check mb-0">
-                                        <input
-                                            className="form-check-input me-2"
-                                            type="checkbox"
-                                            value=""
-                                            name="form2Example3"
-                                        />
-                                        <label
-                                            className="form-check-label"
-                                            for="form2Example3"
-                                        >
-                                            Ghi nhớ mật khẩu?
-                                        </label>
-                                    </div>
-                                    <a href="#!" className="text-body">
-                                        Quên mật khẩu?
-                                    </a>
-                                </div> */}
 
                                     <div className="text-center text-lg-start mt-4 pt-2">
                                         <button

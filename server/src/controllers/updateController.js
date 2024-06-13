@@ -102,7 +102,7 @@ const updateBook = async (req, res) => {
 };
 
 const updateCategory = async (req, res) => {
-    const tenTaiKhoan = req.params.maTheLoaiSach;
+    const maTheLoaiSach = req.params.maTheLoaiSach;
     const { tenTheLoaiSach } = req.body;
     try {
         const sql = `UPDATE Theloaisach
@@ -122,4 +122,73 @@ const updateCategory = async (req, res) => {
     }
 };
 
-export { updateAccount, updateBook, updateCategory };
+const updateCartQuantity = async (req, res) => {
+    const id_gioHang = req.params.id_gioHang;
+    const { soLuongSach } = req.body;
+
+    try {
+        const sql = `UPDATE GioHang
+            set soLuongSach = ? WHERE id_gioHang = ?
+            `;
+        await pool.query(sql, [soLuongSach, id_gioHang]);
+        res.status(200).json({
+            EC: 0,
+            EM: "Cập nhật số lượng sách thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Cập nhật số lượng sách thất bại",
+            Err: err,
+        });
+    }
+};
+
+const resolveOrder = async (req, res) => {
+    const id_donHang = req.params.id_donHang;
+    try {
+        const sql = `UPDATE DonHang
+            set trangThaiDonHang = 'Đã duyệt' WHERE id_donHang = ?
+            `;
+        await pool.query(sql, [id_donHang]);
+        res.status(200).json({
+            EC: 0,
+            EM: "Xác nhận đơn hàng thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Xác nhận đơn hàng thất bại",
+            Err: err,
+        });
+    }
+};
+
+const rejectOrder = async (req, res) => {
+    const id_donHang = req.params.id_donHang;
+    try {
+        const sql = `UPDATE DonHang
+            set trangThaiDonHang = 'Đã hủy' WHERE id_donHang = ?
+            `;
+        await pool.query(sql, [id_donHang]);
+        res.status(200).json({
+            EC: 0,
+            EM: "Đã từ chối đơn hàng",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Từ chối thất bại",
+            Err: err,
+        });
+    }
+};
+
+export {
+    updateAccount,
+    updateBook,
+    updateCategory,
+    updateCartQuantity,
+    resolveOrder,
+    rejectOrder,
+};

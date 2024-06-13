@@ -52,7 +52,7 @@ const ManageCategory = () => {
             <h1 className="title text-center">Quản lý thể loại sách</h1>
             <div className="content">
                 <button
-                    className="btn-add btn btn-primary"
+                    className="btn-hs-bg btn btn-primary"
                     onClick={() =>
                         setShowModalCreateCategory(!showModalCreateCategory)
                     }
@@ -71,7 +71,7 @@ const ManageCategory = () => {
                                     Tên thể loại
                                 </th>
                                 <th className="text-center fs-6" scope="col">
-                                    Action
+                                    Chức năng
                                 </th>
                             </tr>
                         </thead>

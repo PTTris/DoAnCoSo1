@@ -249,7 +249,6 @@ const searchBooks = async (req, res) => {
             EM: "Không thể tìm kiếm",
         });
     }
-
     try {
         const sql = `SELECT * FROM Sach 
                      WHERE tenSach LIKE ? LIMIT ? OFFSET ?`;
@@ -292,16 +291,86 @@ const getCart = async (req, res) => {
     }
 };
 
+const getOrders = async (req, res) => {
+    const { id_taiKhoan } = req.params;
+    const sql = `SELECT id_donHang, email, tenTaiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s') as ngayDatHang FROM DonHang, TaiKhoan 
+                WHERE DonHang.id_taiKhoan = ?;`;
+
+    try {
+        const [rows] = await pool.query(sql, [id_taiKhoan]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getOrdersNewest = async (req, res) => {
+    const { id_taiKhoan } = req.params;
+    const sql = `SELECT id_donHang FROM DonHang WHERE id_taiKhoan = ? ORDER BY ngayDatHang DESC LIMIT 1;;`;
+
+    try {
+        const [rows] = await pool.query(sql, [id_taiKhoan]);
+        return res.status(200).json(rows[0]);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getOrdersWithPaginations = async (req, res) => {
+    const { page, limit } = req.query;
+    const offset = (page - 1) * limit;
+    const sql = `SELECT id_donHang, email, tenTaiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien, trangThaiDonHang, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s') as ngayDatHang FROM DonHang, TaiKhoan 
+                WHERE DonHang.id_taiKhoan = TaiKhoan.id_taiKhoan order by ngayDatHang desc LIMIT ? OFFSET ? `;
+
+    try {
+        const [rows] = await pool.query(sql, [+limit, +offset]);
+
+        const [[{ totalData }]] = await pool.query(
+            `SELECT COUNT(*) as totalData FROM DonHang`
+        );
+
+        return res.status(200).json({
+            data: rows,
+            page,
+            limit,
+            totalData,
+            totalPages: Math.ceil(totalData / limit),
+        });
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getBooksInOrder = async (req, res) => {
+    const { id_donHang } = req.params;
+    const sql = `SELECT donhang.id_donHang, sach.id_sach, tenSach, tacGia, nguoiDich, nhaXB, chitietdonhang.soLuongSach, giaSach, thumbnail 
+    FROM donhang, chitietdonhang, sach 
+    WHERE donhang.id_donHang = chitietdonhang.id_donHang    
+    AND sach.id_sach = chitietdonhang.id_sach 
+    AND donhang.id_donHang = ?;`;
+
+    try {
+        const [rows] = await pool.query(sql, [id_donHang]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
 export {
     getCart,
+    getOrders,
     searchBooks,
     getAllBooks,
     getBookForm,
     getImagesBook,
+    getOrdersNewest,
+    getBooksInOrder,
     getBookSortByDate,
     getAllCategoryBook,
     getDescriptionBook,
     getAllBooksOfCategory,
+    getOrdersWithPaginations,
     getAllBooksWithPaginations,
     getAllUsersWithPaginations,
     getAllBooksOfCategoryWithPag,

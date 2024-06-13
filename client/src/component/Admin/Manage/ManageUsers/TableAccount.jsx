@@ -42,7 +42,7 @@ const TableAccount = (props) => {
                                 Role
                             </th>
                             <th className="text-center fs-6" scope="col">
-                                Action
+                                Chức năng
                             </th>
                         </tr>
                     </thead>

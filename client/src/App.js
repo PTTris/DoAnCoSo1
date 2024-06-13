@@ -17,8 +17,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageCategory from "./component/Admin/Manage/ManageCategory/ManageCategory";
 import SearchBook from "./component/User/Search/SearchBook";
-import ManageCart from "./component/Admin/Manage/ManageCart/ManageCart";
+import ManageOrders from "./component/Admin/Manage/ManageOrders/ManageOrders";
 import Paid from "./component/User/Paid/Paid";
+import Profile from "./component/User/Profile/Profile";
 
 function App() {
     let currentUrl = window.location.href;
@@ -34,7 +35,7 @@ function App() {
         <>
             <Routes>
                 <Route
-                    path="/"
+                    path=""
                     exact
                     element={
                         <User
@@ -47,7 +48,7 @@ function App() {
                     }
                 >
                     <Route index element={<HomePage />} />
-                    <Route path="/tat-ca-san-pham" element={<AllBooks />} />
+                    <Route path="tat-ca-san-pham" element={<AllBooks />} />
                     <Route
                         path={`${selectedCategory}`}
                         element={
@@ -57,20 +58,21 @@ function App() {
                             />
                         }
                     />
-                    <Route path="/lien-he" element={<Contact />} />
-                    <Route path="/gio-hang" element={<Cart />} />
-                    <Route path="/:tenSach" element={<BookDetail />} />
+                    <Route path="lien-he" element={<Contact />} />
+                    <Route path="gio-hang" element={<Cart />} />
+                    <Route path=":tenSach" element={<BookDetail />} />
                     <Route
-                        path="/tim-kiem"
+                        path="tim-kiem"
                         element={<SearchBook dataSearch={dataSearch} />}
                     />
-                    <Route path="/thanh-toan-thanh-cong" element={<Paid />} />
+                    <Route path="thanh-toan-thanh-cong" element={<Paid />} />
+                    <Route path="trang-khach-hang" element={<Profile />} />
                 </Route>
 
-                <Route path="/dang-nhap" element={<Login />} />
-                <Route path="/dang-ky" element={<Register />} />
+                <Route path="dang-nhap" element={<Login />} />
+                <Route path="dang-ky" element={<Register />} />
 
-                <Route path="/admin" exact element={<Admin />}>
+                <Route path="admin" exact element={<Admin />}>
                     <Route index element={<Dashboard />} />
                     <Route
                         path="/admin/quan-ly-tai-khoan"
@@ -85,8 +87,8 @@ function App() {
                         element={<ManageCategory />}
                     />
                     <Route
-                        path="/admin/quan-ly-gio-hang"
-                        element={<ManageCart />}
+                        path="/admin/quan-ly-don-hang"
+                        element={<ManageOrders />}
                     />
                 </Route>
             </Routes>

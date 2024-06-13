@@ -8,7 +8,6 @@ import {
     MDBIcon,
     MDBInput,
     MDBRow,
-    MDBTextArea,
     MDBTypography,
 } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
@@ -16,80 +15,79 @@ import "./Cart.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { scrollToTop } from "../../../assets/js/handleFunc";
 import axios from "../../../utils/axiosCustomize.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAccount } from "../../../redux/reducer/accountReducer";
+import {
+    fetchAllCarts,
+    selectAllCarts,
+    updateCartQuantity,
+} from "../../../redux/reducer/getCarts.js";
 
 export default function Cart() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const account = useSelector(selectAccount);
     const [fullName, setFullName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [address, setAddress] = useState("");
     const [price, setPrice] = useState(0);
-    const [dataBooksCart, setDataBooksCart] = useState([]);
-    const [errors, setErrors] = useState({}); // Biến trạng thái để lưu trữ lỗi
-
-    const fetchBooksInCart = async (id) => {
-        const response = await axios(`/getCart/${id}`);
-        setDataBooksCart(response.data);
-    };
+    const [quantity, setQuantity] = useState(0);
+    const [errors, setErrors] = useState({});
+    const dataBooksCart = useSelector(selectAllCarts);
+    const [quantities, setQuantities] = useState({});
 
     useEffect(() => {
-        fetchBooksInCart(account.id_taiKhoan);
-    }, [account.id_taiKhoan]);
+        dispatch(fetchAllCarts(account.id_taiKhoan));
+    }, [dispatch, account.id_taiKhoan]);
 
     useEffect(() => {
-        const total = dataBooksCart.reduce(
-            (acc, book) => acc + book.giaSach * book.soLuong,
-            0
-        );
-        setPrice(total);
+        const newQuantities = {};
+        dataBooksCart.forEach((book) => {
+            newQuantities[book.id_gioHang] = book.soLuongSach;
+        });
+        setQuantities(newQuantities);
     }, [dataBooksCart]);
 
-    const handleIncreaseQuantity = (bookId) => {
-        const updatedBooks = dataBooksCart.map((book) => {
-            if (book.id_sach === bookId) {
-                return { ...book, soLuong: book.soLuong + 1 };
-            }
-            return book;
-        });
-        setDataBooksCart(updatedBooks);
-    };
+    useEffect(() => {
+        const calculateTotalPrice = () => {
+            const total = dataBooksCart.reduce(
+                (acc, book) => acc + book.giaSach * quantities[book.id_gioHang],
+                0
+            );
+            setPrice(total);
+            const totalQuantity = dataBooksCart.reduce(
+                (acc, book) => acc + quantities[book.id_gioHang],
+                0
+            );
+            setQuantity(totalQuantity);
+        };
+        calculateTotalPrice();
+    }, [dataBooksCart, quantities]);
 
-    const handleDecreaseQuantity = (bookId) => {
-        const updatedBooks = dataBooksCart.map((book) => {
-            if (book.id_sach === bookId && book.soLuong > 1) {
-                return { ...book, soLuong: book.soLuong - 1 };
-            }
-            return book;
+    const handleQuantityChange = async (id_gioHang, newQuantity) => {
+        if (newQuantity < 1) return;
+        setQuantities({
+            ...quantities,
+            [id_gioHang]: newQuantity,
         });
-        setDataBooksCart(updatedBooks);
-    };
-
-    const handleQuantityChange = (bookId, newQuantity) => {
-        const updatedBooks = dataBooksCart.map((book) => {
-            if (book.id_sach === bookId) {
-                return { ...book, soLuong: newQuantity };
-            }
-            return book;
-        });
-        setDataBooksCart(updatedBooks);
+        await dispatch(
+            updateCartQuantity({ id_gioHang, soLuongSach: newQuantity })
+        );
+        dispatch(fetchAllCarts(account.id_taiKhoan));
     };
 
     const handleDeleteCart = async (book) => {
         await axios.delete(`/deleteCart/${book.id_gioHang}`);
-        await fetchBooksInCart(account.id_taiKhoan);
+        dispatch(fetchAllCarts(account.id_taiKhoan));
     };
 
     const handleSubmitPayment = async () => {
-        // Kiểm tra xem tất cả các trường đã được nhập đầy đủ chưa
         let newErrors = {};
-        if (!fullName) newErrors.fullName = "Họ tên là bắt buộc";
-        if (!phoneNumber) newErrors.phoneNumber = "Số điện thoại là bắt buộc";
-        if (!address) newErrors.address = "Địa chỉ là bắt buộc";
-        if (dataBooksCart?.length === 0)
+        if (!fullName) newErrors.fullName = "Họ tên là bắt buộc.";
+        if (!phoneNumber) newErrors.phoneNumber = "Số điện thoại là bắt buộc.";
+        if (!address) newErrors.address = "Địa chỉ là bắt buộc.";
+        if (!quantity)
             newErrors.quantity = "Quý khách chưa thêm bất kỳ sản phẩm nào!";
-
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
@@ -98,11 +96,17 @@ export default function Cart() {
             formData.append("hoTenKH", fullName);
             formData.append("diaChiKH", address);
             formData.append("SDT", phoneNumber);
-            formData.append("soLuongSanPham", dataBooksCart?.length);
+            formData.append("soLuongSanPham", quantity);
             formData.append("tongTien", price);
             const response = await axios.post(`/postCreateOrder`, formData);
-
             if (response.data.EC === 0) {
+                const response = await axios.get(
+                    `/getOrdersNewest/${account.id_taiKhoan}`
+                );
+                await axios.post(`/postCreateOrderDetail`, {
+                    id_donHang: response.data.id_donHang,
+                    dataBooksCart,
+                });
                 navigate("/thanh-toan-thanh-cong");
                 scrollToTop();
             }
@@ -134,9 +138,7 @@ export default function Cart() {
                                                     phẩm
                                                 </MDBTypography>
                                             </div>
-
                                             <hr className="my-4" />
-
                                             {dataBooksCart?.length > 0 ? (
                                                 dataBooksCart.map((book) => (
                                                     <MDBRow
@@ -174,21 +176,24 @@ export default function Cart() {
                                                                 className="text-black mb-0"
                                                             ></MDBTypography>
                                                         </MDBCol>
-
                                                         <MDBCol
                                                             xs={12}
                                                             sm={5}
                                                             md={3}
                                                             lg={4}
-                                                            xl={3}
+                                                            xl="3"
                                                             className="d-flex align-items-center"
                                                         >
                                                             <MDBBtn
                                                                 color="link"
                                                                 className="px-2"
                                                                 onClick={() =>
-                                                                    handleDecreaseQuantity(
-                                                                        book.id_sach
+                                                                    handleQuantityChange(
+                                                                        book.id_gioHang,
+                                                                        quantities[
+                                                                            book
+                                                                                .id_gioHang
+                                                                        ] - 1
                                                                     )
                                                                 }
                                                             >
@@ -197,18 +202,20 @@ export default function Cart() {
                                                                     icon="minus"
                                                                 />
                                                             </MDBBtn>
-
                                                             <MDBInput
                                                                 className="text-center"
                                                                 type="number"
-                                                                min="1"
+                                                                min={1}
                                                                 value={
-                                                                    book.soLuong
+                                                                    quantities[
+                                                                        book
+                                                                            .id_gioHang
+                                                                    ]
                                                                 }
                                                                 size="sm"
                                                                 onChange={(e) =>
                                                                     handleQuantityChange(
-                                                                        book.id_sach,
+                                                                        book.id_gioHang,
                                                                         parseInt(
                                                                             e
                                                                                 .target
@@ -217,13 +224,16 @@ export default function Cart() {
                                                                     )
                                                                 }
                                                             />
-
                                                             <MDBBtn
                                                                 color="link"
                                                                 className="px-2"
                                                                 onClick={() =>
-                                                                    handleIncreaseQuantity(
-                                                                        book.id_sach
+                                                                    handleQuantityChange(
+                                                                        book.id_gioHang,
+                                                                        quantities[
+                                                                            book
+                                                                                .id_gioHang
+                                                                        ] + 1
                                                                     )
                                                                 }
                                                             >
@@ -233,29 +243,30 @@ export default function Cart() {
                                                                 />
                                                             </MDBBtn>
                                                         </MDBCol>
-
                                                         <MDBCol
                                                             xs={8}
                                                             sm={5}
                                                             md={3}
                                                             lg={2}
-                                                            xl={3}
+                                                            xl="3"
                                                             className="book-price text-center"
                                                         >
                                                             <MDBTypography
                                                                 tag="h6"
-                                                                className="mb-0 "
+                                                                className="mb-0"
                                                             >
                                                                 {Number.parseFloat(
                                                                     book.giaSach *
-                                                                        book.soLuong
+                                                                        quantities[
+                                                                            book
+                                                                                .id_gioHang
+                                                                        ]
                                                                 ).toLocaleString(
                                                                     "vi-VN"
                                                                 )}{" "}
                                                                 VNĐ
                                                             </MDBTypography>
                                                         </MDBCol>
-
                                                         <MDBCol
                                                             xs={4}
                                                             sm={2}
@@ -293,7 +304,6 @@ export default function Cart() {
                                                     Không có sản phẩm nào!
                                                 </strong>
                                             )}
-
                                             <div className="pt-5">
                                                 <MDBTypography
                                                     tag="h6"
@@ -322,37 +332,32 @@ export default function Cart() {
                                             >
                                                 Tổng cộng
                                             </MDBTypography>
-
                                             <hr className="my-4" />
-
                                             <div className="d-flex justify-content-between mb-4">
                                                 <MDBTypography
                                                     tag="h6"
                                                     className="text-uppercase"
                                                 >
-                                                    Số lượng:{" "}
-                                                    {dataBooksCart?.length} sản
-                                                    phẩm
+                                                    Tổng số lượng: {quantity}{" "}
+                                                    sản phẩm
                                                 </MDBTypography>
                                             </div>
-
                                             <MDBTypography
                                                 tag="h5"
-                                                className=" mb-3"
+                                                className="mb-3"
                                             >
                                                 Thông tin giao hàng
                                             </MDBTypography>
-
                                             <div className="mb-3">
                                                 <MDBInput
                                                     size="lg"
                                                     label="Nhập họ tên người nhận hàng"
                                                     className="border-none"
                                                     onChange={(event) => {
+                                                        setErrors({});
                                                         setFullName(
                                                             event.target.value
                                                         );
-                                                        setErrors({});
                                                     }}
                                                 />
                                                 {errors.fullName && (
@@ -367,10 +372,10 @@ export default function Cart() {
                                                     label="Nhập số điện thoại"
                                                     className="border-none"
                                                     onChange={(event) => {
+                                                        setErrors({});
                                                         setPhoneNumber(
                                                             event.target.value
                                                         );
-                                                        setErrors({});
                                                     }}
                                                 />
                                                 {errors.phoneNumber && (
@@ -380,15 +385,15 @@ export default function Cart() {
                                                 )}
                                             </div>
                                             <div className="mb-3">
-                                                <MDBTextArea
+                                                <MDBInput
                                                     size="lg"
-                                                    label="Địa chỉ nhận hàng"
+                                                    label="Nhập địa chỉ giao hàng"
                                                     className="border-none"
                                                     onChange={(event) => {
+                                                        setErrors({});
                                                         setAddress(
                                                             event.target.value
                                                         );
-                                                        setErrors({});
                                                     }}
                                                 />
                                                 {errors.address && (
@@ -397,22 +402,17 @@ export default function Cart() {
                                                     </span>
                                                 )}
                                             </div>
-
                                             <hr className="my-4" />
-
-                                            <div className="d-flex justify-content-between mb-3">
+                                            <div className="d-flex justify-content-between mb-2">
                                                 <MDBTypography
-                                                    tag="h5"
+                                                    tag="h6"
                                                     className="text-uppercase"
                                                 >
                                                     Tổng cộng
                                                 </MDBTypography>
                                                 <MDBTypography
-                                                    tag="h5"
-                                                    style={{
-                                                        color: "#38a8ea",
-                                                        fontWeight: 700,
-                                                    }}
+                                                    tag="h6"
+                                                    className="text-uppercase"
                                                 >
                                                     {price.toLocaleString(
                                                         "vi-VN"
@@ -421,22 +421,22 @@ export default function Cart() {
                                                 </MDBTypography>
                                             </div>
                                             {errors.quantity && (
-                                                <span className="text-danger mb-3 d-block">
+                                                <span className="text-danger">
                                                     {errors.quantity}
                                                 </span>
                                             )}
+
                                             <MDBBtn
                                                 style={{
                                                     background: "#38a8ea",
                                                     fontSize: "18px",
+                                                    marginTop: "20px",
                                                 }}
                                                 block
                                                 size="lg"
-                                                onClick={() => {
-                                                    handleSubmitPayment();
-                                                }}
+                                                onClick={handleSubmitPayment}
                                             >
-                                                Thanh Toán
+                                                Thanh toán
                                             </MDBBtn>
                                         </div>
                                     </MDBCol>

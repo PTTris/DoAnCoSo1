@@ -20,6 +20,9 @@ import {
     getAllCategoriesWithPaginations,
     searchBooks,
     getCart,
+    getOrdersWithPaginations,
+    getOrdersNewest,
+    getBooksInOrder,
 } from "../controllers/getApiController.js";
 
 import {
@@ -32,6 +35,7 @@ import {
     login,
     postCreateCart,
     postCreateOrder,
+    postCreateOrderDetail,
 } from "../controllers/postApiController.js";
 
 import {
@@ -39,10 +43,14 @@ import {
     deleteBook,
     deleteCart,
     deleteCategory,
+    deleteOrder,
 } from "../controllers/deleteController.js";
 import {
+    rejectOrder,
+    resolveOrder,
     updateAccount,
     updateBook,
+    updateCartQuantity,
     updateCategory,
 } from "../controllers/updateController.js";
 
@@ -96,6 +104,9 @@ const initAPIRoute = (app) => {
     );
     router.get("/searchBooks", searchBooks);
     router.get("/getCart/:id_taiKhoan", getCart);
+    router.get("/getOrdersWithPaginations/", getOrdersWithPaginations);
+    router.get("/getOrdersNewest/:id_taiKhoan", getOrdersNewest);
+    router.get("/getBooksInOrder/:id_donHang", getBooksInOrder);
 
     // postAPI
     router.post("/postCreateAccount", postCreateAccount);
@@ -105,17 +116,22 @@ const initAPIRoute = (app) => {
     router.post("/postImagesBook", upload.array("images", 10), uploadImages);
     router.post("/postDescBook", uploadDesc);
     router.post("/postCreateOrder", postCreateOrder);
+    router.post("/postCreateOrderDetail", postCreateOrderDetail);
 
     // updateAPI
     router.put("/updateBook/:id_sach", upload.single("thumbnail"), updateBook);
     router.put("/updateAccount/:id_taiKhoan", updateAccount);
     router.put("/updateCategory/:maTheLoaiSach", updateCategory);
+    router.put("/updateCartQuantity/:id_gioHang", updateCartQuantity);
+    router.put("/resolveOrder/:id_donHang", resolveOrder);
+    router.put("/rejectOrder/:id_donHang", rejectOrder);
 
     //deleteAPI
     router.delete("/deleteAccount/:id_taiKhoan", deleteAccount);
     router.delete("/deleteBook/:id_sach", deleteBook);
     router.delete("/deleteCategory/:maTheLoaiSach", deleteCategory);
     router.delete("/deleteCart/:id_gioHang", deleteCart);
+    router.delete("/deleteOrder/:id_donHang", deleteOrder);
 
     // Authentication
     router.post("/register", register);

@@ -42,7 +42,6 @@ const Register = () => {
         }
 
         if (response.data && response.data.EC === 0) {
-            toast.success(response.data.EM);
             navigate("/dang-nhap");
         }
     };

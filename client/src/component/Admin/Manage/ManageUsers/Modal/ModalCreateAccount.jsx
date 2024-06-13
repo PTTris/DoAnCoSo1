@@ -125,7 +125,7 @@ const ModalCreateAccount = (props) => {
                         Hủy
                     </Button>
                     <Button
-                        variant="primary"
+                        className="btn-hs-bg"
                         onClick={handleSubmitCreateAccount}
                     >
                         Tạo tài khoản

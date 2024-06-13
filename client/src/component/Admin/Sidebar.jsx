@@ -46,6 +46,7 @@ const SideBar = (props) => {
                                 Đồ án cơ sở 1 <Link to="/" />
                             </span>
                             <FaBars
+                                cursor={"pointer"}
                                 className="ms-3 fs-4"
                                 onClick={() => setCollapsed(!collapsed)}
                             />
@@ -56,6 +57,7 @@ const SideBar = (props) => {
                             style={{ height: "50px" }}
                         >
                             <FaBars
+                                cursor={"pointer"}
                                 className="fs-4 "
                                 onClick={() => setCollapsed(!collapsed)}
                             />
@@ -84,8 +86,8 @@ const SideBar = (props) => {
                                 <Link to="/admin/quan-ly-the-loai-sach" />
                             </MenuItem>
                             <MenuItem>
-                                Quản lý giỏ hàng
-                                <Link to="/admin/quan-ly-gio-hang" />
+                                Quản lý đơn hàng
+                                <Link to="/admin/quan-ly-don-hang" />
                             </MenuItem>
                         </SubMenu>
                     </Menu>

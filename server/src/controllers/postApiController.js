@@ -138,24 +138,24 @@ const uploadDesc = async (req, res) => {
 };
 
 const postCreateCart = async (req, res) => {
-    const { id_sach, id_taiKhoan, quantity } = req.body;
+    const { id_sach, id_taiKhoan, soLuongSach } = req.body;
     const checkSql = `SELECT * FROM GioHang WHERE id_sach = ? AND id_taiKhoan = ?`;
-    const updateSql = `UPDATE GioHang SET soLuong = soLuong + ? WHERE id_sach = ? AND id_taiKhoan = ?`;
-    const insertSql = `INSERT INTO GioHang (id_sach, id_taiKhoan, soLuong) VALUES (?, ?, ?)`;
+    const updateSql = `UPDATE GioHang SET soLuongSach = soLuongSach + ? WHERE id_sach = ? AND id_taiKhoan = ?`;
+    const insertSql = `INSERT INTO GioHang (id_sach, id_taiKhoan, soLuongSach) VALUES (?, ?, ?)`;
 
     try {
         const [rows] = await pool.query(checkSql, [id_sach, id_taiKhoan]);
 
         if (rows.length > 0) {
             // Sách đã tồn tại trong giỏ hàng, cập nhật số lượng
-            await pool.query(updateSql, [quantity, id_sach, id_taiKhoan]);
+            await pool.query(updateSql, [soLuongSach, id_sach, id_taiKhoan]);
             res.status(200).json({
                 EC: 0,
                 EM: "Cập nhật số lượng sách trong giỏ hàng thành công",
             });
         } else {
             // Sách chưa tồn tại trong giỏ hàng, thêm sách vào giỏ hàng
-            await pool.query(insertSql, [id_sach, id_taiKhoan, quantity]);
+            await pool.query(insertSql, [id_sach, id_taiKhoan, soLuongSach]);
             res.status(200).json({
                 EC: 0,
                 EM: "Thêm sách vào giỏ hàng thành công",
@@ -171,8 +171,15 @@ const postCreateCart = async (req, res) => {
 };
 
 const postCreateOrder = async (req, res) => {
-    const { id_taiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien } =
-        req.body;
+    const {
+        id_taiKhoan,
+        hoTenKH,
+        diaChiKH,
+        SDT,
+        soLuongSanPham,
+        tongTien,
+        sach,
+    } = req.body;
 
     const sql = `INSERT INTO DonHang (id_taiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien) 
                 VALUES (?, ?, ?, ?, ?, ?)`;
@@ -197,14 +204,54 @@ const postCreateOrder = async (req, res) => {
     }
 };
 
+const postCreateOrderDetail = async (req, res) => {
+    const { id_donHang, dataBooksCart } = req.body;
+
+    // Lặp qua mảng dataBooksCart để lấy các giá trị cần thiết
+    const values = dataBooksCart.map((item) => [
+        id_donHang,
+        item.id_sach,
+        item.soLuongSach,
+    ]);
+
+    const sql = `INSERT INTO Chitietdonhang (id_donHang, id_sach, soLuongSach) VALUES ?`;
+
+    try {
+        await pool.query(sql, [values]);
+        res.status(200).json({
+            EC: 0,
+            EM: "Thêm chi tiết đơn hàng thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Thêm chi tiết đơn hàng thất bại",
+            Err: err,
+        });
+    }
+};
+
 // Authentication
 const register = async (req, res) => {
     const { email, username, password } = req.body;
     const hashedPassword = bcrypt.hashSync(password, 8);
-    const sql =
-        "INSERT INTO taikhoan (email,tenTaiKhoan, matKhau, vaiTro) VALUES (?, ?, ?, 'USER')";
+
     try {
+        // Kiểm tra xem email đã tồn tại trong cơ sở dữ liệu chưa
+        const checkEmailSql = "SELECT * FROM taikhoan WHERE email = ?";
+        const [existingUsers] = await pool.query(checkEmailSql, [email]);
+
+        if (existingUsers.length > 0) {
+            return res.status(400).json({
+                EC: 1,
+                EM: "Tài khoản đã tồn tại",
+            });
+        }
+
+        const sql =
+            "INSERT INTO taikhoan (email, tenTaiKhoan, matKhau, vaiTro) VALUES (?, ?, ?, 'USER')";
         await pool.query(sql, [email, username, hashedPassword]);
+
         res.status(200).json({
             EC: 0,
             EM: "Đăng ký thành công",
@@ -213,7 +260,7 @@ const register = async (req, res) => {
         res.status(500).json({
             EC: 1,
             EM: "Đăng ký thất bại",
-            Err: err,
+            Err: err.message,
         });
     }
 };
@@ -221,26 +268,25 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
 
-    const sql = "SELECT * FROM taikhoan WHERE email = ?";
-
     try {
+        const sql = "SELECT * FROM taikhoan WHERE email = ?";
         const [rows] = await pool.query(sql, [email]);
 
-        if (rows.length === 0)
+        if (rows.length === 0) {
             return res.status(404).json({
                 EC: 1,
                 EM: "Tài khoản không hợp lệ",
-                Err: err,
             });
+        }
 
         const user = rows[0];
-        const passwordIsValid = bcrypt.compareSync(password, user.matKhau);
-        if (!passwordIsValid)
+        const passwordIsValid = bcrypt.compareSync(password, user.matKhau); // Chú ý thứ tự các tham số trong compareSync
+        if (!passwordIsValid) {
             return res.status(401).json({
                 EC: 1,
                 EM: "Sai mật khẩu",
-                Err: err,
             });
+        }
 
         const token = jwt.sign(
             { id: user.id_taiKhoan, role: user.vaiTro },
@@ -264,12 +310,13 @@ const login = async (req, res) => {
         res.status(500).json({
             EC: 1,
             EM: "Đăng nhập thất bại",
-            Err: err,
+            Err: err.message,
         });
     }
 };
 
 export {
+    postCreateOrderDetail,
     postCreateCategory,
     postCreateAccount,
     postCreateOrder,

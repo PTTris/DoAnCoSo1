@@ -21,30 +21,26 @@ import {
     selectIsAuthenticated,
 } from "../../../redux/reducer/accountReducer";
 import axios from "../../../utils/axiosCustomize.js";
+import {
+    fetchAllCarts,
+    selectAllCarts,
+} from "../../../redux/reducer/getCarts.js";
 
 export default function Header(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [dataSearch, setDataSearch] = useState();
-    const [dataBooksCart, setDataBooksCart] = useState();
     const [isShowMenuRight, setShowMenuRight] = useState(true);
     const [isShowListBookSelf, setShowListBookSelf] = useState(true);
     const categoryBooks = useSelector(selectAllCategory);
     const account = useSelector(selectAccount);
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const isAdmin = useSelector(selectIsAdmin);
-
-    const fetchBooksInCart = async (id) => {
-        const response = await axios(`/getCart/${id}`);
-        setDataBooksCart(response.data);
-    };
-
-    useEffect(() => {
-        fetchBooksInCart(account.id_taiKhoan);
-    }, [account.id_taiKhoan, dataBooksCart]);
+    const dataBooksCart = useSelector(selectAllCarts);
 
     useEffect(() => {
         dispatch(fetchAllCategory());
+        dispatch(fetchAllCarts(account.id_taiKhoan));
     }, [dispatch, account.id_taiKhoan]);
 
     const handleShowListBookSelf = () => {
@@ -95,6 +91,7 @@ export default function Header(props) {
 
     const handleDeleteCart = async (book) => {
         await axios.delete(`/deleteCart/${book.id_gioHang}`);
+        dispatch(fetchAllCarts(account.id_taiKhoan));
     };
     return (
         <header>
@@ -190,6 +187,11 @@ export default function Header(props) {
                                                 ) : (
                                                     ""
                                                 )}
+                                                <NavLink
+                                                    to={"/trang-khach-hang"}
+                                                >
+                                                    Tài khoản
+                                                </NavLink>
                                                 <NavLink onClick={handleLogout}>
                                                     Đăng xuất
                                                 </NavLink>
@@ -210,11 +212,15 @@ export default function Header(props) {
                                     </div>
                                 </div>
                                 <div className="cart d-flex align-items-center">
+                                    <span className="count_item">
+                                        {dataBooksCart?.length}
+                                    </span>
                                     <NavLink
                                         className="text-light"
                                         to="/gio-hang"
                                     >
                                         <IoCartOutline size={"1.4em"} />
+
                                         <span className="mx-1 ">Giỏ hàng</span>
                                     </NavLink>
 
@@ -236,7 +242,7 @@ export default function Header(props) {
                                                             {book.tenSach}
                                                         </div>
                                                         <div className="quantity">
-                                                            {book.soLuong}
+                                                            {book.soLuongSach}
                                                         </div>
                                                         <div className="price">
                                                             {Number.parseFloat(
@@ -419,7 +425,9 @@ export default function Header(props) {
                                                                     alt="Công ty TNHH văn hóa &amp; truyền thông Skybooks Việt Nam"
                                                                 />
                                                                 <span className="count_item count_item_pr">
-                                                                    0
+                                                                    {
+                                                                        dataBooksCart?.length
+                                                                    }
                                                                 </span>
                                                             </i>
                                                             <span className="bolds cartext d-none d-sm-block d-md-block">
@@ -515,11 +523,19 @@ export default function Header(props) {
                             <div className="menu_mobile">
                                 <ul className="ul_collections">
                                     <li className="level0 level-top parent">
-                                        <NavLink to="/">Trang chủ</NavLink>
+                                        <NavLink
+                                            to="/"
+                                            onClick={handleShowWrapMenuRight}
+                                        >
+                                            Trang chủ
+                                        </NavLink>
                                     </li>
 
                                     <li className="level0 level-top parent">
-                                        <NavLink to="/tat-ca-san-pham">
+                                        <NavLink
+                                            to="/tat-ca-san-pham"
+                                            onClick={handleShowWrapMenuRight}
+                                        >
                                             Tủ sách thương hiệu
                                         </NavLink>
 
@@ -551,23 +567,8 @@ export default function Header(props) {
                                                                     handleClickSetSelectedCategory(
                                                                         event
                                                                     );
-                                                                    const wrapMenuRight =
-                                                                        document.querySelector(
-                                                                            ".wrapmenu_right"
-                                                                        );
-                                                                    const opacityMenu =
-                                                                        document.querySelector(
-                                                                            ".opacity_menu"
-                                                                        );
-                                                                    event.stopPropagation();
-                                                                    wrapMenuRight.classList.remove(
-                                                                        "open_sidebar_menu"
-                                                                    );
-                                                                    opacityMenu.classList.remove(
-                                                                        "open_opacity"
-                                                                    );
-                                                                    setShowMenuRight(
-                                                                        true
+                                                                    handleShowWrapMenuRight(
+                                                                        event
                                                                     );
                                                                 }}
                                                                 to={`/${changeString(
@@ -585,7 +586,12 @@ export default function Header(props) {
                                     </li>
 
                                     <li className="level0 level-top parent">
-                                        <Link to="/lien-he">Liên hệ</Link>
+                                        <Link
+                                            onClick={handleShowWrapMenuRight}
+                                            to="/lien-he"
+                                        >
+                                            Liên hệ
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
