@@ -405,14 +405,21 @@ export default function Cart() {
                                             <hr className="my-4" />
                                             <div className="d-flex justify-content-between mb-2">
                                                 <MDBTypography
-                                                    tag="h6"
+                                                    tag="h5"
                                                     className="text-uppercase"
+                                                    style={{
+                                                        fontWeight: "700",
+                                                    }}
                                                 >
                                                     Tổng cộng
                                                 </MDBTypography>
                                                 <MDBTypography
-                                                    tag="h6"
+                                                    tag="h5"
                                                     className="text-uppercase"
+                                                    style={{
+                                                        color: "#38a8ea",
+                                                        fontWeight: "700",
+                                                    }}
                                                 >
                                                     {price.toLocaleString(
                                                         "vi-VN"

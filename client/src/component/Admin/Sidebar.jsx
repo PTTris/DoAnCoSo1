@@ -68,7 +68,7 @@ const SideBar = (props) => {
                 <SidebarContent>
                     <Menu iconShape="circle">
                         <MenuItem icon={<FaTachometerAlt />}>
-                            Dashboard
+                            Trang chủ
                             <Link to="/admin" />
                         </MenuItem>
                     </Menu>

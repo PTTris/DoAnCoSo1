@@ -169,7 +169,10 @@ export default function Header(props) {
                                 </div>
                                 <div className="account d-flex align-items-center">
                                     <FaRegUser size={"1.1em"} />
-                                    <span className="mx-1">
+                                    <span
+                                        className="mx-1"
+                                        style={{ cursor: "default" }}
+                                    >
                                         {isAuthenticated
                                             ? account.tenTaiKhoan
                                             : "Tài khoản"}
@@ -239,7 +242,14 @@ export default function Header(props) {
                                                             />
                                                         </div>
                                                         <div className="detail">
-                                                            {book.tenSach}
+                                                            <p
+                                                                style={{
+                                                                    lineHeight:
+                                                                        "1.3",
+                                                                }}
+                                                            >
+                                                                {book.tenSach}
+                                                            </p>
                                                         </div>
                                                         <div className="quantity">
                                                             {book.soLuongSach}
@@ -502,7 +512,11 @@ export default function Header(props) {
                             <div className="contenttop">
                                 {isAuthenticated ? (
                                     <div className="section mb-2 mt-1">
-                                        <Link className="btnx">
+                                        <Link
+                                            to={"/trang-khach-hang"}
+                                            className="btnx"
+                                            onClick={handleShowWrapMenuRight}
+                                        >
                                             {account.tenTaiKhoan}
                                         </Link>
                                         &nbsp;/&nbsp;

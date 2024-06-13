@@ -191,6 +191,19 @@ const BookDetail = () => {
                                                                         }
                                                                     </td>
                                                                 </tr>
+                                                                {book.nguoiDich && (
+                                                                    <tr>
+                                                                        <th>
+                                                                            Người
+                                                                            dịch
+                                                                        </th>
+                                                                        <td>
+                                                                            {
+                                                                                book.nguoiDich
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                )}
                                                                 <tr>
                                                                     <th>NXB</th>
                                                                     <td>

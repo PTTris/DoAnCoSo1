@@ -357,18 +357,48 @@ const getBooksInOrder = async (req, res) => {
     }
 };
 
+const getOrderWithAccount = async (req, res) => {
+    const { id_taiKhoan } = req.params;
+    const sql = `SELECT   donhang.id_donHang, hoTenKH, SDT, diaChiKH, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s')as ngayDatHang, tongTien FROM donhang
+    WHERE donhang.id_taiKhoan = ?
+    Order by donhang.ngayDatHang desc;`;
+
+    try {
+        const [rows] = await pool.query(sql, [id_taiKhoan]);
+        return res.status(200).json(rows);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
+const getDataToTal = async (req, res) => {
+    const sql = `SELECT 
+    (SELECT COUNT(*) FROM Sach) AS tongSoSach,
+    (SELECT COUNT(*) FROM TaiKhoan) AS tongSoTaiKhoan,
+    (SELECT COUNT(*) FROM TheLoaiSach) AS tongSoTheLoaiSach,
+    (SELECT COUNT(*) FROM DonHang) AS tongDonHang;`;
+    try {
+        const [rows] = await pool.query(sql);
+        return res.status(200).json(rows[0]);
+    } catch (error) {
+        return res.status(500).send("Error: " + error.message);
+    }
+};
+
 export {
     getCart,
     getOrders,
     searchBooks,
     getAllBooks,
     getBookForm,
+    getDataToTal,
     getImagesBook,
     getOrdersNewest,
     getBooksInOrder,
     getBookSortByDate,
     getAllCategoryBook,
     getDescriptionBook,
+    getOrderWithAccount,
     getAllBooksOfCategory,
     getOrdersWithPaginations,
     getAllBooksWithPaginations,

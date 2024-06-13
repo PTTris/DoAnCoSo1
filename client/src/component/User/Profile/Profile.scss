@@ -1,6 +1,25 @@
 .page_customer_account {
     margin-bottom: 30px;
     padding: 20px 0;
+    .list-book {
+        li {
+            list-style: none;
+        }
+        button {
+            padding: 5px;
+            outline: none;
+            border: none;
+            background-color: #38a8ea;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        ul {
+            text-align: start;
+            padding: 0;
+            margin: 0;
+        }
+    }
 
     .block-account .title-account {
         font-family: "Quicksand", sans-serif;
@@ -48,6 +67,7 @@
             white-space: nowrap;
             display: flex;
             flex-direction: column;
+            text-align: center;
         }
     }
 }

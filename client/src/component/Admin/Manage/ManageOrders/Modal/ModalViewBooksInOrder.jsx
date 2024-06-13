@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
 
 const ModalViewBooksInOrder = (props) => {
@@ -49,7 +48,7 @@ const ModalViewBooksInOrder = (props) => {
                                             <td className="text-center">
                                                 {book.id_sach}
                                             </td>
-                                            <td>
+                                            <td className="text-center">
                                                 <img
                                                     src={`http://localhost:8080/images/${book.thumbnail}`}
                                                     alt={book.tenSach}
@@ -81,7 +80,9 @@ const ModalViewBooksInOrder = (props) => {
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary">Xác nhận</Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Xác nhận
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

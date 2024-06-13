@@ -28,17 +28,18 @@ const Contact = () => {
                                             <div className="r">
                                                 <i className="fas fa-map-marker-alt"></i>
                                                 <div>
-                                                    <b>Địa chỉ:</b> Số 83 Lý Nam
-                                                    Đế, Phường Cửa Đông, Quận
-                                                    Hoàn Kiếm, Hà Nội
+                                                    <b>Địa chỉ:</b> 168, Nguyễn
+                                                    Văn Cừ (nối dài), Phường An
+                                                    Bình, Quận Ninh Kiều, Thành
+                                                    phố Cần Thơ
                                                 </div>
                                             </div>
                                             <div className="r">
                                                 <i className="fas fa-envelope"></i>
                                                 <div>
                                                     <b>Email:</b>{" "}
-                                                    <a href="mailto:contact.skybooks@gmail.com">
-                                                        contact.skybooks@gmail.com
+                                                    <a href="mailto:dnc@moet.edu.vn">
+                                                        dnc@moet.edu.vn
                                                     </a>
                                                 </div>
                                             </div>
@@ -48,15 +49,15 @@ const Contact = () => {
                                                     <b>Hotline:</b>{" "}
                                                     <a
                                                         className="fone"
-                                                        href="tel:02438438220"
+                                                        href="tel:84 0292 3 798 222"
                                                     >
-                                                        02438438220
+                                                        +84 0292 3 798 222
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div
+                                    {/* <div
                                         id="pagelogin"
                                         className="margin-bottom-50"
                                     >
@@ -119,7 +120,7 @@ const Contact = () => {
                                                 </div>
                                             </div>
                                         </form>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

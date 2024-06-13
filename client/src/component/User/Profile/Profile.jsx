@@ -4,17 +4,29 @@ import { NavLink } from "react-router-dom";
 import axios from "../../../utils/axiosCustomize.js";
 import { useSelector } from "react-redux";
 import { selectAccount } from "../../../redux/reducer/accountReducer.js";
+
 const Profile = () => {
     const account = useSelector(selectAccount);
-    const [listOrder, setListOrders] = useState();
-    const fetchOrders = async (id_taiKhoan) => {
-        let response = await axios.get(`/getOrders/${id_taiKhoan}`);
+    const [listOrder, setListOrders] = useState([]);
+    const [bookDetails, setBookDetails] = useState({});
+    const [showBtn, setShowBtn] = useState(true);
+    const fetchAllOrdersWithAccount = async (id) => {
+        const response = await axios.get(`/getOrderWithAccount/${id}`);
         setListOrders(response.data);
     };
 
     useEffect(() => {
-        fetchOrders(account.id_taiKhoan);
+        fetchAllOrdersWithAccount(account.id_taiKhoan);
     }, [account.id_taiKhoan]);
+
+    const showListBook = async (id_donHang) => {
+        const response = await axios.get(`/getBooksInOrder/${id_donHang}`);
+        setBookDetails((prevOrder) => ({
+            ...prevOrder,
+            [id_donHang]: response.data,
+        }));
+        setShowBtn(!showBtn);
+    };
 
     return (
         <div>
@@ -39,37 +51,39 @@ const Profile = () => {
                     </div>
                 </div>
             </section>
-            <section class="signup page_customer_account">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
-                            <div class="block-account">
-                                <h5 class="title-account">Trang tài khoản</h5>
+            <section className="signup page_customer_account">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
+                            <div className="block-account">
+                                <h5 className="title-account">
+                                    Trang tài khoản
+                                </h5>
                                 <p>
                                     Xin chào,{" "}
                                     <span style={{ color: "#38a8ea" }}>
-                                        Trí Phan Thanh
+                                        {account.tenTaiKhoan}
                                     </span>
                                 </p>
                                 <p>
-                                    <span>tript2609@gmail.com</span>
+                                    <span>{account.email}</span>
                                 </p>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
-                            <h5 class="title-head margin-top-0">
+                        <div className="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
+                            <h5 className="title-head margin-top-0">
                                 Đơn hàng của bạn
                             </h5>
-                            <div class="col-xs-12 col-sm-12 col-lg-12 no-padding">
-                                <div class="my-account">
-                                    <div class="dashboard">
-                                        <div class="recent-orders">
+                            <div className="col-xs-12 col-sm-12 col-lg-12 no-padding">
+                                <div className="my-account">
+                                    <div className="dashboard">
+                                        <div className="recent-orders">
                                             <div
-                                                class="table-responsive-block tab-all"
+                                                className="table-responsive-block tab-all"
                                                 style={{ overflowX: "auto" }}
                                             >
-                                                <table class="table">
-                                                    <thead class="text-center">
+                                                <table className="table">
+                                                    <thead className="text-center">
                                                         <tr>
                                                             <th>STT</th>
                                                             <th>
@@ -89,102 +103,122 @@ const Profile = () => {
                                                     </thead>
 
                                                     <tbody>
-                                                        {listOrder?.length >
-                                                            0 &&
+                                                        {listOrder.length > 0 &&
                                                             listOrder.map(
                                                                 (
                                                                     order,
                                                                     index
                                                                 ) => (
-                                                                    <tr>
+                                                                    <tr
+                                                                        key={
+                                                                            order.id_donHang
+                                                                        }
+                                                                    >
                                                                         <td>
                                                                             <p className="text-center">
                                                                                 {index +
                                                                                     1}
                                                                             </p>
                                                                         </td>
-                                                                        <td>
-                                                                            <p>
-                                                                                {
-                                                                                    order
-                                                                                }
-                                                                                <p>
-                                                                                    (SL:
-                                                                                    3)
-                                                                                </p>
-                                                                            </p>
-                                                                            <p>
-                                                                                NHÀ
-                                                                                CÓ
-                                                                                HAI
-                                                                                NGƯỜI
-                                                                                <p>
-                                                                                    (SL:
-                                                                                    3)
-                                                                                </p>
-                                                                            </p>
-                                                                            <p>
-                                                                                LÁ
-                                                                                THƯ
-                                                                                GỬI
-                                                                                TỪ
-                                                                                MIỀN
-                                                                                HẠNH
-                                                                                PHÚC
-                                                                                <p>
-                                                                                    (SL:
-                                                                                    3)
-                                                                                </p>
-                                                                            </p>
+                                                                        <td className="list-book text-center">
+                                                                            {showBtn && (
+                                                                                <button
+                                                                                    onClick={() =>
+                                                                                        showListBook(
+                                                                                            order.id_donHang
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Hiển
+                                                                                    thị
+                                                                                    sách
+                                                                                </button>
+                                                                            )}
+
+                                                                            {bookDetails[
+                                                                                order
+                                                                                    .id_donHang
+                                                                            ] && (
+                                                                                <ul>
+                                                                                    {bookDetails[
+                                                                                        order
+                                                                                            .id_donHang
+                                                                                    ].map(
+                                                                                        (
+                                                                                            book
+                                                                                        ) => (
+                                                                                            <li
+                                                                                                key={
+                                                                                                    book.id_sach
+                                                                                                }
+                                                                                            >
+                                                                                                <p>
+                                                                                                    {
+                                                                                                        book.tenSach
+                                                                                                    }
+                                                                                                </p>
+                                                                                                <p>
+                                                                                                    (SL:{" "}
+                                                                                                    {
+                                                                                                        book.soLuongSach
+                                                                                                    }
+
+                                                                                                    )
+                                                                                                </p>
+                                                                                            </li>
+                                                                                        )
+                                                                                    )}
+                                                                                </ul>
+                                                                            )}
                                                                         </td>
                                                                         <td>
                                                                             <p>
                                                                                 Họ
-                                                                                tên:
-                                                                                Phan
-                                                                                Thanh
-                                                                                Trí
+                                                                                tên:{" "}
+                                                                                {
+                                                                                    order.hoTenKH
+                                                                                }
                                                                             </p>
                                                                             <p>
-                                                                                SĐT:
-                                                                                0398944226
+                                                                                SĐT:{" "}
+                                                                                {
+                                                                                    order.SDT
+                                                                                }
                                                                             </p>
 
                                                                             <p>
                                                                                 Địa
-                                                                                chỉ:
-                                                                                Kiên
-                                                                                Thị
-                                                                                Nhẫn
-                                                                                Khóm
-                                                                                3
-                                                                                Phường
-                                                                                7
-                                                                                TP
-                                                                                Trà
-                                                                                Vinh
+                                                                                chỉ:{" "}
+                                                                                {
+                                                                                    order.diaChiKH
+                                                                                }
                                                                             </p>
                                                                         </td>
                                                                         <td>
                                                                             <p>
-                                                                                26/09/2003
-                                                                                18:30:02
+                                                                                {
+                                                                                    order.ngayDatHang
+                                                                                }
                                                                             </p>
                                                                         </td>
                                                                         <td>
                                                                             <p className="special">
-                                                                                2.200.000
+                                                                                {Number.parseFloat(
+                                                                                    order.tongTien
+                                                                                ).toLocaleString(
+                                                                                    "vi-VN"
+                                                                                )}{" "}
                                                                                 VNĐ
                                                                             </p>
                                                                         </td>
                                                                     </tr>
                                                                 )
                                                             )}
-                                                        {listOrder?.length ===
+                                                        {listOrder.length ===
                                                             0 && (
                                                             <tr>
                                                                 <td
-                                                                    colspan="5"
+                                                                    colSpan="5"
                                                                     className="text-center"
                                                                 >
                                                                     <p>

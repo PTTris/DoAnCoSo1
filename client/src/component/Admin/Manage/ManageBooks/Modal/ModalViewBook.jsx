@@ -23,7 +23,7 @@ const ModalViewBook = (props) => {
 
     useEffect(() => {
         dispatch(fetchAllImagesBook(dataView.id_sach));
-    }, [dispatch, dataView.id_sach, imgsBook]);
+    }, [dispatch, dataView.id_sach]);
 
     return (
         <>

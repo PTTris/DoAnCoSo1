@@ -10,7 +10,6 @@ import Cart from "./component/User/Cart/Cart";
 import AllBooksOfCategory from "./component/User/Books/AllBooksOfCategory/AllBooksOfCategory";
 import { useState } from "react";
 import Admin from "./component/Admin/Admin";
-import Dashboard from "./component/Admin/Content/Dashboard";
 import ManageBooks from "./component/Admin/Manage/ManageBooks/ManageBooks";
 import ManageAccount from "./component/Admin/Manage/ManageUsers/ManageAccount";
 import { ToastContainer } from "react-toastify";
@@ -20,6 +19,7 @@ import SearchBook from "./component/User/Search/SearchBook";
 import ManageOrders from "./component/Admin/Manage/ManageOrders/ManageOrders";
 import Paid from "./component/User/Paid/Paid";
 import Profile from "./component/User/Profile/Profile";
+import HomeAdmin from "./component/Admin/Content/HomeAdmin";
 
 function App() {
     let currentUrl = window.location.href;
@@ -73,7 +73,7 @@ function App() {
                 <Route path="dang-ky" element={<Register />} />
 
                 <Route path="admin" exact element={<Admin />}>
-                    <Route index element={<Dashboard />} />
+                    <Route index element={<HomeAdmin />} />
                     <Route
                         path="/admin/quan-ly-tai-khoan"
                         element={<ManageAccount />}

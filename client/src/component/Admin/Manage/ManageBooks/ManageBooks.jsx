@@ -10,7 +10,7 @@ import ModalViewBook from "./Modal/ModalViewBook.jsx";
 import ModalUpdateBook from "./Modal/ModalUpdateBook.jsx";
 
 const ManageBooks = () => {
-    const LIMIT_PAGE = 4;
+    const LIMIT_PAGE = 3;
     const [fetchBook, setFetchBook] = useState(true);
     const [showModalCreateBook, setShowModalCreateBook] = useState(false);
     const [showModalCreateImages, setShowModalCreateImages] = useState(false);

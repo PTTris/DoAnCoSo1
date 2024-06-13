@@ -93,7 +93,12 @@ const TableBooks = (props) => {
                                         <td className="text-center">
                                             {book.ngonNgu}
                                         </td>
-                                        <td>{book.giaSach}</td>
+                                        <td>
+                                            {Number.parseFloat(
+                                                book.giaSach
+                                            ).toLocaleString("vi-VN")}{" "}
+                                            VNĐ
+                                        </td>
                                         <td className=" fs-2 col-2 text-center">
                                             <FaRegPlusSquare
                                                 size={"1.5rem"}

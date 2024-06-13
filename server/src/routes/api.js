@@ -23,6 +23,8 @@ import {
     getOrdersWithPaginations,
     getOrdersNewest,
     getBooksInOrder,
+    getOrderWithAccount,
+    getDataToTal,
 } from "../controllers/getApiController.js";
 
 import {
@@ -107,6 +109,8 @@ const initAPIRoute = (app) => {
     router.get("/getOrdersWithPaginations/", getOrdersWithPaginations);
     router.get("/getOrdersNewest/:id_taiKhoan", getOrdersNewest);
     router.get("/getBooksInOrder/:id_donHang", getBooksInOrder);
+    router.get("/getOrderWithAccount/:id_taiKhoan", getOrderWithAccount);
+    router.get("/getDataToTal", getDataToTal);
 
     // postAPI
     router.post("/postCreateAccount", postCreateAccount);

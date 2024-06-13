@@ -59,7 +59,7 @@ const Register = () => {
                             />
                         </div>
                         <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                            <form>
+                            <div>
                                 <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                                     <p className="lead fw-normal mb-0 me-3">
                                         Đăng ký với
@@ -91,82 +91,86 @@ const Register = () => {
                                         Hoặc
                                     </p>
                                 </div>
-
-                                <div className="form-outline mb-4">
-                                    <label className="form-label" for="email">
-                                        Email address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        className="form-control form-control-lg"
-                                        placeholder="Nhập địa chỉ email"
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                    />
-                                </div>
-
-                                <div className="form-outline mb-4">
-                                    <label
-                                        className="form-label"
-                                        for="username"
-                                    >
-                                        Username
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        className="form-control form-control-lg"
-                                        placeholder="Vui lòng nhập tên người dùng"
-                                        onChange={(e) =>
-                                            setUsername(e.target.value)
-                                        }
-                                    />
-                                </div>
-
-                                <div className="form-outline mb-3">
-                                    <label
-                                        className="form-label"
-                                        for="password"
-                                    >
-                                        Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Nhập mật khẩu"
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
-                                    />
-                                </div>
-
-                                <div className="text-center text-lg-start mt-2 pt-2">
-                                    <button
-                                        type="button"
-                                        onClick={handleSubmit}
-                                        className="btn btn-primary btn-lg px-5 btn-register"
-                                    >
-                                        Register
-                                    </button>
-                                    <p className="small fw-bold mt-2 pt-1 mb-0">
-                                        Bạn đã có tài khoản?{" "}
-                                        <NavLink to="/dang-nhap">
-                                            Đăng nhập
-                                        </NavLink>
-                                    </p>
-                                    <div className="return-home">
-                                        <NavLink
-                                            to="/"
-                                            className="btn-return-home"
+                                <form onSubmit={(event) => handleSubmit(event)}>
+                                    <div className="form-outline mb-4">
+                                        <label
+                                            className="form-label"
+                                            for="email"
                                         >
-                                            {"<-- Trở về trang chủ"}
-                                        </NavLink>
+                                            Email address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            className="form-control form-control-lg"
+                                            placeholder="Nhập địa chỉ email"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                        />
                                     </div>
-                                </div>
-                            </form>
+
+                                    <div className="form-outline mb-4">
+                                        <label
+                                            className="form-label"
+                                            for="username"
+                                        >
+                                            Username
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            className="form-control form-control-lg"
+                                            placeholder="Vui lòng nhập tên người dùng"
+                                            onChange={(e) =>
+                                                setUsername(e.target.value)
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="form-outline mb-3">
+                                        <label
+                                            className="form-label"
+                                            for="password"
+                                        >
+                                            Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            className="form-control form-control-lg"
+                                            placeholder="Nhập mật khẩu"
+                                            onChange={(e) =>
+                                                setPassword(e.target.value)
+                                            }
+                                        />
+                                    </div>
+
+                                    <div className="text-center text-lg-start mt-2 pt-2">
+                                        <button
+                                            type="button"
+                                            onClick={handleSubmit}
+                                            className="btn btn-primary btn-lg px-5 btn-register"
+                                        >
+                                            Register
+                                        </button>
+                                        <p className="small fw-bold mt-2 pt-1 mb-0">
+                                            Bạn đã có tài khoản?{" "}
+                                            <NavLink to="/dang-nhap">
+                                                Đăng nhập
+                                            </NavLink>
+                                        </p>
+                                        <div className="return-home">
+                                            <NavLink
+                                                to="/"
+                                                className="btn-return-home"
+                                            >
+                                                {"<-- Trở về trang chủ"}
+                                            </NavLink>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

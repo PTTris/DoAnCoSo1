@@ -34,7 +34,6 @@ const ModalCreateBook = (props) => {
     }, [dispatch]);
 
     const handleClose = () => {
-        setShow(false);
         setTenSach("");
         setTacGia("");
         setNhaXB("");
@@ -47,6 +46,7 @@ const ModalCreateBook = (props) => {
         setThumbnail("");
         setTheLoaiSach("");
         setValidationErrors({});
+        setShow(!show);
     };
 
     const handleSubmitCreateAccount = async () => {
@@ -95,8 +95,8 @@ const ModalCreateBook = (props) => {
             toast.error(response.data.EM);
         }
         if (response.data && response.data.EC === 0) {
-            toast.success(response.data.EM);
             await fetchAllBooksWithPaginate(1);
+            toast.success(response.data.EM);
             setCurrentPage(1);
             handleClose();
         }

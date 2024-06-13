@@ -68,49 +68,19 @@ export default function Footer() {
 
                         <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Products
+                                Công nghệ sử dụng
                             </h6>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    ExpressJS
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    ReactJS
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    MySQL
-                                </a>
-                            </p>
+                            <p>ExpressJS</p>
+                            <p>ReactJS</p>
+                            <p>MySQL</p>
                         </MDBCol>
 
                         <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Useful links
+                                Thành viên
                             </h6>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    Pricing
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    Settings
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    Orders
-                                </a>
-                            </p>
-                            <p>
-                                <a href="#!" className="text-reset">
-                                    Help
-                                </a>
-                            </p>
+                            <p>Phan Thanh Trí</p>
+                            <p>Nguyễn Thái Phương Trinh</p>
                         </MDBCol>
 
                         <MDBCol
@@ -120,7 +90,7 @@ export default function Footer() {
                             className="mx-auto mb-md-0 mb-4"
                         >
                             <h6 className="text-uppercase fw-bold mb-4">
-                                Contact
+                                Liên hệ
                             </h6>
                             <p>
                                 <MDBIcon
@@ -128,8 +98,8 @@ export default function Footer() {
                                     icon="home"
                                     className="me-2"
                                 />
-                                168, Nguyễn Văn Cừ {"(nối dài)"}, P. An Bình, Q.
-                                Ninh Kiều, TP. Cần Thơ
+                                Số 83 Lý Nam Đế, Phường Cửa Đông, Quận Hoàn
+                                Kiếm, Hà Nội
                             </p>
                             <p>
                                 <MDBIcon
@@ -137,7 +107,7 @@ export default function Footer() {
                                     icon="envelope"
                                     className="me-3"
                                 />
-                                dnc@moet.edu.vn
+                                contact.skybooks@gmail.com
                             </p>
                             <p>
                                 <MDBIcon
@@ -153,7 +123,7 @@ export default function Footer() {
                                     icon="print"
                                     className="me-3"
                                 />{" "}
-                                + 84 0292 3 798 668
+                                + 84 02438438220
                             </p>
                         </MDBCol>
                     </MDBRow>
