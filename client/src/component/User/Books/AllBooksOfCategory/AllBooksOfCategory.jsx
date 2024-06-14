@@ -109,9 +109,11 @@ const AllBooksOfCategory = (props) => {
                                                                 </h3>
                                                                 <div className="price-box">
                                                                     <span>
-                                                                        {
+                                                                        {Number.parseFloat(
                                                                             book.giaSach
-                                                                        }
+                                                                        ).toLocaleString(
+                                                                            "vi-VN"
+                                                                        )}
                                                                         &nbsp;VNĐ
                                                                     </span>
                                                                 </div>
