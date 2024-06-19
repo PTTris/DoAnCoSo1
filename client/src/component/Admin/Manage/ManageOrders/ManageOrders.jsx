@@ -8,13 +8,22 @@ import ReactPaginate from "react-paginate";
 import ModalDeleteOrder from "./Modal/ModalDeleteOrder.jsx";
 import { toast } from "react-toastify";
 import ModalViewBooksInOrder from "./Modal/ModalViewBooksInOrder.jsx";
+import { useDispatch } from "react-redux";
+import {
+    DECREASEPRICE,
+    INCREASEPRICE,
+} from "../../../../redux/reducer/totalPrice.js";
 const ManageOrders = () => {
     const LIMIT_PAGE = 3;
+    const dispatch = useDispatch();
+    const [fetchBook, setFetchBook] = useState(true);
     const [listOrder, setListOrders] = useState();
     const [dataDelete, setDataDelete] = useState();
     const [dataView, setDataView] = useState();
-    const [totalPages, settotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [dataFilter, setDataFilter] = useState("");
+    const [isFiltering, setIsFiltering] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalView, setShowModalView] = useState(false);
     const fetchOrdersWithPaginate = async (page) => {
@@ -22,17 +31,30 @@ const ManageOrders = () => {
             `/getOrdersWithPaginations?page=${page}&limit=${LIMIT_PAGE}`
         );
         setListOrders(response.data.data);
-        settotalPages(response.data.totalPages);
+        setTotalPages(response.data.totalPages);
+    };
+
+    const fetchFilterOrdersWithPaginate = async (data) => {
+        let response = await axios.get(
+            `/getOrdersWithPaginations?trangThaiDonHang=${data}&page=1&limit=${LIMIT_PAGE}`
+        );
+        setListOrders(response.data.data);
+        setTotalPages(response.data.totalPages);
     };
 
     useEffect(() => {
-        fetchOrdersWithPaginate(1);
-    }, []);
+        if (fetchBook) fetchOrdersWithPaginate(1);
+    }, [fetchBook]);
 
-    // Xử lí click
+    // Xử lí clicks
     const handlePageClick = async (event) => {
-        await fetchOrdersWithPaginate(+event.selected + 1);
-        setCurrentPage(+event.selected + 1);
+        if (isFiltering) {
+            fetchFilterOrdersWithPaginate(dataFilter, +event.selected + 1);
+            setCurrentPage(+event.selected + 1);
+        } else {
+            await fetchOrdersWithPaginate(+event.selected + 1);
+            setCurrentPage(+event.selected + 1);
+        }
     };
 
     const handleResolve = async (order) => {
@@ -42,10 +64,11 @@ const ManageOrders = () => {
         }
         if (response.data && response.data.EC === 0) {
             toast.success(response.data.EM);
+            dispatch(INCREASEPRICE(Number.parseFloat(order.tongTien)));
             fetchOrdersWithPaginate(currentPage);
         }
     };
-
+    console.log(isFiltering);
     const handleReject = async (order) => {
         const response = await axios.put(`/rejectOrder/${order.id_donHang}`);
         if (response.data && response.data.EC !== 0) {
@@ -53,6 +76,7 @@ const ManageOrders = () => {
         }
         if (response.data && response.data.EC === 0) {
             toast.success(response.data.EM);
+            dispatch(DECREASEPRICE(Number.parseFloat(order.tongTien)));
             fetchOrdersWithPaginate(currentPage);
         }
     };
@@ -70,10 +94,46 @@ const ManageOrders = () => {
         setDataView(response.data);
     };
 
+    const handleSubmitFilter = async (event) => {
+        event.preventDefault();
+        setFetchBook(false);
+        setDataFilter(event.target.value);
+        if (event.target.value !== "Tất cả") {
+            await fetchFilterOrdersWithPaginate(event.target.value, 1);
+            setIsFiltering(true);
+        } else {
+            await fetchOrdersWithPaginate(1);
+        }
+    };
+
+    console.log(dataFilter, isFiltering, fetchBook);
+
     return (
         <div className="manage-container">
             <h1 className="title text-center">Quản lý đơn hàng</h1>
             <div className="content">
+                <div className="status-order-container">
+                    <label htmlFor="status-order">Tình trạng đơn hàng</label>
+                    <select
+                        name="status-order"
+                        id="status-order"
+                        onChange={(event) => {
+                            if (event.target.value === "Tất cả") {
+                                setFetchBook(true);
+                                setIsFiltering(false);
+                            }
+                            handleSubmitFilter(event);
+                        }}
+                    >
+                        <option selected value={"Tất cả"}>
+                            Tất cả
+                        </option>
+                        <option value="Chờ duyệt">Chờ duyệt</option>
+                        <option value="Đã duyệt">Đã duyệt</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                    </select>
+                </div>
+
                 <div className="table-container">
                     <Table className="table table-hover table-bordered mt-3">
                         <thead>
@@ -99,8 +159,12 @@ const ManageOrders = () => {
                                 <th className="text-center fs-6" scope="col">
                                     Ngày đặt
                                 </th>
-                                <th className="text-center fs-6" scope="col">
-                                    TT
+                                <th
+                                    className="text-center fs-6"
+                                    scope="col"
+                                    style={{ whiteSpace: "nowrap" }}
+                                >
+                                    Trạng thái
                                 </th>
                                 <th className="text-center fs-6" scope="col">
                                     CN
@@ -203,7 +267,7 @@ const ManageOrders = () => {
                     style={{
                         display: "flex",
                         justifyContent: "center",
-                        marginTop: "80px",
+                        marginTop: "100px",
                     }}
                 >
                     <ReactPaginate

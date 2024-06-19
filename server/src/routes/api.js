@@ -38,6 +38,7 @@ import {
     postCreateCart,
     postCreateOrder,
     postCreateOrderDetail,
+    changePassword,
 } from "../controllers/postApiController.js";
 
 import {
@@ -48,6 +49,7 @@ import {
     deleteOrder,
 } from "../controllers/deleteController.js";
 import {
+    addInformations,
     rejectOrder,
     resolveOrder,
     updateAccount,
@@ -68,9 +70,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const verifyAdmin = (req, res, next) => {
+export const verifyAdmin = (req, res, next) => {
     const token = req.headers["access-token"];
-    if (!token) return res.status(401).send("Access Denied");
+    if (!token) return res.status(401).send("Không có token");
 
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if (err) return res.status(403);
@@ -129,6 +131,7 @@ const initAPIRoute = (app) => {
     router.put("/updateCartQuantity/:id_gioHang", updateCartQuantity);
     router.put("/resolveOrder/:id_donHang", resolveOrder);
     router.put("/rejectOrder/:id_donHang", rejectOrder);
+    router.put("/addInformations/:id_taiKhoan", addInformations);
 
     //deleteAPI
     router.delete("/deleteAccount/:id_taiKhoan", deleteAccount);
@@ -148,6 +151,8 @@ const initAPIRoute = (app) => {
             isADMIN: true,
         });
     });
+
+    router.post("/changePassword", changePassword);
 
     return app.use("/api/v1", router);
 };

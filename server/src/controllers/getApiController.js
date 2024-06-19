@@ -24,7 +24,8 @@ const getAllBooksWithPaginations = async (req, res) => {
                 [`%${tenSach}%`, +limit, +offset]
             );
             const [[{ totalData }]] = await pool.query(
-                "SELECT COUNT(*) AS totalData FROM Sach"
+                "SELECT COUNT(*) AS totalData FROM Sach Where tenSach LIKE ?",
+                [`%${tenSach}%`]
             );
 
             return res.status(200).json({
@@ -177,52 +178,97 @@ const getImagesBook = async (req, res) => {
 };
 
 const getAllUsersWithPaginations = async (req, res) => {
-    try {
-        const { page, limit } = req.query;
-        const offset = (page - 1) * limit;
+    const { tenTaiKhoan, page, limit } = req.query;
+    const offset = (page - 1) * limit;
 
-        const [rows] = await pool.query(
-            "SELECT * FROM Taikhoan LIMIT ? OFFSET ?",
-            [+limit, +offset]
-        );
-        const [[{ totalData }]] = await pool.query(
-            "SELECT COUNT(*) AS totalData FROM Taikhoan"
-        );
+    if (tenTaiKhoan) {
+        try {
+            const [rows] = await pool.query(
+                "SELECT * FROM Taikhoan WHERE tenTaiKhoan LIKE ? LIMIT ? OFFSET ?",
+                [`%${tenTaiKhoan}%`, +limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM Taikhoan WHERE tenTaiKhoan LIKE ?",
+                [`%${tenTaiKhoan}%`]
+            );
 
-        return res.status(200).json({
-            data: rows,
-            page,
-            limit,
-            totalData,
-            totalPages: Math.ceil(totalData / limit),
-        });
-    } catch (error) {
-        return res.status(500).send("Error: " + error.message);
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
+    } else {
+        try {
+            const [rows] = await pool.query(
+                "SELECT * FROM Taikhoan ORDER BY ngayThemMoi desc LIMIT ? OFFSET ?",
+                [+limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM Taikhoan"
+            );
+
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
     }
 };
 
 const getAllCategoriesWithPaginations = async (req, res) => {
-    try {
-        const { page, limit } = req.query;
-        const offset = (page - 1) * limit;
+    const { tenTheLoaiSach, page, limit } = req.query;
+    const offset = (page - 1) * limit;
+    if (tenTheLoaiSach) {
+        try {
+            const [rows] = await pool.query(
+                "SELECT * FROM TheLoaiSach Where tenTheLoaiSach Like ? LIMIT ? OFFSET ?",
+                [`%${tenTheLoaiSach}%`, +limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM TheLoaiSach Where tenTheLoaiSach LIKE ? ",
+                [`%${tenTheLoaiSach}%`]
+            );
 
-        const [rows] = await pool.query(
-            "SELECT * FROM TheLoaiSach LIMIT ? OFFSET ?",
-            [+limit, +offset]
-        );
-        const [[{ totalData }]] = await pool.query(
-            "SELECT COUNT(*) AS totalData FROM TheLoaiSach"
-        );
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
+    } else {
+        try {
+            const [rows] = await pool.query(
+                "SELECT * FROM TheLoaiSach LIMIT ? OFFSET ?",
+                [+limit, +offset]
+            );
+            const [[{ totalData }]] = await pool.query(
+                "SELECT COUNT(*) AS totalData FROM TheLoaiSach"
+            );
 
-        return res.status(200).json({
-            data: rows,
-            page,
-            limit,
-            totalData,
-            totalPages: Math.ceil(totalData / limit),
-        });
-    } catch (error) {
-        return res.status(500).send("Error: " + error.message);
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
     }
 };
 
@@ -317,27 +363,56 @@ const getOrdersNewest = async (req, res) => {
 };
 
 const getOrdersWithPaginations = async (req, res) => {
-    const { page, limit } = req.query;
+    const { trangThaiDonHang, page, limit } = req.query;
     const offset = (page - 1) * limit;
-    const sql = `SELECT id_donHang, email, tenTaiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien, trangThaiDonHang, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s') as ngayDatHang FROM DonHang, TaiKhoan 
+
+    if (trangThaiDonHang) {
+        try {
+            const sql = `SELECT id_donHang, email, tenTaiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien, trangThaiDonHang, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s') as ngayDatHang FROM DonHang, TaiKhoan 
+                WHERE DonHang.id_taiKhoan = TaiKhoan.id_taiKhoan AND trangThaiDonHang LIKE ? order by ngayDatHang desc LIMIT ? OFFSET ? `;
+
+            const [rows] = await pool.query(sql, [
+                `%${trangThaiDonHang}%`,
+                +limit,
+                +offset,
+            ]);
+
+            const [[{ totalData }]] = await pool.query(
+                `SELECT COUNT(*) as totalData FROM DonHang Where trangThaiDonHang LIKE ?`,
+                [`%${trangThaiDonHang}%`]
+            );
+
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
+    } else {
+        try {
+            const sql = `SELECT id_donHang, email, tenTaiKhoan, hoTenKH, diaChiKH, SDT, soLuongSanPham, tongTien, trangThaiDonHang, DATE_FORMAT(ngayDatHang,'%d/%m/%Y %H:%i:%s') as ngayDatHang FROM DonHang, TaiKhoan 
                 WHERE DonHang.id_taiKhoan = TaiKhoan.id_taiKhoan order by ngayDatHang desc LIMIT ? OFFSET ? `;
 
-    try {
-        const [rows] = await pool.query(sql, [+limit, +offset]);
+            const [rows] = await pool.query(sql, [+limit, +offset]);
 
-        const [[{ totalData }]] = await pool.query(
-            `SELECT COUNT(*) as totalData FROM DonHang`
-        );
+            const [[{ totalData }]] = await pool.query(
+                `SELECT COUNT(*) as totalData FROM DonHang`
+            );
 
-        return res.status(200).json({
-            data: rows,
-            page,
-            limit,
-            totalData,
-            totalPages: Math.ceil(totalData / limit),
-        });
-    } catch (error) {
-        return res.status(500).send("Error: " + error.message);
+            return res.status(200).json({
+                data: rows,
+                page,
+                limit,
+                totalData,
+                totalPages: Math.ceil(totalData / limit),
+            });
+        } catch (error) {
+            return res.status(500).send("Error: " + error.message);
+        }
     }
 };
 

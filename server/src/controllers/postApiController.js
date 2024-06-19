@@ -292,7 +292,7 @@ const login = async (req, res) => {
             { id: user.id_taiKhoan, role: user.vaiTro },
             process.env.SECRET_KEY,
             {
-                expiresIn: "1h",
+                expiresIn: "1d",
             }
         );
 
@@ -301,10 +301,13 @@ const login = async (req, res) => {
                 id_taiKhoan: user.id_taiKhoan,
                 email: user.email,
                 tenTaiKhoan: user.tenTaiKhoan,
+                tenNhanHang: user.tenNhanHang,
+                diaChiNhanHang: user.diaChiNhanHang,
+                SDTNhanHang: user.SDTNhanHang,
             },
+            token: token,
             EC: 0,
             EM: "Đăng nhập thành công!",
-            token: token,
         });
     } catch (err) {
         res.status(500).json({
@@ -315,13 +318,95 @@ const login = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+    const token = req.headers["access-token"];
+
+    try {
+        if (!token) {
+            return res.status(401).json({
+                EC: 1,
+                EM: "Access Denied",
+            });
+        }
+        console.log(process.env.SECRET_KEY);
+        // Verify token và lấy thông tin user từ token
+        jwt.verify(
+            token.split(" ")[1],
+            process.env.SECRET_KEY,
+            async (err, decoded) => {
+                if (err) {
+                    return res.status(403).json({
+                        EC: 1,
+                        EM: "Không tìm thấy token",
+                    });
+                }
+
+                const sql = "SELECT * FROM taikhoan WHERE id_taiKhoan = ?";
+                const [rows] = await pool.query(sql, [decoded.id]);
+
+                if (rows.length === 0) {
+                    return res.status(404).json({
+                        EC: 1,
+                        EM: "Không tìm thấy người dùng",
+                    });
+                }
+                const user = rows[0];
+
+                // Kiểm tra mật khẩu cũ
+                const passwordIsValid = bcrypt.compareSync(
+                    oldPassword,
+                    user.matKhau
+                );
+                if (!passwordIsValid) {
+                    return res.status(401).json({
+                        EC: 1,
+                        EM: "Sai mật khẩu",
+                    });
+                }
+
+                // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới có khớp nhau không
+                if (newPassword !== confirmNewPassword) {
+                    return res.status(400).json({
+                        EC: 1,
+                        EM: "Xác nhận mật khẩu không trùng khớp",
+                    });
+                }
+
+                // Mã hóa mật khẩu mới
+                const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+
+                // Update mật khẩu trong database
+                const updateSql =
+                    "UPDATE taikhoan SET matKhau = ? WHERE id_taiKhoan = ?";
+                await pool.query(updateSql, [
+                    hashedNewPassword,
+                    user.id_taiKhoan,
+                ]);
+
+                res.status(200).json({
+                    EC: 0,
+                    EM: "Thay đổi mật khẩu thành công!",
+                });
+            }
+        );
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Failed to change password",
+            Err: err.message,
+        });
+    }
+};
+
 export {
     postCreateOrderDetail,
     postCreateCategory,
     postCreateAccount,
     postCreateOrder,
-    postCreateBook,
     postCreateCart,
+    postCreateBook,
+    changePassword,
     uploadImages,
     uploadDesc,
     register,

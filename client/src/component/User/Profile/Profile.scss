@@ -20,24 +20,44 @@
             margin: 0;
         }
     }
+    .block-account {
+        .title-account {
+            font-family: "Quicksand", sans-serif;
+            font-size: 22px;
+            font-weight: 500;
+            color: #212b25;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
 
-    .block-account .title-account {
-        font-family: "Quicksand", sans-serif;
-        font-size: 22px;
-        font-weight: 500;
-        color: #212b25;
-        margin-top: 0;
-        margin-bottom: 15px;
-        text-transform: uppercase;
+        button {
+            outline: none;
+            border: none;
+            color: #38a8ea;
+            background-color: transparent;
+            font-weight: 500;
+        }
+
+        .feature-address {
+            span {
+                display: block;
+                font-weight: 400;
+                margin: 5px 0;
+            }
+        }
+        p {
+            margin: 12px 0;
+        }
     }
-
     p {
         font-weight: 700;
-        font-size: 14px;
+        font-size: 16px;
         font-family: "Quicksand", sans-serif;
         line-height: 16px;
         margin-bottom: 28px;
         color: #212b25;
+        line-height: 1.4;
     }
 
     .title-head {

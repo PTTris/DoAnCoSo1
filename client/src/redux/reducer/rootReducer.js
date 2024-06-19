@@ -5,6 +5,7 @@ import getBookSortByDate from "./getBookSortByDate.js";
 import getAllImagesBook from "./getAllImagesBook.js";
 import accountReducer from "./accountReducer.js";
 import getCarts from "./getCarts.js";
+import totalPrice from "./totalPrice.js";
 
 const rootReducer = combineReducers({
     getAllBooks: getAllBooks,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     getAllImagesBook: getAllImagesBook,
     getCarts: getCarts,
     accountReducer: accountReducer,
+    totalPrice: totalPrice,
 });
 
 export default rootReducer;

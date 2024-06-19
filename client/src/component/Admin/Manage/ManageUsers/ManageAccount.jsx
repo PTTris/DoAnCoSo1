@@ -12,7 +12,8 @@ const ManageAccount = () => {
     const [showModalCreate, setShowModalCreate] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalUpdate, setShowModalUpdate] = useState(false);
-
+    const [fetchBook, setFetchBook] = useState(true);
+    const [dataSearch, setDataSearch] = useState([]);
     const [listAccount, setListAccount] = useState([]);
     const [dataHandler, setDataHandler] = useState({});
     const [totalPages, settotalPages] = useState(0);
@@ -24,13 +25,21 @@ const ManageAccount = () => {
         );
 
         setListAccount(response.data.data);
+        settotalPages(response.data.totalPages);
+    };
 
+    const fetchAllSearchAccountWithPaginate = async (dataSearch, page) => {
+        let response = await axios.get(
+            `/getAllUsersWithPaginations?tenTaiKhoan=${dataSearch}&page=${page}&limit=${LIMIT_PAGE}`
+        );
+
+        setListAccount(response.data.data);
         settotalPages(response.data.totalPages);
     };
 
     useEffect(() => {
-        fetchAccountWithPaginate(1);
-    }, []);
+        if (fetchBook) fetchAccountWithPaginate(1);
+    }, [fetchBook]);
 
     // Xử lý sự kiện click
     const handleClickDeleteAccount = (user) => {
@@ -43,6 +52,12 @@ const ManageAccount = () => {
         setDataHandler(user);
     };
 
+    const handleSubmitSearch = async (event) => {
+        event.preventDefault();
+        await fetchAllSearchAccountWithPaginate(dataSearch, 1);
+        setFetchBook(false);
+    };
+
     return (
         <div className="manage-container">
             <h1 className="title text-center">Quản lý tài khoản</h1>
@@ -53,6 +68,30 @@ const ManageAccount = () => {
                 >
                     Thêm tài khoản
                 </button>
+
+                <form
+                    className="form-search"
+                    style={{
+                        display: "inline-block",
+                        width: "30%",
+                        float: "right",
+                        marginTop: "30px",
+                    }}
+                    onSubmit={handleSubmitSearch}
+                >
+                    <input
+                        type="text"
+                        className="input-search-book form-control"
+                        style={{ width: "100%" }}
+                        placeholder="Nhập tên tài khoản..."
+                        onChange={(event) => {
+                            setDataSearch(event.target.value);
+                            if (event.target.value === "") {
+                                setFetchBook(true);
+                            }
+                        }}
+                    />
+                </form>
 
                 <div className="table-container">
                     <TableAccount

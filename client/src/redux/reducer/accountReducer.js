@@ -3,13 +3,25 @@ import { createSlice } from "@reduxjs/toolkit";
 const accountReducer = createSlice({
     name: "accountReducer",
     initialState: {
-        account: {},
+        account: {
+            id_taiKhoan: 0,
+            email: "",
+            tenTaiKhoan: "",
+            tenNhanHang: "",
+            diaChiNhanHang: "",
+            SDTNhanHang: "",
+        },
         isAuthenticated: false,
         isAdmin: false,
     },
     reducers: {
         LOGIN: (state, action) => {
-            state.account = action.payload;
+            state.account.id_taiKhoan = action.payload.id_taiKhoan;
+            state.account.email = action.payload.email;
+            state.account.tenTaiKhoan = action.payload.tenTaiKhoan;
+            state.account.tenNhanHang = action.payload.tenNhanHang;
+            state.account.diaChiNhanHang = action.payload.diaChiNhanHang;
+            state.account.SDTNhanHang = action.payload.SDTNhanHang;
             state.isAuthenticated = true;
         },
         ISADMIN: (state, action) => {
@@ -20,10 +32,15 @@ const accountReducer = createSlice({
             state.isAuthenticated = false;
             state.isAdmin = false;
         },
+        UPDATEINFO: (state, action) => {
+            state.account.tenNhanHang = action.payload.tenNhanHang;
+            state.account.diaChiNhanHang = action.payload.diaChiNhanHang;
+            state.account.SDTNhanHang = action.payload.SDTNhanHang;
+        },
     },
 });
 
-export const { LOGIN, LOGOUT, ISADMIN } = accountReducer.actions;
+export const { LOGIN, LOGOUT, ISADMIN, UPDATEINFO } = accountReducer.actions;
 
 export const selectAccount = (state) => state.accountReducer.account;
 export const selectIsAuthenticated = (state) =>

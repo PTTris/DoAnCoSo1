@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import User from "./component/User/User";
 import HomePage from "./component/User/Home/HomePage";
@@ -8,7 +9,6 @@ import Contact from "./component/User/Contact/Contact";
 import BookDetail from "./component/User/Books/BookDetail/BookDetail";
 import Cart from "./component/User/Cart/Cart";
 import AllBooksOfCategory from "./component/User/Books/AllBooksOfCategory/AllBooksOfCategory";
-import { useState } from "react";
 import Admin from "./component/Admin/Admin";
 import ManageBooks from "./component/Admin/Manage/ManageBooks/ManageBooks";
 import ManageAccount from "./component/Admin/Manage/ManageUsers/ManageAccount";

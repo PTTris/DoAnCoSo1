@@ -27,9 +27,15 @@ export default function Cart() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const account = useSelector(selectAccount);
-    const [fullName, setFullName] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [address, setAddress] = useState("");
+    const [fullName, setFullName] = useState(
+        account?.tenNhanHang ? account?.tenNhanHang : ""
+    );
+    const [phoneNumber, setPhoneNumber] = useState(
+        account?.SDTNhanHang ? account?.SDTNhanHang : ""
+    );
+    const [address, setAddress] = useState(
+        account?.diaChiNhanHang ? account?.diaChiNhanHang : ""
+    );
     const [price, setPrice] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [errors, setErrors] = useState({});
@@ -353,6 +359,7 @@ export default function Cart() {
                                                     size="lg"
                                                     label="Nhập họ tên người nhận hàng"
                                                     className="border-none"
+                                                    value={fullName}
                                                     onChange={(event) => {
                                                         setErrors({});
                                                         setFullName(
@@ -371,6 +378,7 @@ export default function Cart() {
                                                     size="lg"
                                                     label="Nhập số điện thoại"
                                                     className="border-none"
+                                                    value={phoneNumber}
                                                     onChange={(event) => {
                                                         setErrors({});
                                                         setPhoneNumber(
@@ -389,6 +397,7 @@ export default function Cart() {
                                                     size="lg"
                                                     label="Nhập địa chỉ giao hàng"
                                                     className="border-none"
+                                                    value={address}
                                                     onChange={(event) => {
                                                         setErrors({});
                                                         setAddress(

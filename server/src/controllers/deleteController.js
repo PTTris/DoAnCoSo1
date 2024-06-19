@@ -24,9 +24,12 @@ const deleteAccount = async (req, res) => {
             });
         }
 
+        const deleteCart = "DELETE FROM giohang WHERE id_taiKhoan = ?";
+        await pool.query(deleteCart, [id_taiKhoan]);
+
         // Thực hiện xóa tài khoản nếu không phải là admin
-        const deleteSql = "DELETE FROM taikhoan WHERE id_taiKhoan = ?";
-        await pool.query(deleteSql, [id_taiKhoan]);
+        const deleteAcountSql = "DELETE FROM taikhoan WHERE id_taiKhoan = ?";
+        await pool.query(deleteAcountSql, [id_taiKhoan]);
 
         res.status(200).json({
             EC: 0,

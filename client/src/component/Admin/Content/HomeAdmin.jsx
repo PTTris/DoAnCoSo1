@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./HomeAdmin.scss";
 import axios from "../../../utils/axiosCustomize.js";
+import { useSelector } from "react-redux";
+import { selectTotalPrice } from "../../../redux/reducer/totalPrice.js";
 
 const HomeAdmin = () => {
+    const totalPrice = useSelector(selectTotalPrice);
     const [dataListTotal, setDataListTotal] = useState(null);
 
     const fetchDataTotal = async () => {
@@ -50,7 +53,7 @@ const HomeAdmin = () => {
                                 <img
                                     width="64"
                                     height="64"
-                                    src="https://img.icons8.com/dusk/64/price-tag-euro.png"
+                                    src="https://img.icons8.com/?size=100&id=71733&format=png&color=000000"
                                     alt="price-tag-euro"
                                 />
                                 <p className="item-data-right">
@@ -75,7 +78,7 @@ const HomeAdmin = () => {
                                     </strong>
                                 </p>
                             </div>
-                        </div>{" "}
+                        </div>
                         <div id="Dealhot" className="Admin-card-table-value">
                             <h2>Đơn hàng</h2>
                             <div className="Actual-data">
@@ -91,7 +94,26 @@ const HomeAdmin = () => {
                                     </strong>
                                 </p>
                             </div>
-                        </div>{" "}
+                        </div>
+                        <div id="total" className="Admin-card-table-value">
+                            <h2>Doanh thu</h2>
+                            <div className="Actual-data">
+                                <img
+                                    width="64"
+                                    height="64"
+                                    src="https://img.icons8.com/dusk/64/price-tag-euro.png"
+                                    alt="mega-sales--v2"
+                                />
+                                <p className="item-data-right">
+                                    <strong>
+                                        {Number.parseFloat(
+                                            totalPrice
+                                        ).toLocaleString("vi-VN")}{" "}
+                                        VNĐ
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

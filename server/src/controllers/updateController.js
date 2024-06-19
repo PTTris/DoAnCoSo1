@@ -184,6 +184,38 @@ const rejectOrder = async (req, res) => {
     }
 };
 
+const addInformations = async (req, res) => {
+    const id_taiKhoan = req.params.id_taiKhoan;
+    const { tenNhanHang, diaChiNhanHang, SDTNhanHang } = req.body;
+    try {
+        const sql = `UPDATE TaiKhoan
+            set tenNhanHang = ?, diaChiNhanHang = ?, SDTNhanHang = ? WHERE id_taiKhoan = ?
+            `;
+        await pool.query(sql, [
+            tenNhanHang,
+            diaChiNhanHang,
+            SDTNhanHang,
+            id_taiKhoan,
+        ]);
+        res.status(200).json({
+            DATA: {
+                tenNhanHang,
+                diaChiNhanHang,
+                SDTNhanHang,
+            },
+            EC: 0,
+            EM: "Thêm thông tin giao hàng thành công",
+        });
+    } catch (err) {
+        res.status(500).json({
+            EC: 1,
+            EM: "Thêm thông tin giao hàng thất bại",
+            Err: err,
+        });
+        console.log(err);
+    }
+};
+
 export {
     updateAccount,
     updateBook,
@@ -191,4 +223,5 @@ export {
     updateCartQuantity,
     resolveOrder,
     rejectOrder,
+    addInformations,
 };

@@ -6,10 +6,11 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path";
-import pool from "./config/database.js";
+
 // Tạo đường dẫn tương đối
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 // config req.body
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data

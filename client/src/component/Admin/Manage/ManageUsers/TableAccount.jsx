@@ -33,13 +33,13 @@ const TableAccount = (props) => {
                                 ID
                             </th>
                             <th className="text-center fs-6" scope="col">
-                                Username
+                                Tên tài khoản
                             </th>
                             <th className="text-center fs-6" scope="col">
                                 Email
                             </th>
                             <th className="text-center fs-6" scope="col">
-                                Role
+                                Vai trò
                             </th>
                             <th className="text-center fs-6" scope="col">
                                 Chức năng

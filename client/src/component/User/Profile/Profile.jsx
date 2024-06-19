@@ -4,30 +4,55 @@ import { NavLink } from "react-router-dom";
 import axios from "../../../utils/axiosCustomize.js";
 import { useSelector } from "react-redux";
 import { selectAccount } from "../../../redux/reducer/accountReducer.js";
-
+import ModalChangePassword from "./Modal/ModalChangePassword.jsx";
+import ModalAddInformations from "./Modal/ModalAddInformations.jsx";
+import ModalChangeInformation from "./Modal/ModalChangeInformation.jsx";
 const Profile = () => {
     const account = useSelector(selectAccount);
     const [listOrder, setListOrders] = useState([]);
     const [bookDetails, setBookDetails] = useState({});
-    const [showBtn, setShowBtn] = useState(true);
+    const [showModalChangePassword, setShowModalChangePassword] =
+        useState(false);
+    const [showModalAddInformations, setShowModalAddInformations] =
+        useState(false);
+    const [showModalChangeInformation, setShowModalChangeInformation] =
+        useState(false);
+
     const fetchAllOrdersWithAccount = async (id) => {
         const response = await axios.get(`/getOrderWithAccount/${id}`);
-        setListOrders(response.data);
+        const orders = response.data;
+        setListOrders(orders);
+
+        // Lấy từng sách với từng đơn hàng bằng gọi api với từng id đơn hàng
+        const bookDetailsPromises = orders.map((order) =>
+            axios.get(`/getBooksInOrder/${order.id_donHang}`)
+        );
+
+        // await Promise.all đợi đến khi tất cả yêu cầu hoàn thành
+        const bookDetailsResponses = await Promise.all(bookDetailsPromises);
+
+        // Với mỗi phản hồi, ID của đơn hàng tương ứng được sử dụng làm khóa trong đối tượng bookDetailsMap, và response.data (chi tiết sách) được đặt làm giá trị.
+        const bookDetailsMap = {};
+        bookDetailsResponses.forEach((response, index) => {
+            bookDetailsMap[orders[index].id_donHang] = response.data;
+        });
+
+        setBookDetails(bookDetailsMap);
     };
 
     useEffect(() => {
         fetchAllOrdersWithAccount(account.id_taiKhoan);
     }, [account.id_taiKhoan]);
 
-    const showListBook = async (id_donHang) => {
-        const response = await axios.get(`/getBooksInOrder/${id_donHang}`);
-        setBookDetails((prevOrder) => ({
-            ...prevOrder,
-            [id_donHang]: response.data,
-        }));
-        setShowBtn(!showBtn);
+    const handleClickShowChangePassword = () => {
+        setShowModalChangePassword(true);
     };
-
+    const handleClickShowAddInfor = () => {
+        setShowModalAddInformations(true);
+    };
+    const handleClickShowChangeInfor = () => {
+        setShowModalChangeInformation(true);
+    };
     return (
         <div>
             <section className="bread-crumb">
@@ -56,9 +81,7 @@ const Profile = () => {
                     <div className="row">
                         <div className="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
                             <div className="block-account">
-                                <h5 className="title-account">
-                                    Trang tài khoản
-                                </h5>
+                                <h5 className="title-account">Tài khoản</h5>
                                 <p>
                                     Xin chào,{" "}
                                     <span style={{ color: "#38a8ea" }}>
@@ -67,6 +90,51 @@ const Profile = () => {
                                 </p>
                                 <p>
                                     <span>{account.email}</span>
+                                </p>
+                                <p className="feature-info">
+                                    <button
+                                        className="change-password"
+                                        onClick={handleClickShowChangePassword}
+                                    >
+                                        Đổi mật khẩu
+                                    </button>
+                                </p>
+
+                                <hr />
+
+                                <p className="feature-address">
+                                    {account?.tenNhanHang === null && (
+                                        <button
+                                            className="add-address"
+                                            onClick={handleClickShowAddInfor}
+                                        >
+                                            Thêm thông tin giao hàng
+                                        </button>
+                                    )}
+                                    {account?.tenNhanHang !== null && (
+                                        <>
+                                            <p>Thông tin người giao hàng</p>
+                                            <p>
+                                                <span>
+                                                    {account?.tenNhanHang}
+                                                </span>
+                                                <span>
+                                                    {account?.SDTNhanHang}
+                                                </span>
+                                                <span>
+                                                    {account?.diaChiNhanHang}
+                                                </span>
+                                                <button
+                                                    className="change-address"
+                                                    onClick={
+                                                        handleClickShowChangeInfor
+                                                    }
+                                                >
+                                                    Thay đổi thông tin
+                                                </button>
+                                            </p>
+                                        </>
+                                    )}
                                 </p>
                             </div>
                         </div>
@@ -121,55 +189,41 @@ const Profile = () => {
                                                                             </p>
                                                                         </td>
                                                                         <td className="list-book text-center">
-                                                                            {showBtn && (
-                                                                                <button
-                                                                                    onClick={() =>
-                                                                                        showListBook(
-                                                                                            order.id_donHang
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    Hiển
-                                                                                    thị
-                                                                                    sách
-                                                                                </button>
-                                                                            )}
-
-                                                                            {bookDetails[
-                                                                                order
-                                                                                    .id_donHang
-                                                                            ] && (
-                                                                                <ul>
-                                                                                    {bookDetails[
-                                                                                        order
-                                                                                            .id_donHang
-                                                                                    ].map(
-                                                                                        (
-                                                                                            book
-                                                                                        ) => (
-                                                                                            <li
-                                                                                                key={
-                                                                                                    book.id_sach
-                                                                                                }
+                                                                            <ul>
+                                                                                {bookDetails[
+                                                                                    order
+                                                                                        .id_donHang
+                                                                                ]?.map(
+                                                                                    (
+                                                                                        book
+                                                                                    ) => (
+                                                                                        <li
+                                                                                            key={
+                                                                                                book.id_sach
+                                                                                            }
+                                                                                        >
+                                                                                            <p
+                                                                                                style={{
+                                                                                                    marginBottom:
+                                                                                                        "4px",
+                                                                                                }}
                                                                                             >
-                                                                                                <p>
-                                                                                                    {
-                                                                                                        book.tenSach
-                                                                                                    }
-                                                                                                </p>
-                                                                                                <p>
-                                                                                                    (SL:{" "}
-                                                                                                    {
-                                                                                                        book.soLuongSach
-                                                                                                    }
+                                                                                                {
+                                                                                                    book.tenSach
+                                                                                                }
+                                                                                            </p>
+                                                                                            <p>
+                                                                                                (SL:{" "}
+                                                                                                {
+                                                                                                    book.soLuongSach
+                                                                                                }
 
-                                                                                                    )
-                                                                                                </p>
-                                                                                            </li>
-                                                                                        )
-                                                                                    )}
-                                                                                </ul>
-                                                                            )}
+                                                                                                )
+                                                                                            </p>
+                                                                                        </li>
+                                                                                    )
+                                                                                )}
+                                                                            </ul>
                                                                         </td>
                                                                         <td>
                                                                             <p>
@@ -240,6 +294,18 @@ const Profile = () => {
                     </div>
                 </div>
             </section>
+            <ModalChangePassword
+                show={showModalChangePassword}
+                setShowModalChangePassword={setShowModalChangePassword}
+            />
+            <ModalAddInformations
+                show={showModalAddInformations}
+                setShowModalAddInformations={setShowModalAddInformations}
+            />
+            <ModalChangeInformation
+                show={showModalChangeInformation}
+                setShowModalChangeInformation={setShowModalChangeInformation}
+            />
         </div>
     );
 };

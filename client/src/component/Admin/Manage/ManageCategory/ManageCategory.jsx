@@ -9,6 +9,8 @@ import ModalUpdateCategory from "./Modal/ModalUpdateCategory.jsx";
 
 const ManageCategory = () => {
     const LIMIT_PAGE = 4;
+    const [fetchBook, setFetchBook] = useState(true);
+    const [dataSearch, setDataSearch] = useState([]);
     const [listCategories, setListCategories] = useState();
     const [dataHandler, setDataHandler] = useState();
     const [totalPages, settotalPages] = useState(0);
@@ -28,9 +30,18 @@ const ManageCategory = () => {
         settotalPages(response.data.totalPages);
     };
 
+    const fetchAllSearchCategoriesWithPaginate = async (dataSearch, page) => {
+        let response = await axios.get(
+            `/getAllCategoriesWithPaginations?tenTheLoaiSach=${dataSearch}&page=${page}&limit=${LIMIT_PAGE}`
+        );
+
+        setListCategories(response.data.data);
+        settotalPages(response.data.totalPages);
+    };
+
     useEffect(() => {
-        fetchAllCategoriesWithPaginate(1);
-    }, []);
+        if (fetchBook) fetchAllCategoriesWithPaginate(1);
+    }, [fetchBook]);
 
     const handlePageClick = async (event) => {
         await fetchAllCategoriesWithPaginate(+event.selected + 1);
@@ -47,6 +58,12 @@ const ManageCategory = () => {
         setDataHandler(user);
     };
 
+    const handleSubmitSearch = async (event) => {
+        event.preventDefault();
+        await fetchAllSearchCategoriesWithPaginate(dataSearch, 1);
+        setFetchBook(false);
+    };
+
     return (
         <div className="manage-container">
             <h1 className="title text-center">Quản lý thể loại sách</h1>
@@ -59,6 +76,30 @@ const ManageCategory = () => {
                 >
                     Tạo thể loại sách mới
                 </button>
+
+                <form
+                    className="form-search"
+                    style={{
+                        display: "inline-block",
+                        width: "30%",
+                        float: "right",
+                        marginTop: "30px",
+                    }}
+                    onSubmit={handleSubmitSearch}
+                >
+                    <input
+                        type="text"
+                        className="input-search-book form-control"
+                        style={{ width: "100%" }}
+                        placeholder="Nhập tên thể loại sách..."
+                        onChange={(event) => {
+                            setDataSearch(event.target.value);
+                            if (event.target.value === "") {
+                                setFetchBook(true);
+                            }
+                        }}
+                    />
+                </form>
 
                 <div className="table-container">
                     <Table className="table table-hover table-bordered">

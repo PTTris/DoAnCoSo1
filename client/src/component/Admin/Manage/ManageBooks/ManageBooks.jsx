@@ -23,6 +23,8 @@ const ManageBooks = () => {
     const [dataExtension, setDataExtension] = useState({});
     const [dataUpdate, setDataUpdate] = useState({});
     const [dataView, setDataView] = useState({});
+    const [dataFilter, setDataFilter] = useState("");
+    const [isFiltering, setIsFiltering] = useState(false);
     const [totalPages, settotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -46,8 +48,8 @@ const ManageBooks = () => {
 
     useEffect(() => {
         // fetchBook lần đầu chạy set = true để call API
-        if (dataSearch === "" || fetchBook) fetchAllBooksWithPaginate(1);
-    }, [dataSearch, fetchBook]);
+        if (fetchBook) fetchAllBooksWithPaginate(1);
+    }, [fetchBook]);
 
     const handleClickCreateImages = (book) => {
         setShowModalCreateImages(true);
@@ -103,6 +105,9 @@ const ManageBooks = () => {
                         placeholder="Nhập tên sách..."
                         onChange={(event) => {
                             setDataSearch(event.target.value);
+                            if (event.target.value === "") {
+                                setFetchBook(true);
+                            }
                         }}
                     />
                 </form>
